@@ -1,0 +1,42 @@
+﻿@model RecruitingPortal.Models.ExternalLoginListViewModel
+@using Microsoft.Owin.Security
+@{
+    var loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
+}
+
+@using (Html.BeginForm("ExternalLogin", "Account", new { ReturnUrl = Model.ReturnUrl }))
+{
+    @Html.AntiForgeryToken()
+
+
+    foreach (AuthenticationDescription p in loginProviders)
+    {
+        switch (p.AuthenticationType.ToLowerInvariant())
+        {
+            case "facebook":
+                <button type="submit" class="btn facebook" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Log in using your @p.Caption account">
+                    <span><i class="fab fa-facebook-f"></i></span> Sign in with @p.AuthenticationType
+                </button>
+                break;
+            case "google":
+                <button type="submit" class="btn googlePlus" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Log in using your @p.Caption account">
+                    <span><i class="fab fa-google-plus-g"></i></span> Sign in with @p.AuthenticationType
+                </button>
+                break;
+
+                @*<button class="btn twitter">
+                        <span><i class="fab fa-twitter"></i></span> Sign in with Twitter
+                    </button>
+                    <button class="btn linkedin">
+                        <span><i class="fab fa-linkedin-in"></i></span> Sign in with LinkedIn
+                    </button>*@
+        }
+    }
+
+    <p>
+
+        Job Applicant @Html.RadioButton("userType", "JobSeeker", true, new { Id = "jobseeker" })
+        &nbsp;&nbsp;&nbsp;&nbsp;Company @Html.RadioButton("userType", "Company", new { Id = "company" })
+    </p>
+}
+

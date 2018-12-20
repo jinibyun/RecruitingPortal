@@ -1,0 +1,160 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Paragon Security - View Security Guard</title>
+<link rel="stylesheet" type="text/css" href="../assets/css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="../assets/css/style.css">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,600i,700,700i" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+
+</head>
+
+<body>
+
+<div class="rsTopBar">
+	<img src="../assets/img/ppl-logo.png">
+</div>
+
+<div id="rsPageWrap">
+
+        <!-- Sidebar -->
+        <div id="rsSidebarWrap" data-spy="affix" data-offset-top="15">
+            <ul class="rsSidebarNav affix" data-spy="affix" data-offset-top="15">
+                <li class="rsLogo">
+                    <a href="#menu-toggle" class="btn btn-secondary" id="menu-toggle">
+                    	<i class="fas fa-bars"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                    	<img src="../assets/img/sidebarIcon-overview.png">Overview
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                    	<img src="../assets/img/sidebarIcon-mjp.png">Manage job Postings
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                    	<img src="../assets/img/sidebarIcon-rl.png">Request List
+                     </a>
+                </li>
+                <li>
+                    <a href="#" class="active">
+                    	<img src="../assets/img/sidebarIcon-vsg.png">View Security Guards
+                    </a>
+                </li>
+            </ul>
+            
+            <div class="rsSidebarLoginSNS">
+            	SNS AD Posting
+                <ul>
+                	<li>
+                    	<div class="rsIconCircle facebook">
+                        	<i class="fab fa-facebook-f"></i>
+                        </div>
+                    </li>
+                    <li>
+                    	<div class="rsIconCircle twitter">
+                        	<i class="fab fa-twitter"></i>
+                        </div>
+                    </li>
+                    <li>
+                    	<div class="rsIconCircle linkedin">
+                        	<i class="fab fa-linkedin-in"></i>
+                        </div>
+                    </li>
+                </ul>
+                
+                <input type="text">
+                <input type="text">
+                <button class="btn rsBtnDefault">
+                   Sign in
+                </button>
+                <a href="#" class="pull-right">Go to page</a>
+            </div>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="rsPageContentWrap">
+        	<div class="row">
+                <div class="col-sm-9 col-xs-12 rs-mpr-0">
+                <h3>All Security Guard</h3>
+                    <div class="rsBackCard">
+                     
+                    </div>
+                </div>
+                <div class="col-sm-3 col-xs-12">
+                        <div class="rsSearchWrap">
+                        <h3>Security Guard Search</h3>
+                        <div class="rsBackCard">
+                        	<label>Contacted by</label>
+                            <select>
+                            	<option>Select person</option>
+                            </select>
+                            
+                            <label>Scoring Range</label>
+                            <select>
+                            	<option>Select Score Range</option>
+                            </select>
+                            
+                            <label>Province</label>
+                            <input type="text">
+                            
+                            <label>City</label>
+                            <input type="text">
+                            
+                            <label>Service</label>
+                            <select>
+                            	<option>Select Service Type</option>
+                            </select>
+                            
+                            <label>Security Experience</label>
+                            <input type="text">
+                            
+                            <div class="row">
+                            	<div class="col-sm-5 col-xs-12">
+                            		<label style="margin-top: 0.6em;">Post Code</label>
+                                </div>
+                                <div class="col-sm-7 col-xs-12">
+                            		<input type="text">
+                                </div>
+                            </div>
+                            <div class="row">
+                            	<div class="col-sm-5 col-xs-12">
+                            		<label style="margin-top: 0.6em;">Within</label>
+                                </div>
+                                <div class="col-sm-7 col-xs-12">
+                            		<input type="text" placeholder="10mi(15km)">
+                                </div>
+                            </div>
+                            
+                            <button class="btn rsBtnDefault">
+                                Find Security Guard
+                            </button>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+<script src="../assets/js/bootstrap.js"></script>
+<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+
+<!-- Menu Toggle Script -->
+    <script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#rsPageWrap").toggleClass("toggled");
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8DC8E03D-DBE5-48AC-BD25-D6C4F384BBF5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>RecruitingPortal.BLL</RootNamespace>
+    <AssemblyName>RecruitingPortal.BLL</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp, Version=106.2.1.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.106.2.1\lib\net452\RestSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BusinessLayerService.cs" />
+    <Compile Include="BaseService.cs" />
+    <Compile Include="FormattedDbEntityValidationException.cs" />
+    <Compile Include="IBusinessLayer.cs" />
+    <Compile Include="ServiceFactory.cs" />
+    <Compile Include="PortalService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\AspNetUserService.cs" />
+    <Compile Include="Service\AspNetUsersStaffTeamService.cs" />
+    <Compile Include="Service\BranchAddressService.cs" />
+    <Compile Include="Service\CityService.cs" />
+    <Compile Include="Service\CompanyFileService.cs" />
+    <Compile Include="Service\CompanyLangService.cs" />
+    <Compile Include="Service\CompanyService.cs" />
+    <Compile Include="Service\CompanyTypeOfWorkService.cs" />
+    <Compile Include="Service\GuardRequestService.cs" />
+    <Compile Include="Service\GuardRequestTypeOfWorkService.cs" />
+    <Compile Include="Service\JobAlertService.cs" />
+    <Compile Include="Service\JobApplyService.cs" />
+    <Compile Include="Service\JobHireService.cs" />
+    <Compile Include="Service\JobPostingFileService.cs" />
+    <Compile Include="Service\JobPostingService.cs" />
+    <Compile Include="Service\JobPostingTypeOfWorkService.cs" />
+    <Compile Include="Service\JobSeekerContactLogService.cs" />
+    <Compile Include="Service\JobSeekerFileService.cs" />
+    <Compile Include="Service\JobSeekerLangService.cs" />
+    <Compile Include="Service\JobSeekerScoreService.cs" />
+    <Compile Include="Service\JobSeekerSecurityExperienceService.cs" />
+    <Compile Include="Service\JobSeekerService.cs" />
+    <Compile Include="Service\JobSeekerStatusService.cs" />
+    <Compile Include="Service\JobSeekerTypeOfWorkAvailability.cs" />
+    <Compile Include="Service\JobSeekerTypeOfWorkService.cs" />
+    <Compile Include="Service\NotificationQueueService.cs" />
+    <Compile Include="Service\RegionService.cs" />
+    <Compile Include="Service\StaffTeamService.cs" />
+    <Compile Include="Service\TypeOfJobNoticeService.cs" />
+    <Compile Include="Service\TypeOfPositionService.cs" />
+    <Compile Include="Service\TypeOfSecurityExperienceService.cs" />
+    <Compile Include="Service\TypeOfService.cs" />
+    <Compile Include="Service\TypeOfWorkService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RecruitingPortal.DAL\RecruitingPortal.DAL.csproj">
+      <Project>{98ce2e5c-edd4-4044-a73d-ab0ac1ea2faf}</Project>
+      <Name>RecruitingPortal.DAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RecruitingPortal.Domain\RecruitingPortal.Domain.csproj">
+      <Project>{4d976f78-bdf8-4cef-b130-1932ecb6eba6}</Project>
+      <Name>RecruitingPortal.Domain</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Mail\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

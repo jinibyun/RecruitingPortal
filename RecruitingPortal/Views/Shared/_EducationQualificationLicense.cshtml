@@ -1,0 +1,341 @@
+﻿@model RecruitingPortal.Models.JobSeekerViewModel
+@using RecruitingPortal.BLL
+
+<style>
+    input[type=radio] {
+        margin-right: 0.5em;
+    }
+
+</style>
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-12">
+            <i class="far fa-file-alt" aria-hidden="true"></i> marked fields below means it <b class="rsRed">requires attached document</b> to prove it upon interview if answered with "Yes".<br /><br />
+        </div>
+    </div>
+    <p></p>
+    <div class="row">
+        <div class="col-md-2">
+            <i class="far fa-file-alt" aria-hidden="true"></i>
+            @Html.LabelFor(model => model.StatusList)
+        </div>
+        <div class="col-md-4">
+            @Html.DropDownListFor(model => model.JobSeekerStatu.Id, Model.StatusList, new { @class = "form-control required" })
+            @Html.ValidationMessageFor(model => model.JobSeekerStatu.Id, "Please select status", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-2">
+            @Html.LabelFor(model => model.WorkPermitExpiry)
+        </div>
+        <div class="col-md-4">
+            @Html.TextBoxFor(model => model.WorkPermitExpiry, "{0:MM/dd/yyyy}", new { @class = "form-control datefieldWP", maxlength = 10 })
+        </div>
+    </div>
+    <p></p><br />
+    <div class="row">
+        <div class="col-md-2">
+            @Html.LabelFor(model => model.TypeOfServices)
+        </div>
+        <div class="col-md-4">
+            @Html.DropDownListFor(model => model.TypeOfService.Id, Model.TypeOfServices, new { @class = "form-control required" })
+            @Html.ValidationMessageFor(model => model.TypeOfService.Id, "Please select service type", new { @class = "text-danger" })
+            <span id="spanTypeOfService"></span>
+        </div>
+        <div class="col-md-2">
+            @Html.Label("Work Type")
+        </div>
+        <div class="col-md-4">
+            @* ref: http://stackoverflow.com/questions/16688170/asp-net-mvc-html-checkboxfor *@
+
+            @for (int i = 0; i < Model.CheckBoxListTypeOfWork.Count; i++)
+            {
+                @Html.CheckBoxFor(model => model.CheckBoxListTypeOfWork[i].Checked, new { id = "CheckBoxListTypeOfWork_" + i })
+                @Html.Raw("&nbsp;&nbsp;")
+                @Html.HiddenFor(model => model.CheckBoxListTypeOfWork[i].Id)
+                @Html.DisplayFor(m => m.CheckBoxListTypeOfWork[i].Text)
+                @Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;")
+            }
+
+            @Html.ValidationMessageFor(model => model.CheckBoxListTypeOfWork, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <p></p><br />
+    <div class="row">
+        <div class="col-md-2">
+            @Html.LabelFor(model => model.YearsOfExperience)
+        </div>
+        <div class="col-md-4">
+            @Html.TextBoxFor(model => model.YearsOfExperience, new { @class = "form-control onlyInteger" })
+            @Html.ValidationMessageFor(model => model.YearsOfExperience, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <p></p><br />
+    <div class="row">
+        <div class="col-md-2">
+            @Html.Label("Securiy Related Experience")
+        </div>
+        <div class="col-md-4">
+            @* ref: http://stackoverflow.com/questions/16688170/asp-net-mvc-html-checkboxfor *@
+            @for (int i = 0; i < Model.CheckBoxListSecurityExperience.Count; i++)
+            {
+                @Html.CheckBoxFor(model => model.CheckBoxListSecurityExperience[i].Checked, new { id = "CheckBoxListSecurityExperience_" + i })
+                @Html.Raw("&nbsp;&nbsp;")
+                @Html.HiddenFor(model => model.CheckBoxListSecurityExperience[i].Id)
+                @Html.DisplayFor(m => m.CheckBoxListSecurityExperience[i].Text)
+                @Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;")
+            }
+        </div>
+        <div class="col-md-2">
+            @Html.Label("Securiy Title")
+        </div>
+        <div class="col-md-4">
+            @Html.Raw("(These are subset of Security experience) <br />")
+            @* ref: http://stackoverflow.com/questions/16688170/asp-net-mvc-html-checkboxfor *@
+            @for (int j = 0; j < Model.CheckBoxListSecuritySubExperience.Count; j++)
+            {
+                @Html.CheckBoxFor(model => model.CheckBoxListSecuritySubExperience[j].Checked, new { id = "CheckBoxListSecuritySubExperience_" + j })
+                @Html.Raw("&nbsp;&nbsp;")
+                @Html.HiddenFor(model => model.CheckBoxListSecuritySubExperience[j].Id)
+                @Html.DisplayFor(m => m.CheckBoxListSecuritySubExperience[j].Text)
+                @Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;")
+            }
+        </div>
+    </div>
+    <p></p><br />
+    <div class="row">
+        <div class="col-md-4">
+            <i class="far fa-file-alt aria-hidden="true"></i>
+            @Html.LabelFor(model => model.HasSecurityLicense)
+        </div>
+        <div class="col-md-2">
+            @*ref: http://stackoverflow.com/questions/23534642/radiobuttonfor-in-mvc-razor-syntax*@
+            @Html.Label("rbSecurityLicense", "Yes")
+            @Html.RadioButtonFor(model => model.HasSecurityLicense, true)
+
+            @Html.Label("rbSecurityLicense", "No")
+            @Html.RadioButtonFor(model => model.HasSecurityLicense, false)
+
+            @Html.ValidationMessageFor(model => model.HasSecurityLicense, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-2">
+            @Html.LabelFor(model => model.SecurityLicenseExpiry)
+        </div>
+        <div class="col-md-4">
+            @Html.TextBoxFor(model => model.SecurityLicenseExpiry, "{0:MM/dd/yyyy}", new { @class = "form-control datefield", maxlength = 10 })
+        </div>
+    </div>
+    <p></p><br />
+    <div class="row">
+        <div class="col-md-6">
+            <i class="far fa-file-alt" aria-hidden="true"></i>
+            @Html.LabelFor(model => model.HasLawSecurityCommunityCollegeCertificate)
+        </div>
+        <div class="col-md-6">
+            @*ref: http://stackoverflow.com/questions/23534642/radiobuttonfor-in-mvc-razor-syntax*@
+            @Html.Label("rbLawSecurityCommunityCollegeCertificate", "Yes")
+            @Html.RadioButtonFor(model => model.HasLawSecurityCommunityCollegeCertificate, true)
+            @Html.Label("rbLawSecurityCommunityCollegeCertificate", "No")
+            @Html.RadioButtonFor(model => model.HasLawSecurityCommunityCollegeCertificate, false)
+        </div>
+    </div>
+    <p></p><br />
+    <div class="row">
+        <div class="col-md-6">
+            <i class="far fa-file-alt" aria-hidden="true"></i>
+            @Html.LabelFor(model => model.HasValidFirstAidCertificate)
+        </div>
+        <div class="col-md-6">
+            @*ref: http://stackoverflow.com/questions/23534642/radiobuttonfor-in-mvc-razor-syntax*@
+            @Html.Label("rbValidFirstAidCertificate", "Yes")
+            @Html.RadioButtonFor(model => model.HasValidFirstAidCertificate, true)
+            @Html.Label("rbValidFirstAidCertificate", "No")
+            @Html.RadioButtonFor(model => model.HasValidFirstAidCertificate, false)
+        </div>
+    </div>
+    <p></p><br />
+    <div class="row">
+        <div class="col-md-2">@Html.LabelFor(model => model.EducationLevels)</div>
+        <div class="col-md-4">
+            @Html.DropDownListFor(model => model.EducationLevel.Id, Model.EducationLevels, new { @class = "form-control required" })
+            @Html.ValidationMessageFor(model => model.EducationLevel.Id, "Please select education", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-2">
+            @Html.LabelFor(model => model.OtherEduction)
+        </div>
+        <div class="col-md-4">
+            @Html.TextBoxFor(model => model.OtherEduction, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.OtherEduction, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <p></p><br />
+    <div class="row">
+        <div class="col-md-2">@Html.Label("Available Language(s)")</div>
+        <div class="col-md-4">
+            @* ref: http://stackoverflow.com/questions/16688170/asp-net-mvc-html-checkboxfor *@
+            @for (int i = 0; i < Model.CheckBoxListLanguages.Count; i++)
+            {
+                @Html.CheckBoxFor(model => model.CheckBoxListLanguages[i].Checked, new { id = "CheckBoxListLanguages_" + i })
+                @Html.Raw("&nbsp;&nbsp;")
+                @Html.HiddenFor(model => model.CheckBoxListLanguages[i].Id)
+                @Html.DisplayFor(m => m.CheckBoxListLanguages[i].Text)
+                @Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;")
+            }
+            @Html.ValidationMessageFor(model => model.CheckBoxListLanguages, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-2">
+            @Html.Label("Other Language(s)")
+        </div>
+        <div class="col-md-4">
+            @Html.TextBoxFor(model => model.AnotherLanguage, new { @class = "form-control" })
+        </div>
+    </div>
+    <p></p><br />
+    <div class="row">
+        <div class="col-md-2">
+            @Html.LabelFor(x => x.IsCurrentlyWorking)
+        </div>
+        <div class="col-md-4">
+            @*ref: http://stackoverflow.com/questions/23534642/radiobuttonfor-in-mvc-razor-syntax*@
+            @Html.Label("rbCurrentlyWorking", "Yes")
+            @Html.RadioButtonFor(model => model.IsCurrentlyWorking, true)
+            @Html.Label("rbCurrentlyWorking", "No")
+            @Html.RadioButtonFor(model => model.IsCurrentlyWorking, false)
+        </div>
+        <div class="col-md-2">
+            @Html.LabelFor(model => model.HasCar)
+        </div>
+        <div class="col-md-4">
+            @*ref: http://stackoverflow.com/questions/23534642/radiobuttonfor-in-mvc-razor-syntax*@
+            @Html.Label("rbCar", "Yes")
+            @Html.RadioButtonFor(model => model.HasCar, true)
+
+            @Html.Label("rbCar", "No")
+            @Html.RadioButtonFor(model => model.HasCar, false)
+
+            @Html.ValidationMessageFor(model => model.HasCar, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <p></p><br />
+    @*<div class="row">
+    <div class="col-md-2">
+        @Html.Label("Is shift work available?")
+    </div>
+    <div class="col-md-4">*@
+            @*ref: http://stackoverflow.com/questions/23534642/radiobuttonfor-in-mvc-razor-syntax*@
+            @*@Html.Label("rbShiftAvailable", "Yes")
+            @Html.RadioButtonFor(model => model.IsShiftAvailable, true)
+
+            @Html.Label("rbShiftAvailable", "No")
+            @Html.RadioButtonFor(model => model.IsShiftAvailable, false)
+        </div>
+        <div class="col-md-2">
+            @Html.LabelFor(model => model.TypeOfNotices)
+        </div>
+        <div class="col-md-4">
+            @Html.DropDownListFor(model => model.TypeOfNoticeId, Model.TypeOfNotices, new { @class = "form-control required" })
+            @Html.ValidationMessageFor(model => model.TypeOfNoticeId, "Please select notice type", new { @class = "text-danger" })
+        </div>
+    </div>
+    <p></p>
+    <div class="row">
+        <div class="col-md-2">@Html.LabelFor(model => model.WillProvidereference)</div>
+        <div class="col-md-4">
+            @Html.Label("rbReference", "Yes")
+            @Html.RadioButtonFor(model => model.WillProvidereference, true)
+
+            @Html.Label("rbReference", "No")
+            @Html.RadioButtonFor(model => model.WillProvidereference, false)
+
+            @Html.ValidationMessageFor(model => model.WillProvidereference, "", new { @class = "text-danger" })
+        </div>
+
+    </div>*@
+
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#spanTypeOfService").text("");
+        $(".datefieldWP").datepicker();
+        $(".datefield").datepicker();
+
+        var hasLicense = $("input[type=radio][name=HasSecurityLicense]").val();
+        var status = $('#JobSeekerStatu_Id').val();
+        var eduLevel = $("#EducationLevel_Id").val();
+
+        if (hasLicense == "True") {
+            $(".datefield").attr("disabled", false);
+        }
+        else {
+            $(".datefield").val("");
+            $(".datefield").attr("disabled", true);
+        }
+
+        if (status == 3) {
+            $(".datefieldWP").attr("disabled", false);
+        }
+        else {
+            $(".datefieldWP").val("");
+            $(".datefieldWP").attr("disabled", true);
+        }
+
+        if (eduLevel == 10) { // other
+            $("#OtherEduction").attr("disabled", false);
+        }
+        else {
+            $("#OtherEduction").val("");
+            $("#OtherEduction").attr("disabled", true);
+        }
+
+        $("input[type=radio][name=HasSecurityLicense]").change(function () {
+            var HasSecurityLicense = $('input[name=HasSecurityLicense]:checked').val();
+            if (HasSecurityLicense == "True") {
+                $(".datefield").attr("disabled", false);
+            } else {
+                $(".datefield").val("");
+                $(".datefield").attr("disabled", true);
+            }
+        });
+
+        $('#TypeOfService_Id').change(function () {
+            $("#spanTypeOfService").text("");
+            var typeOfServiceValue = $("#TypeOfService_Id option:selected").val();
+            if (typeOfServiceValue == 10) { // mobile patrol
+                $("#spanTypeOfService").html("<font color='green'>For insurance purpose, you should be 25 years old or older</font>");
+            }
+        });
+
+        // JobSeekerStatu_Id
+        $('#JobSeekerStatu_Id').change(function () {
+            $(".datefieldWP").val("");
+            $(".datefieldWP").attr("disabled", true);
+            var jobSeekerStatusValue = $("#JobSeekerStatu_Id option:selected").val();
+            if (jobSeekerStatusValue == 3) { // working permit visa
+                $(".datefieldWP").attr("disabled", false);
+            }
+        });
+
+        // Education
+        $('#EducationLevel_Id').change(function () {
+            $("#OtherEduction").val("");
+            $("#OtherEduction").attr("disabled", true);
+            var otherEducation = $("#EducationLevel_Id option:selected").val();
+            if (otherEducation == 10) { // other education
+                $("#OtherEduction").attr("disabled", false);
+            }
+        });
+
+        // Security Experience
+        $('#CheckBoxListSecurityExperience_2').change(function () {
+            var self = $(this);
+            if (self.is(":checked")) { // checked
+                $("#CheckBoxListSecuritySubExperience_0").prop("disabled", false);
+                $("#CheckBoxListSecuritySubExperience_1").prop("disabled", false);
+                $("#CheckBoxListSecuritySubExperience_2").prop("disabled", false);
+            }
+            else { // unchecked
+                $("#CheckBoxListSecuritySubExperience_0").prop("disabled", true);
+                $("#CheckBoxListSecuritySubExperience_1").prop("disabled", true);
+                $("#CheckBoxListSecuritySubExperience_2").prop("disabled", true);
+            }
+        });
+    });
+</script>

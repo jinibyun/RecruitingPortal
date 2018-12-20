@@ -1,0 +1,496 @@
+﻿@model RecruitingPortal.Models.JobPostingViewModel
+@using RecruitingPortal.BLL
+@using RecruitingPortal.Domain
+@{
+    //ref: http://www.mikesdotnetting.com/article/164/nested-layout-pages-with-razor
+    Layout = "~/Views/Shared/_LayoutSub.cshtml";
+
+    if (ViewData["PageMode"] == null)
+    {
+        ViewData["PageMode"] = PageMode.EDIT;
+    }
+    var pageMode = (PageMode)Enum.Parse(typeof(PageMode), ViewData["PageMode"].ToString());
+
+    var buttonLabel = string.Empty;
+    if (pageMode == PageMode.CREATE)
+    {
+        buttonLabel = "POST JOB";
+        ViewBag.Title = "Post Job";
+    }
+    else
+    {
+        buttonLabel = "EDIT JOB";
+        ViewBag.Title = "Edit Job";
+    }
+
+    var guardRequestIdString = "";
+    if (@Model.GuardRequestId.HasValue)
+    {
+        guardRequestIdString = string.Format("{0}", @Model.GuardRequestId);
+    }
+}
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+<!-- TinyMCE Script Reference -->
+<script src="~/scripts/tinymce/tinymce.min.js"></script>
+
+<!-- Script to wire up your TinyMCE editor -->
+<script type="text/javascript">
+    // Initialize your tinyMCE Editor with your preferred options
+    tinyMCE.init({
+        // General options
+        // mode: "textareas",
+        theme: "modern",
+        // Theme options
+        theme_advanced_buttons1: "save,newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,styleselect,formatselect,fontselect,fontsizeselect",
+        theme_advanced_buttons2: "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code,|,insertdate,inserttime,preview,|,forecolor,backcolor",
+        theme_advanced_buttons3: "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,emotions,iespell,media,advhr,|,print,|,ltr,rtl,|,fullscreen",
+        theme_advanced_buttons4: "insertlayer,moveforward,movebackward,absolute,|,styleprops,spellchecker,|,cite,abbr,acronym,del,ins,attribs,|,visualchars,nonbreaking,template,blockquote,pagebreak,|,insertfile,insertimage",
+        theme_advanced_toolbar_location: "top",
+        theme_advanced_toolbar_align: "left",
+        theme_advanced_statusbar_location: "bottom",
+        theme_advanced_resizing: false
+
+        // Example content CSS (should be your site CSS)
+        // content_css: "css/example.css"
+    });
+</script>
+
+<div id="rsPageContentWrap">
+    <h3>
+        @if (pageMode == PageMode.CREATE)
+        {
+            @Html.Raw("Post Job");
+        }
+        else
+        {
+            @Html.Raw("Edit Job");
+        }
+    </h3>
+    <div class="rsBackCard">
+        <div class="col-xs-12">
+            <div class="rsBlockWrap">
+                <div>
+                    <!--<div class="alert alert-success">
+        <ul class="fa-ul">
+            <li>
+                <i class="fa fa-check-square-o fa-lg fa-li"></i>
+                Once a job is posted, it will be visible to all job seekers immediately.
+            </li>
+            <li>
+                <i class="fa fa-check-square-o fa-lg fa-li"></i>
+                Some of information are prepopulated from the guard request information if there is.
+            </li>
+            <li>
+                <i class="fa fa-check-square-o fa-lg fa-li"></i>
+                The job can be posted with or without guard request from service team.
+            </li>
+        </ul>
+    </div>-->
+
+                    <div class="rsMsgWrap">
+                        <div class="rsCircle rsWarn">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        Once a job is posted, it will be visible to all job seekers immediately.<br />
+                        <div class="rsCircle rsSuccess">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        Some of information are prepopulated from the guard request information if there is.<br />
+                        <div class="rsCircle rsSuccess">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        The job can be posted with or without guard request from service team.
+                    </div>
+
+                    <div class="rsTitleBlue">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-8 col-md-9">
+                                Post Job Information Detail
+                            </div>
+                            <div class="col-xs-12 col-sm-4 col-md-3">
+                                @Html.ActionLink("View Security Guard Request List", "Index", "Company", null, new { @class = "btn rsExportBtn pull-right" })
+                            </div>
+
+                        </div>
+                    </div>
+                    
+
+                    <br />
+
+                    <div>
+                        <div class="panel-body">
+                            @using (Html.BeginForm("CreateOrEdit", "JobPosting", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.Hidden("PageMode", ViewData["PageMode"]);
+                @Html.Hidden("GuardRequestId", guardRequestIdString)
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                <div class="form-group">
+                    @if (!string.IsNullOrEmpty(@guardRequestIdString))
+    {
+                <div class="row">
+                    @Html.Label("Request Id", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <a href="#guardRequestDetail" class="guardRequestDetail" id="@guardRequestIdString">@guardRequestIdString</a>
+                    <a href='#guardRequestDetail' class='guardRequestDetail btn btn-info btn-xs' id="@guardRequestIdString">VIEW</a>
+                </div>
+}
+                    @if (pageMode == PageMode.EDIT)
+    {
+                <div>&nbsp;</div>
+                <div class="row">
+                    @Html.LabelFor(model => model.JobId, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(model => model.JobId, new { @class = "form-control", @readonly = "readonly" })
+                    </div>
+
+                    @Html.LabelFor(model => model.TypeOfPositions, htmlAttributes: new { @class = "control-label col-md-2 " })
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.TypeOfPositionId, Model.TypeOfPositions, new { @class = "form-control required" })
+                        @Html.ValidationMessageFor(model => model.TypeOfPositionId, "Please select position", new { @class = "text-danger" })
+                    </div>
+                </div>
+}
+                    <div>&nbsp;</div>
+                    <div class="row">
+                        @Html.LabelFor(model => model.TypeOfPositions, htmlAttributes: new { @class = "control-label col-md-2 " })
+                        <div class="col-md-4">
+                            @Html.DropDownListFor(model => model.TypeOfPositionId, Model.TypeOfPositions, new { @class = "form-control required" })
+                            @Html.ValidationMessageFor(model => model.TypeOfPositionId, "Please select position", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div>&nbsp;</div>
+                    <div class="row">
+                        @Html.LabelFor(model => model.TypeOfServices, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-4">
+                            @Html.DropDownListFor(model => model.TypeOfServiceId, Model.TypeOfServices, new { @class = "form-control required" })
+                            @Html.ValidationMessageFor(model => model.TypeOfServiceId, "Please select service type", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div>&nbsp;</div>
+                    <div class="row">
+                        @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(model => model.Title, new { @class = "form-control", placeholder = "Title" })
+                            @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div>&nbsp;</div>
+                    <div class="row">
+                        @Html.Label("Type of work", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @* ref: http://stackoverflow.com/questions/16688170/asp-net-mvc-html-checkboxfor *@
+
+                            @for (int i = 0; i < Model.CheckBoxListTypeOfWork.Count; i++)
+            {
+                @Html.CheckBoxFor(model => model.CheckBoxListTypeOfWork[i].Checked, new { id = "CheckBoxListTypeOfWork_" + i })
+                @Html.Raw("&nbsp;&nbsp;")
+                @Html.HiddenFor(model => model.CheckBoxListTypeOfWork[i].Id)
+                @Html.DisplayFor(m => m.CheckBoxListTypeOfWork[i].Text)
+                @Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;")
+}
+
+                            @Html.ValidationMessageFor(model => model.CheckBoxListTypeOfWork, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div>&nbsp;</div>
+                    <!--ref: http://stackoverflow.com/questions/1169170/pass-additional-viewdata-to-a-strongly-typed-partial-view -->
+                    @Html.Partial("_ProvinceCity", Model.city, new ViewDataDictionary { { "regions", Model.RegionsInDropDown }, { "cities", Model.CitiesInDropDown }, { "searchControlDirection", SearchControlDirection.Horizontal }, { "fullsize", true }, { "isRequired", false } })
+                    <div>&nbsp;</div>
+                    <div class="row">
+                        @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            <!--
+                note: TextBoxFor does not work with ValidationMessageFor
+                ref: http://stackoverflow.com/questions/10294699/jquery-validate-unobtrusive-is-not-working-for-textarea
+
+                note: TinyMCE
+                ref: http://www.codeproject.com/Articles/830925/Integrating-TinyMCE-into-an-MVC-Project
+            -->
+                            @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @id = "jobDescription", @rows = 10 } })
+                            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                            @*<span class="field-validation-error" id="AC"></span>*@
+                        </div>
+                    </div>
+                    @*<div>&nbsp;</div>
+        <div class="row">
+            @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.TextBoxFor(model => model.Address, new { @class = "form-control", placeholder = "Address" })
+
+            </div>
+            @Html.LabelFor(model => model.PostalCode, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.TextBoxFor(model => model.PostalCode, new { @class = "form-control", placeholder = "Postal Code", @id = "postalCode" })
+                @Html.ValidationMessageFor(model => model.PostalCode, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+                    <div>&nbsp;</div>
+                    <div class="row">
+                        @Html.LabelFor(model => model.Rate, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-4">
+                            @Html.TextBoxFor(model => model.Rate, new { @class = "form-control", placeholder = "Rate", maxlength = "6" })
+                            @Html.ValidationMessageFor(model => model.Rate, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div>&nbsp;</div>
+                    <div class="row">
+                        @Html.LabelFor(model => model.BranchOffices, htmlAttributes: new { @class = "control-label col-md-2 " })
+                        <div class="col-md-4">
+                            @Html.DropDownListFor(model => model.BranchAddressId, Model.BranchOffices, new { @class = "form-control required" })
+                            @Html.ValidationMessageFor(model => model.BranchAddressId, "Please select office", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-md-6">
+                            <span id="spanAddress"></span>
+                        </div>
+                    </div>
+                    <div>&nbsp;</div>
+                    <div class="row">
+                        @Html.Label("File", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            <a class='btn btn-success big_header' href='javascript:;'>
+                                Choose Job Posting File...
+                                <input type="file" name="fileAttached1" size="40"
+                                       style="position:absolute;z-index:2;top:0;
+                           left:0;filter: alpha(opacity=0); opacity:0;
+                           background-color:transparent;color:transparent;"
+                                       onchange='$("#upload-file-info").html($(this).val());'>
+                            </a>
+                            &nbsp;&nbsp;
+                            <span class='label label-info' id="upload-file-info"></span>
+                        </div>
+                    </div>
+                    @if (pageMode == PageMode.EDIT)
+    {
+                <div>&nbsp;</div>
+                <div class="row">
+                    @Html.Label("File Uploaded", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @if (Model.JobPostingFiles != null && Model.JobPostingFiles.Where(x => !string.IsNullOrEmpty(x.JobFilePath1)).Any())
+        {
+            var jobPostingFile = Model.JobPostingFiles.Where(x => !string.IsNullOrEmpty(x.JobFilePath1)).SingleOrDefault<JobPostingFile>();
+                <span class="fileJobPostingYes">
+                    <span class="fileLinkJobPosting">@Html.ActionLink(Path.GetFileName(jobPostingFile.JobFilePath1), "DownloadFile", new { name = "JobPostingFile", fileId = jobPostingFile.Id, filePostType = EnumFilePostType.JobPosting })</span>
+                    @Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;")
+                    <span class="delJobPosting"><a href="#_" id="@jobPostingFile.Id" class="btn btn-danger"><i class="fa fa-trash-o"></i></a></span>
+                </span>
+}
+else
+{
+                <span class="fileJobPostingNo">
+                    @Html.Raw("No Job Posting File")
+                </span>
+}
+                    </div>
+                </div>
+}
+                    <div>&nbsp;</div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button type="submit" class="btn rsBtnDefault pull-right">@buttonLabel</button>
+                        </div>
+                    </div>
+                </div>
+
+                @*<div class="form-group">
+        @Html.LabelFor(model => model.EducationLevels, htmlAttributes: new { @class = "control-label col-md-2 requiredLabel" })
+        <div class="col-md-4">
+            @Html.DropDownListFor(model => model.EducationLevelId, Model.EducationLevels, new { @class = "form-control required" })
+            @Html.ValidationMessageFor(model => model.EducationLevelId, "Please select education level", new { @class = "text-danger" })
+        </div>
+
+        @Html.LabelFor(model => model.TypeOfServices, htmlAttributes: new { @class = "control-label col-md-2 requiredLabel" })
+        <div class="col-md-4">
+            @Html.DropDownListFor(model => model.TypeOfServiceId, Model.TypeOfServices, new { @class = "form-control required" })
+            @Html.ValidationMessageFor(model => model.TypeOfServiceId, "Please select service type", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div>&nbsp;</div>*@
+}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var branchId = $("#BranchAddressId option:selected").val();
+        showBranch(branchId);
+
+        $("body").on("click", ".guardRequestDetail", function (e) {
+            e.preventDefault();
+            var requestId = $(this).attr('id'); // request id
+            var url = "@Url.Action("GetGuardRequestDetail", "ServiceTeam")"
+            GetGuardRequestDetal(requestId, url);
+        });
+
+        // Job Posting
+        $('.delJobPosting a').click(function () {
+            var url = "@Url.Action("DeleteFile", "Common")";
+            var fileId = $(this).attr('id');
+            var fileName = $(".fileLinkJobPosting a").text();
+            var mode = "JobPosting";
+            var filePostType = $(".fileLinkJobPosting a").attr("href").split("&")[2].split("=")[1];
+            // ref: http://stackoverflow.com/questions/30133132/jquery-to-call-action-method-in-asp-net-mvc-c-sharp-by-ajax
+            // ref: http://stackoverflow.com/questions/17873926/invalid-json-primitive-error
+
+
+            fancyConfirm('Are you sure deleting job posting file?',
+                        function () { // ok click
+                            $.ajax(
+                                {
+                                    url: url, // '@Url.Action("UpdateOrder")', // to get the right path to controller from TableRoutes of Asp.Net MVC
+                                    dataType: "json",
+                                    type: "POST",
+                                    contentType: 'application/json; charset=utf-8',
+                                    cache: false,
+                                    data: JSON.stringify({
+                                        FileId: fileId,
+                                        fileName: fileName,
+                                        mode: mode,
+                                        filePostType: filePostType
+                                    }),
+                                    success: function (data) {
+                                        // data is your result from controller
+                                        if (data.success) {
+                                            alert(fileName + ' was successfully deleted');
+                                            $('.fileJobPostingYes').hide();
+                                            $('.fileJobPostingNo').show();
+                                            $('.fileJobPostingNo').text("No Job Posting File");
+                                        }
+                                    },
+                                    error: function (xhr) {
+                                        fancyAlert('error');
+                                    }
+                                }
+                            );
+                        },
+                        function () { // cancel click
+                            // do nothing
+                        }
+                    );
+        });
+
+        $('#BranchAddressId').change(function () {
+            branchId = $("#BranchAddressId option:selected").val();
+            if (branchId == "" || branchId == null || branchId < 1) {
+                $("#spanAddress").text("");
+                return;
+            }
+            showBranch(branchId);
+        });
+
+        $("body").on("click", ".mapToShowGoogle", function (e) {
+            e.preventDefault();
+
+            $("a.mapToShowGoogle").fancybox({
+                'width': 800,
+                'height': 500,
+                'hideOnContentClick': false, // so you can handle the map
+                'overlayColor': '#ccffee',
+                'overlayOpacity': 0.8,
+                'autoDimensions': true, // the selector #mapcontainer HAS css width and height
+                'beforeShow': function () {
+                    var array = this.element[0].id.split("|");
+                    var city = array[0]; // city name
+                    var province = array[1]; // province name
+                    var postalCode = array[2]; // postal code
+
+                    var cityProvince = city + "," + province;
+
+                    initialize(cityProvince, postalCode);
+                    google.maps.event.trigger(map, "resize");
+                    // codeAddress("M6h 2w9");
+                    $("#fancybox-close").css({ "opacity": 0.5 });
+                },
+                'onCleanup': function () {
+                    var myContent = this.href;
+                    $(myContent).unwrap();
+                } // fixes inline bug
+            });
+        });
+
+
+    }); // end of document load
+
+    // TODO: show maps only after click twice
+    function showBranch(branchId) {
+        if (branchId < 1)
+            return;
+
+        $.ajax({
+                url: "@Url.Action("GetBranchAddress", "ServiceTeam")",
+                dataType: "json",
+                type: "GET",
+                cache: false,
+                data: {
+                    Id: branchId
+                },
+                success: function (returnData) {
+                    if (returnData.success != undefined && returnData.success == false) {
+                        alert('failed');
+                    }
+                    else {
+                        // console.log(returnData);
+                        var fullAddress = returnData.Address1;
+                        if (returnData.Address2 != '' && returnData.Address2 != null) {
+                            fullAddress += ' ' + returnData.Address2;
+                        }
+                        fullAddress += ' ' + returnData.city.City1;
+                        fullAddress += ' ' + returnData.city.Region.Code;
+                        fullAddress += ' ' + returnData.PostalCode;
+
+                        var linkFullAddress = "<a href='#mapcontainer' class='mapToShowGoogle' id='" + returnData.city.City1 + "|" + returnData.city.Region.Region1 + "|" + returnData.PostalCode + "'>";
+                        linkFullAddress += "<i class='glyphicon glyphicon-map-marker'></i>";
+                        linkFullAddress += fullAddress;
+                        linkFullAddress += "</a>";
+                        $("#spanAddress").html(linkFullAddress);
+                    }
+                },
+                error: function (request, status, error) {
+                    fancyAlert("Status:" + status + " Error Thrown: " + error);
+                }
+            });
+    }
+
+    // ref: http://stackoverflow.com/questions/12554688/how-to-dynamically-change-the-centre-of-a-google-maps-without-erasing-markers
+    // ref: https://developers.google.com/maps/documentation/javascript/examples/geocoding-simple
+    // note: above two concepts have been used and merged together for proper use
+    function initialize(cityProvince, postalCode) {
+        var mapDiv = document.getElementById('map_canvas');
+
+        // addressParam can be eithere address or postal code
+        // TODO: if case postalCode is not valid, check with cityProvince which is not being used for now.
+        var address = postalCode;
+        geocoder = new google.maps.Geocoder();
+
+        // Get LatLng information by name
+        geocoder.geocode({
+            "address": address
+        }, function (results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                map = new google.maps.Map(mapDiv, {
+                    // Center map (but check status of geocoder)
+                    center: results[0].geometry.location,
+                    zoom: 15,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                });
+
+                map.setCenter(results[0].geometry.location);
+                var marker = new google.maps.Marker({
+                    map: map,
+                    position: results[0].geometry.location
+                });
+            } else {
+                alert('Geocode was not successful for the following reason: ' + status);
+            }
+        });
+    }
+</script>
+@Html.Partial("_guardRequestDetail")

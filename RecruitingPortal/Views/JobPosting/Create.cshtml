@@ -1,0 +1,150 @@
+﻿@model RecruitingPortal.Models.JobPostingViewModel
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<script type="text/javascript" src="@Url.Content("~/scripts/jHtmlArea-0.8.min.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/scripts/jHtmlArea.ColorPickerMenu-0.8.min.js")"></script>
+<link rel="Stylesheet" type="text/css" href="@Url.Content("~/Content/jHtmlArea/jHtmlArea.css")" />
+<link rel="Stylesheet" type="text/css" href="@Url.Content("~/Content/jHtmlArea/jHtmlArea.ColorPickerMenu.css")" />
+
+
+@using (Html.BeginForm("Create","JobPosting",FormMethod.Post, new { enctype = "multipart/form-data" })) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>JOB POSTING</h4>
+        <hr />
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.Title, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })            
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.Description, 10, 75, new {@class = "form-control",  @id="txtDescription" })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        
+        @Html.Action("ShowProvinceCity", "JobPosting", new { isRequired = true })
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.TextBoxFor(model => model.Address, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+            </div>
+            @Html.LabelFor(model => model.PostalCode, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-2">
+                @Html.TextBoxFor(model => model.PostalCode, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.PostalCode, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.MinRate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-2">
+                @Html.TextBoxFor(model => model.MinRate, new { @class = "form-control" } )
+                @Html.ValidationMessageFor(model => model.MinRate, "", new { @class = "text-danger" })
+            </div>
+            @Html.LabelFor(model => model.MaxRate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-2">
+                @Html.TextBoxFor(model => model.MaxRate, new { @class = "form-control" } )
+                @Html.ValidationMessageFor(model => model.MaxRate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        @*ref: http://stackoverflow.com/questions/21878673/html-enumdropdownlistfor-showing-a-default-text *@
+        <div class="form-group">
+            @Html.LabelFor(model => model.EducationLevel, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EnumDropDownListFor(model => model.EducationLevel, "Select Education Level", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.EducationLevel, "", new { @class = "text-danger" })
+                
+            </div>
+            
+            @Html.LabelFor(model => model.TypeOfService, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EnumDropDownListFor(model => model.TypeOfService, "Select Service Type", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.TypeOfService, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @*@Html.LabelFor(model => model.TypeOfWork, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">                
+                @Html.EnumDropDownListFor(model => model.TypeOfWork, "Select Work Type", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.TypeOfWork, "", new { @class = "text-danger" })
+            </div>*@
+
+            @Html.Label("Type of work", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @* ref: http://stackoverflow.com/questions/16688170/asp-net-mvc-html-checkboxfor *@
+                @for (int i = 0; i < Model.CheckBoxListTypeOfWork.Count; i++)
+                {
+                    @Html.CheckBoxFor(model => model.CheckBoxListTypeOfWork[i].Checked, new { id = "CheckBoxListTypeOfWork_" + i })
+                    @Html.Raw("&nbsp;&nbsp;")
+                    @Html.HiddenFor(model => model.CheckBoxListTypeOfWork[i].Id)
+                    @Html.DisplayFor(m => m.CheckBoxListTypeOfWork[i].Text)
+                    @Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;")
+                }
+                @Html.ValidationMessageFor(model => model.CheckBoxListTypeOfWork, "", new { @class = "text-danger" })
+            </div>
+        </div>
+                               
+        <div class="form-group">
+            @Html.Label("File", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <a class='btn' href='javascript:;'>
+                    Choose File...
+                    <input type="file" name="fileAttached1" size="40"
+                           style="position:absolute;z-index:2;top:0;
+                           left:0;filter: alpha(opacity=0); opacity:0;
+                           background-color:transparent;color:transparent;"
+                           onchange='$("#upload-file-info").html($(this).val());'>
+                </a>
+                <span class='label label-info' id="upload-file-info"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="POST JOB" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@*@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}*@
+
+
+<script type="text/jscript">
+    // ref: http://jhtmlarea.codeplex.com/
+    $('#txtDescription').htmlarea({
+        toolbar: [
+            ["bold", "italic", "underline"],
+            ["p"],
+            // ["h1", "h2", "h3"],
+            // ["increasefontsize", "decreasefontsize"],
+            ["link", "unlink"],
+            ["Cut", "Copy", "Paste"],
+            ["orderedList", "unorderedList"],
+            ["indent", "outdent", "justifyleft", "justifycenter", "justifyright"],
+            ["forecolor"],
+            ["horizontalrule"]
+        ]
+    });
+</script>

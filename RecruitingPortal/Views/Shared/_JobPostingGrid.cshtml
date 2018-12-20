@@ -1,0 +1,236 @@
+﻿@using RecruitingPortal.Domain
+@using RecruitingPortal.BLL
+@using RecruitingPortal.Infrastructure
+@using System.Configuration
+@{
+    var FileDownLoadedUrl = ConfigurationManager.AppSettings["hostWebName"] + "FileUploaded/JobPosting/";
+}
+
+<h4 class="sub-heading">Job Posting</h4>
+<!--<div class="alert alert-success">
+    <ul class="fa-ul">
+        <li>
+            <i class="fa fa-check-square-o fa-lg fa-li"></i>
+            "Applied" on the grid shows that you have already applied for the job <i class="fa fa-question-circle" data-toggle="tooltip" title="An 'Applied Job' list can also be viewed on your Account Page" style="color:black"></i>
+        </li>
+        <li>
+            <i class="fa fa-check-square-o fa-lg fa-li"></i>
+            "Apply" on the grid shows that you can apply for the job
+        </li>
+    </ul>
+</div>-->
+
+<div class="rsMsgWrap">
+    <div class="rsCircle rsSuccess">
+        <i class="fas fa-check"></i>
+    </div>
+    "Applied" on the grid shows that you have already applied for the job <i class="fas fa-question-circle" data-toggle="tooltip" title="An 'Applied Job' list can also be viewed on your Account Page"></i>
+    <br />
+    <div class="rsCircle rsWarn">
+        <i class="fas fa-check"></i>
+    </div>
+    "Apply" on the grid shows that you can apply for the job
+</div>
+
+@if (TempData["message"] != null)
+{
+    <div class="alert alert-info alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <span class="glyphicon glyphicon-ok"></span> <strong>@TempData["message"]</strong>
+    </div>
+}
+<table id="table_JobPosting" style="width:100%">
+    <thead>
+        <tr>
+            <th>Position</th>
+            <th>Service</th>
+            <th>City</th>
+            <th>Posted</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+
+
+<script type="text/jscript">
+    $(document).ready(function () {
+
+        // ref: https://www.echosteg.com/jquery-datatables-asp.net-mvc5-server-side
+        var oTable = $('#table_JobPosting').DataTable({
+            iDisplayLength: 25,
+            serverSide: true,
+            ajax: {
+                type: "POST",
+                url: "@Url.Action("GetJobPosting", "JobPosting")",
+                contentType: 'application/json; charset=utf-8',
+                dataType: "json",
+                dataSrc: "data",
+                data: function (data) {
+                    data.Region = $("#JobSearch_RegionID").val() == null || $("#JobSearch_RegionID").val() == "" ? "0" : $("#JobSearch_RegionID").val();
+                    data.City = $("#JobSearch_CityId").val() == null || $("#JobSearch_CityId").val() == "" ? "0" : $("#JobSearch_CityId").val();
+                    data.ServiceType = $("#ServiceType").val() == null || $("#ServiceType").val() == "" ? "0" : $("#ServiceType").val();
+                    data.Title = $("#Title").val();
+                    data.Description = $("#Description").val();
+                    data.postalCode = $("#postalCode").val();
+
+                    return JSON.stringify(data);
+                },
+                error: function (request, status, error) {
+                    console.log("request: " + request);
+                    console.log("status: " + status);
+                    console.log("error: " + error);
+                }
+            },
+            //"dom": 'frtiS',
+            //"scrollY": 500,
+            //"scrollX": true,
+            //"scrollCollapse": true,
+            "scroller": {
+                loadingIndicator: false
+            },
+            processing: true,
+            language:{
+                processing: "<img  src='/images/loading.gif' />",
+            },
+            select: true,
+            destroy: true,
+            paging: true,
+            bInfo: true, // hide 1 of n record
+            bFilter: true, // hide search box
+            bLengthChange: true, // hide entries dropdown list
+            // sDom: 't', // hide paging // ref: https://datatables.net/forums/discussion/2850/remove-pagination  // ref: http://legacy.datatables.net/usage/options#sDom
+            // ordering: true,
+            // deferRender: true,
+
+            // ref: http://stackoverflow.com/questions/19777075/datatables-merge-columns-together
+            columns: [
+                     {
+                         data: "Title",
+                         render: function (data, type, row) {
+                             if (row["Title"].length > 30)
+                                 return "<a href='#jobPostingDetail' class='jobPostingDetail' id='" + row["Id"] + "'>" + row["Title"].substring(0, 30) + "..." + "</a>";
+
+                             return "<a href='#jobPostingDetail' class='jobPostingDetail' id='" + row["Id"] + "'>" + row["Title"] + "..." + "</a>";
+                         }
+
+                     },
+                     {
+                         data: "typeOfServiceName"
+
+                     },
+                     {
+                         data: "cityName"
+
+                     },
+                     {
+                         data: "CreateDate",
+                         render: function (value) {
+                             var date = new Date(parseInt(value.replace("/Date(", "").replace(")/", "")));
+                             return date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+                         }
+                     },
+                     {
+                         // this is Actions Column
+                         // ref: http://stackoverflow.com/questions/30627026/jquery-datatables-how-to-add-an-edit-and-delete-option
+
+                         mRender: function (data, type, row) {
+                             var editLink = "APPLIED";
+
+                             if (row["jobApplied"] == false){
+                                 editLink = "<a href='#_' class='jobApplyButton btn btn-warning btn-xs' id='" + row["Id"] + "'>APPLY</a>";
+                             }
+
+                             return editLink;
+                         },
+                         "bSortable": false
+                     }
+            ],
+            order: [3, "desc"], // posting date
+            columnDefs: [
+                {
+                    className: "dt-left", "targets": [0]
+                },
+                {
+                    className: "dt-left", "targets": [1]
+                },
+                {
+                    className: "dt-left", "targets": [2]
+                },
+                {
+                    className: "dt-center", "targets": [4]
+                }
+            ]
+        });
+
+        $("body").on("click", "#findJob", function (e) {
+            oTable.ajax.reload();
+        });
+
+        $("body").on("click", "#resetJobSearchForm", function (e) {
+
+            $("#JobSearch_RegionID").val("0");
+            $("#JobSearch_CityId").val("0");
+            $("#ServiceType").val("");
+            $("#Title").val("");
+            $("#Description").val("");
+            $("#postalCode").val("");
+
+
+            oTable.ajax.reload();
+        });
+
+        // apply for job
+        $("body").on("click", ".jobApplyButton", function (e) {
+            var Id = $(this).attr('id');
+            var url = "@Url.Action("Apply", "JobApply")";
+
+            fancyConfirm('NOTE: Once you apply for the job with eligibility, status, security license and certification(s) checked, you may need to bring copies of each to prove them upon interview. Are you sure applying for the job?',
+                    function () { // ok click
+                        $.ajax({
+                            type: "GET",
+                            cache: false,
+                            dataType: "json",
+                            url: url,
+                            data: {
+                                Id: Id,
+                                IsRedirectToAction: false
+                            },
+                            success: function (data) {
+                                // data is your result from controller
+                                if (data.success) {
+                                    window.location.href =  "@Url.Action("Index", "JobPosting")";
+                                }
+                                else {
+                                    alert('You will have to create your profile in order to apply for the job.');
+                                    window.location.href = "@Url.Action("CreateOrEdit", "JobSeeker")";
+                                }
+                            },
+                            error: function (request, status, error) {
+                                alert('Applying for the job is failed. Please try it again');
+                            },
+                            complete: function () {
+                            }
+                        });
+                    },
+                    function () { // cancel click
+                        // do nothing
+                    }
+                );
+        });
+
+        // job posting Detail
+        $("body").on("click", ".jobPostingDetail", function (e) {
+            e.preventDefault();
+            var id = $(this).attr('id');
+            var url = "@Url.Action("JobPostingDetail", "JobPosting")";
+            var fileDownloadUrl = "@FileDownLoadedUrl";
+            GetJobPostingDetail(id, url, fileDownloadUrl);
+
+        });
+
+    }); // end of document loading
+
+</script>
+@Html.Partial("_JobPostingDetail")

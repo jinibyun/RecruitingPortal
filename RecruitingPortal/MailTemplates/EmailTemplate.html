@@ -1,0 +1,118 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Email Template</title>
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,600i,700,700i" rel="stylesheet">
+
+<style>
+	body {
+		font-family: 'Open Sans', sans-serif;
+		background: #f9f9f9;
+	}
+	
+	img {
+		width: 100px;
+		margin-top: 1em;
+		margin-bottom: 1em;
+		margin-left: 42%;
+	}
+	
+	#rsEmailTempPpl {
+		display: block;
+		background: #fff;
+		border: 1px solid #ddd;
+		padding: 2em;
+		font-size: 16px;
+		min-height: 200px;
+		text-align: center;
+		color: #2b3244;
+		margin: 1em 1em 3em 1em;
+	}
+	
+	#rsEmailTempPpl h2 {
+		font-weight: 300;
+	}
+	
+	#rsEmailTempPpl .rsLgSvg{
+		color: #006ee7;
+		font-size: 52px;
+	}
+	
+	#rsEmailTempPpl svg {
+		color: #006ee7;
+		font-size: 27px;
+	}
+	
+	#rsEmailTempPpl p {
+		color: #777777;
+		line-height: 25px;
+		padding: 1em 3em;
+	}
+	
+	#rsEmailTempPpl p b {
+		font-weight: 600;
+		color: #006ee7;
+	}
+	
+	#rsEmailTempPpl p a,
+	#rsEmailTempPpl a {
+		color: #006ee7;
+		text-decoration:none;
+	}
+	
+	#rsEmailTempPpl p a:hover,
+	#rsEmailTempPpl a:hover {
+		text-decoration: underline;
+		cursor: pointer;
+	}
+	
+	#rsDivWrap {
+		width: 100%;
+	}
+	
+	hr {
+		margin-top: 20px;
+	    margin-bottom: 20px;
+	    border: 0;
+	    border-top: 1px solid #eee;
+	}
+	
+	@media (min-width: 768px) {
+		#rsDivWrap {
+		width: 80%;
+		position: relative;
+	    min-height: 1px;
+	    padding-right: 15px;
+	    padding-left: 15px;
+		margin-left: 15%;
+	}
+	}
+	
+</style>
+
+</head>
+
+<body>
+
+<div id="rsDivWrap">
+    <%LogoUrl%>
+    <div id="rsEmailTempPpl">
+    	<i class="far fa-check-circle rsLgSvg"></i>
+        <h2><%BodyTitle%></h2>
+        <p>
+            <%BodyContent%>
+        </p>
+        <hr>
+        <i class="far far fa-bookmark"></i>
+        <p><%HomeUrl%></p>
+        <div><i><%BodySubContent%></i></div>
+    </div>
+</div>
+
+
+<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+
+
+</body>
+</html>

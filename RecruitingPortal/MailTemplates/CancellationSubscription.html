@@ -1,0 +1,71 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Successful Cancellation Confirmation</title>
+    <style type="text/css">
+        body {
+            background-color: #FFF;
+            color: #777;
+            font-family: "Open Sans", Arial, sans-serif;
+            font-size: 14px;
+            line-height: 22px;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <table style="width: 90%;color: #777;font-family: Arial, sans-serif;font-size: 14px;" border="0">
+        <tr>
+            <td colspan="2" valign="top"><h2>Cancellation subscription without refund</h2></td>
+        </tr>
+        <tr>
+            <td width="30%" valign="top">
+                <b>Cancelled Subscription Plan:</b>
+            </td>
+            <td width="*">
+                <%SubscriptionPlan%>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                <b>Cancellation Unique Id: </b>
+            </td>
+            <td>
+                <%PaymentLogGuid%>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                <b>Cancelled Date:</b>
+            </td>
+            <td>
+                <%CancelledDate%>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                <b>Refund Detail:</b>
+            </td>
+            <td>
+                <%Refund%>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" colspan="2">
+                &nbsp;
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" colspan="2">
+                <br /><%FeedbackURL%>
+            </td>
+        </tr>
+        <tr>
+            <td align="left" colspan="2">
+                <br />
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

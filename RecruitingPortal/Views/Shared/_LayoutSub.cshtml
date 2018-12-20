@@ -1,0 +1,91 @@
+﻿@using System.Configuration
+@using RecruitingPortal.Domain
+@using RecruitingPortal.BLL
+@using RecruitingPortal.Models
+@using RecruitingPortal.Infrastructure
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Css {
+    @RenderSection("Css", required: false)
+}
+@section Scripts{
+    @RenderSection("Scripts", required: false)
+}
+
+<!-- Sidebar -->
+<div id="rsSidebarWrap" data-spy="affix" data-offset-top="15">
+    <ul class="rsSidebarNav affix" data-spy="affix" data-offset-top="15">
+        <li class="rsLogo">
+            <a href="#menu-toggle" class="btn btn-secondary" id="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </a>
+        </li>
+        @Html.Partial("_Sidebar")        
+    </ul>
+
+    @*<div class="rsSidebarLoginSNS">
+        SNS AD Posting
+        <ul>
+            <li>
+                <div class="rsIconCircle facebook">
+                    <i class="fab fa-facebook-f"></i>
+                </div>
+            </li>
+            <li>
+                <div class="rsIconCircle twitter">
+                    <i class="fab fa-twitter"></i>
+                </div>
+            </li>
+            <li>
+                <div class="rsIconCircle linkedin">
+                    <i class="fab fa-linkedin-in"></i>
+                </div>
+            </li>
+        </ul>
+
+        <input type="text">
+        <input type="text">
+        <button class="btn rsBtnDefault">
+            Sign in
+        </button>
+        <a href="#" class="pull-right">Go to page</a>
+    </div>*@
+</div>
+<!-- /#sidebar-wrapper -->
+<!-- Page Content -->
+@RenderBody()
+<!-- /#page-content-wrapper -->
+<script type="text/javascript">
+    // menu toggle script
+    $("#menu-toggle").click(function (e) {
+        e.preventDefault();
+        $("#rsPageWrap").toggleClass("toggled");
+    });
+
+    
+
+    // TODO: how to define below function in global level
+    // ref: http://stackoverflow.com/questions/10446122/javascript-jquery-callback-for-fancybox-yes-no-confirm
+    function fancyConfirm(msg, callbackYes, callbackNo) {
+        var ret;
+
+        jQuery.fancybox({
+            'modal': true,
+            'content': "<div style=\"margin:1px;width:300px;\"><b>" + msg + "</b><div style=\"text-align:right;margin-top:10px;\">" +
+                       "<input id=\"fancyconfirm_cancel\"  type=\"button\" value=\"Cancel\" class=\"btn btn-warning\">&nbsp;&nbsp;&nbsp;&nbsp;" +
+                       "<input id=\"fancyConfirm_ok\" type=\"button\" value=\"Ok\" class=\"btn btn-success\"></div></div>",
+            'beforeShow': function () {
+                jQuery("#fancyconfirm_cancel").click(function () {
+                    $.fancybox.close();
+                    callbackNo();
+                });
+
+                jQuery("#fancyConfirm_ok").click(function () {
+                    $.fancybox.close();
+                    callbackYes();
+                });
+            }
+        });
+    }
+</script>

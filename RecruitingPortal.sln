@@ -1,0 +1,85 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2010
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecruitingPortal", "RecruitingPortal\RecruitingPortal.csproj", "{0F72CC19-39CC-44B1-9B4F-14AEBB5DC05B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "10 Presentation - Web", "10 Presentation - Web", "{6C6A3332-79D6-45CE-ADA5-6B8FB7AE8FB3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "20 Business Layer", "20 Business Layer", "{B398428F-9084-4146-A985-8CA9DFEF7AEC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "30 Data Layer", "30 Data Layer", "{AE3CE493-66BA-4F87-9618-5B537B679106}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "90 Test Layer", "90 Test Layer", "{B27A7D4B-1EF5-483F-8931-B16FD23FB9B5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecruitingPortal.DAL", "RecruitingPortal.DAL\RecruitingPortal.DAL.csproj", "{98CE2E5C-EDD4-4044-A73D-AB0AC1EA2FAF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecruitingPortal.BLL", "RecruitingPortal.BLL\RecruitingPortal.BLL.csproj", "{8DC8E03D-DBE5-48AC-BD25-D6C4F384BBF5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecruitingPortal.Domain", "RecruitingPortal.Domain\RecruitingPortal.Domain.csproj", "{4D976F78-BDF8-4CEF-B130-1932ECB6EBA6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "15 Presentation - Windows Service", "15 Presentation - Windows Service", "{81D87307-B083-4D9F-A16F-B78075F77B7C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecruitingPortal.Win.Service", "RecruitingPortal.Win.Service\RecruitingPortal.Win.Service.csproj", "{6F2500C7-62B0-4878-9C61-7867800FED7F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecruitingPortal.Win.Service.BLL", "RecruitingPortal.Win.Service.BLL\RecruitingPortal.Win.Service.BLL.csproj", "{A2E1CFD3-E82B-4343-BA30-1BB9A2025535}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestProject1", "UnitTestProject1\UnitTestProject1.csproj", "{60964916-52ED-4A84-BC3C-F4D7B8A4A207}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "RecruitingPortal.Setup", "RecruitingPortal.Setup\RecruitingPortal.Setup.vdproj", "{66363B60-D866-4109-9C86-B77A4FABDE75}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0F72CC19-39CC-44B1-9B4F-14AEBB5DC05B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F72CC19-39CC-44B1-9B4F-14AEBB5DC05B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F72CC19-39CC-44B1-9B4F-14AEBB5DC05B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F72CC19-39CC-44B1-9B4F-14AEBB5DC05B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98CE2E5C-EDD4-4044-A73D-AB0AC1EA2FAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98CE2E5C-EDD4-4044-A73D-AB0AC1EA2FAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98CE2E5C-EDD4-4044-A73D-AB0AC1EA2FAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98CE2E5C-EDD4-4044-A73D-AB0AC1EA2FAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8DC8E03D-DBE5-48AC-BD25-D6C4F384BBF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DC8E03D-DBE5-48AC-BD25-D6C4F384BBF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DC8E03D-DBE5-48AC-BD25-D6C4F384BBF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DC8E03D-DBE5-48AC-BD25-D6C4F384BBF5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D976F78-BDF8-4CEF-B130-1932ECB6EBA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D976F78-BDF8-4CEF-B130-1932ECB6EBA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D976F78-BDF8-4CEF-B130-1932ECB6EBA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D976F78-BDF8-4CEF-B130-1932ECB6EBA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F2500C7-62B0-4878-9C61-7867800FED7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F2500C7-62B0-4878-9C61-7867800FED7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F2500C7-62B0-4878-9C61-7867800FED7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F2500C7-62B0-4878-9C61-7867800FED7F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2E1CFD3-E82B-4343-BA30-1BB9A2025535}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2E1CFD3-E82B-4343-BA30-1BB9A2025535}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2E1CFD3-E82B-4343-BA30-1BB9A2025535}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2E1CFD3-E82B-4343-BA30-1BB9A2025535}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60964916-52ED-4A84-BC3C-F4D7B8A4A207}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60964916-52ED-4A84-BC3C-F4D7B8A4A207}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60964916-52ED-4A84-BC3C-F4D7B8A4A207}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60964916-52ED-4A84-BC3C-F4D7B8A4A207}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66363B60-D866-4109-9C86-B77A4FABDE75}.Debug|Any CPU.ActiveCfg = Debug
+		{66363B60-D866-4109-9C86-B77A4FABDE75}.Release|Any CPU.ActiveCfg = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0F72CC19-39CC-44B1-9B4F-14AEBB5DC05B} = {6C6A3332-79D6-45CE-ADA5-6B8FB7AE8FB3}
+		{98CE2E5C-EDD4-4044-A73D-AB0AC1EA2FAF} = {AE3CE493-66BA-4F87-9618-5B537B679106}
+		{8DC8E03D-DBE5-48AC-BD25-D6C4F384BBF5} = {B398428F-9084-4146-A985-8CA9DFEF7AEC}
+		{4D976F78-BDF8-4CEF-B130-1932ECB6EBA6} = {AE3CE493-66BA-4F87-9618-5B537B679106}
+		{6F2500C7-62B0-4878-9C61-7867800FED7F} = {81D87307-B083-4D9F-A16F-B78075F77B7C}
+		{A2E1CFD3-E82B-4343-BA30-1BB9A2025535} = {B398428F-9084-4146-A985-8CA9DFEF7AEC}
+		{60964916-52ED-4A84-BC3C-F4D7B8A4A207} = {B27A7D4B-1EF5-483F-8931-B16FD23FB9B5}
+		{66363B60-D866-4109-9C86-B77A4FABDE75} = {81D87307-B083-4D9F-A16F-B78075F77B7C}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5596386B-366A-44CF-AC74-0CC7B533B207}
+	EndGlobalSection
+EndGlobal

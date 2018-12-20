@@ -1,0 +1,273 @@
+﻿@using System.Configuration
+@using RecruitingPortal.Models
+@model List<JobApplyViewModel>
+
+@{
+    /**/
+
+    Layout = "~/Views/Shared/_LayoutSub.cshtml";
+    ViewBag.Title = "Job Applied List";
+
+    var hostWebName = ConfigurationManager.AppSettings["hostWebName"];
+    var FileDownLoadedUrl = ConfigurationManager.AppSettings["hostWebName"] + "FileUploaded/JobPosting/";
+
+
+    var jobApply = Model.FirstOrDefault<JobApplyViewModel>();
+    int JobPostingId = jobApply.JobPostingId;
+    string jobPostingTitle = jobApply.JobPostingTitle;
+    var createDate = jobApply.JobPosting.CreateDate;
+    var updateDate = jobApply.JobPosting.UpdateDate;
+    var isHired = jobApply.JobPosting.IsHired ?? false;
+}
+@*note: implementing list in asp.net mvc may needs following three*@
+@*ref: http://bootsnipp.com/snippets/featured/list-grid-view*@
+@*ref: http://stackoverflow.com/questions/2106692/best-way-to-do-listview-in-asp-net-mvc*@
+@*ref: paging: http://rickyrosario.com/blog/simple-htmlhelper-extension-for-paging-in-asp-net-mvc/*@
+
+<style type="text/css">
+    .glyphicon {
+        margin-right: 5px;
+    }
+
+    .thumbnail {
+        margin-bottom: 20px;
+        padding: 0px;
+        -webkit-border-radius: 0px;
+        -moz-border-radius: 0px;
+        border-radius: 0px;
+    }
+
+    .item.list-group-item {
+        float: none;
+        width: 100%;
+        background-color: #fff;
+        margin-bottom: 10px;
+    }
+
+        .item.list-group-item:nth-of-type(odd):hover, .item.list-group-item:hover {
+            background: #428bca;
+        }
+
+        .item.list-group-item .list-group-image {
+            margin-right: 10px;
+        }
+
+        .item.list-group-item .thumbnail {
+            margin-bottom: 0px;
+        }
+
+        .item.list-group-item .caption {
+            padding: 9px 9px 0px 9px;
+        }
+
+        .item.list-group-item:nth-of-type(odd) {
+            background: #eeeeee;
+        }
+
+        .item.list-group-item:before, .item.list-group-item:after {
+            display: table;
+            content: " ";
+        }
+
+        .item.list-group-item img {
+            float: left;
+        }
+
+        .item.list-group-item:after {
+            clear: both;
+        }
+
+    .list-group-item-text {
+        margin: 0 0 11px;
+    }
+
+</style>
+
+
+<div id="rsPageContentWrap">
+    <h3>Job applicant(s) applied</h3>
+    <div class="rsBackCard">
+        <div class="col-xs-12">
+            <div class="rsBlockWrap">
+                <section id="featured">
+                    <div class="container-fluid">
+
+                        <div class="bs-callout bs-callout-info" id="callout-labels-inline-block">
+                            <h4><a href="#jobPostingDetail" class="jobPostingDetail" id="@JobPostingId">@jobPostingTitle</a></h4>
+                            <p>
+                                <ul class="rsSummary">
+                                    <li><b>Created: </b> @createDate</li>
+                                    <li><b>Last Update:</b> @updateDate</li>
+                                    @if (isHired)
+                                    {
+                                        @ShowHiredApplicants()
+                                    }
+                                </ul>
+                            </p>
+                        </div>
+
+                        <p style="text-align:right" class="rsBackText">
+                            <i class="fas fa-chevron-left"></i>
+                            @Html.ActionLink("Back to Job Posting", "CompanyPostedJob", "JobPosting")
+                        </p>
+
+                        <div class="well well-sm">
+                            <strong>Job Security Guard(s) who applied for the job</strong>&nbsp;&nbsp;
+                            <div class="btn-group pull-right" style="top: -4px;">
+                                <a href="#" id="list" class="btn btn-sm rsBtnWhite ">
+                                    <span class="glyphicon glyphicon-th-list">
+                                    </span>List
+                                </a> <a href="#" id="grid" class="btn btn-sm rsBtnWhite ">
+                                    <span class="glyphicon glyphicon-th"></span>Grid
+                                </a>
+                            </div>
+                        </div>
+                        <div id="products" class="row list-group">
+                            @if (Model != null && Model.Count > 0)
+                            {
+                                foreach (var apply in Model)
+                                {
+                                    //TODO
+                                    var hired = apply.JobHires.Any();
+                                    int hireJobSeekerId = 0;
+                                    if (hired)
+                                    {
+                                        hireJobSeekerId = apply.JobSeekerId;
+                                    }
+                                    @Html.Partial("_JobApplyList", apply, new ViewDataDictionary { { "HireJobSeekerId", hireJobSeekerId }, { "IsHired", hired } })
+                                    @*@Html.Partial("_JobApplyList", jobApply, new ViewDataDictionary { { "HireMemberId", @Model.HireMemberId }, { "IsHired", Model.IsHired } })*@
+                                }
+                            }
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@helper ShowHiredApplicants()
+{
+        var hired = Model.Where(x => x.JobHires.Where(y => y.JobApplyId == x.Id).Any()).ToList<JobApplyViewModel>();
+        DateTime hiredDate;
+        string hiredMemberFName;
+        string hiredMemberLName;
+        foreach (var member in hired)
+        {
+            hiredDate = member.JobHires.Select(x => x.HiredDate).FirstOrDefault();
+            hiredMemberFName = member.JobSeeker.FirstName;
+            hiredMemberLName = member.JobSeeker.LastName;
+            <li><b>Hired Applicant (Date) : </b> <span class="btn-info"> @string.Format(" {0} {1} ({2}) ", hiredMemberFName, hiredMemberLName, hiredDate) </span></li>
+        }
+
+}
+
+
+@Html.Partial("_JobPostingDetail")
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#list').click(function (event) { event.preventDefault(); $('#products .item').addClass('list-group-item'); });
+        $('#grid').click(function (event) { event.preventDefault(); $('#products .item').removeClass('list-group-item'); $('#products .item').addClass('grid-group-item'); });
+
+        // $("#hiredApplicant")
+        @*$.ajax({
+            url: "@Url.Action("GetBranchAddress", "ServiceTeam")",
+            dataType: "json",
+            type: "GET",
+            cache: false,
+            data: {
+                Id: branchId
+            },
+            success: function (returnData) {
+                if (returnData.success != undefined && returnData.success == false) {
+                    alert('failed');
+                }
+                else {
+                    // console.log(returnData);
+                    var fullAddress = returnData.Address1;
+                    if (returnData.Address2 != '' && returnData.Address2 != null) {
+                        fullAddress += ' ' + returnData.Address2;
+                    }
+                    fullAddress += ' ' + returnData.city.City1;
+                    fullAddress += ' ' + returnData.city.Region.Code;
+                    fullAddress += ' ' + returnData.PostalCode;
+
+                    var linkFullAddress = "<a href='#mapcontainer' class='mapToShowGoogle' id='" + returnData.city.City1 + "|" + returnData.city.Region.Region1 + "|" + returnData.PostalCode + "'>";
+                    linkFullAddress += "<i class='glyphicon glyphicon-map-marker'></i>";
+                    linkFullAddress += fullAddress;
+                    linkFullAddress += "</a>";
+                    $("#spanAddress").html(linkFullAddress);
+                }
+            },
+            error: function (request, status, error) {
+                fancyAlert("Status:" + status + " Error Thrown: " + error);
+            }
+        });*@
+
+
+        // job posting Detail
+        $("body").on("click", ".jobPostingDetail", function (e) {
+            e.preventDefault();
+            var id = $(this).attr('id');
+            var url = "@Url.Action("JobPostingDetail", "JobPosting")";
+            var fileDownloadUrl = "@FileDownLoadedUrl";
+            GetJobPostingDetail(id, url, fileDownloadUrl);
+        });
+
+        // click "HIRE" button
+        $("body").on("click", ".applicant-hire", function (e) {
+            e.preventDefault();
+            var jobPostingId = '@JobPostingId';
+
+            var jobApplyId = $(this).attr('id');
+
+            var name = $(this).attr('name');
+            var applicantName = name.split("|")[0].trim();
+            var applicantEmail = name.split("|")[1].trim()
+
+            $.ajax({
+		        type: "POST",
+		        cache: false,
+		        dataType: "json",
+		        contentType: 'application/json; charset=utf-8',
+		        url: "@Url.Action("ChangeToHire", "JobHire")",
+                data: JSON.stringify({
+                    jobPostingId: jobPostingId,
+                    jobApplyId: jobApplyId,
+                    applicantName: applicantName,
+                    applicantEmail: applicantEmail
+		        }),
+		        success: function (data) {
+			        // data is your result from controller
+			        if (data.success) {
+                        fancyAlerReload(applicantName + " has been successfully hired and the confirmation email has been sent");
+			        }
+			        else {
+				        alert('Job was not changed to "Hired" status.Please try it again');
+			        }
+		        },
+		        error: function (request, status, error) {
+			        alert('Job was not changed to "Hired" status. Please try it again');
+
+		        },
+		        complete: function () {
+
+		        }
+	        });
+        });
+    }); // end of document loading
+
+
+    // Count characters
+    // ref: http://stackoverflow.com/questions/5371089/count-characters-in-textarea
+    function countChar(val, max, target) {
+        var len = val.value.length;
+        if (len >= max) {
+            val.value = val.value.substring(0, max);
+        } else {
+            $('#' + target).html(max - len + " <i>characters remaining</i>");
+        }
+    }
+</script>

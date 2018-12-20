@@ -1,0 +1,206 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Respond To Request</title>
+    <style type="text/css">
+    body {
+	    background-color: #FFF;
+	    color: #777;
+	    font-family: "Open Sans", Arial, sans-serif;
+	    font-size: 14px;
+	    line-height: 22px;
+	    margin: 0;
+    }
+    </style>
+</head>
+<body>
+    <table style="width: 90%;color: #777;font-family: Arial, sans-serif;font-size: 14px;" border="0">
+        <tr>
+            <td colspan="2" valign="top">
+                <h2>
+                    Provider Response</h2>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                <b>Customer Request Id:</b>
+            </td>
+            <td>
+                <%CustomerRequestId%>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                <b>Category:</b>
+            </td>
+            <td>
+                <%CategoryName%>
+            </td>
+        </tr>
+        <!--            <tr>
+                <td valign ="top">
+                    <b>Title:</b>
+                </td>
+                <td>
+                    <%Title%>
+                </td>
+            </tr>-->
+        <tr>
+            <td valign="top">
+                <b>Response Date:</b>
+            </td>
+            <td>
+                <%ResponseDate%>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+            &nbsp;
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <%Description%>
+            </td>
+        </tr>
+
+        <!-- short form begin-->
+        <tr>
+            <td valign="top">
+                <b>Year Established:</b>
+            </td>
+            <td>
+                <%YearEstablished%>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                <b>Number of Employees:</b>
+            </td>
+            <td>
+                <%NumberOfEmployee%>
+            </td>
+        </tr>
+
+        <tr>
+            <td valign="top">
+                <b>Licenses:</b>
+            </td>
+            <td>
+                <%IsLicensed%>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                <b>Professional Membership:</b>
+            </td>
+            <td>
+                <%HasProfessionalMemberShip%>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                <b>Liability Insurance:</b>
+            </td>
+            <td>
+                <%HasLiabilityInsurance%>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                <b>Written Contract Provided:</b>
+            </td>
+            <td>
+                <%HasWrittenContractProvided%>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                <b>Provider Warranty:</b>
+            </td>
+            <td>
+                <%HasWarranty%>
+            </td>
+        </tr>
+       <tr>
+            <td valign="top">
+                <b>Reference Available:</b>
+            </td>
+            <td>
+                <%IsRefAvailable%>
+            </td>
+        </tr>
+
+              <tr>
+            <td valign="top">
+                <b>Payment method:</b>
+            </td>
+            <td>
+                <%ProviderPaymentMethods%>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                <b>Available Languages:</b>
+            </td>
+            <td>
+                <%Languages%>
+            </td>
+        </tr>
+        <!-- short form end-->
+        <!-- Detail info begin-->
+        <tr>
+            <td colspan="2">
+            &nbsp;
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <%Description1%>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                <b>Company Description:</b>
+            </td>
+            <td>
+                <%CompanyDesc%>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                <b>Company Files(license, certificate):</b>
+            </td>
+            <td>
+                * License: <%License%><br />
+                * Certificate: <%Certificate%>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                <b>Estimate:</b>
+            </td>
+            <td valign="top">
+                <%Estimate%>
+            </td>
+        </tr>
+        <!-- Detail info  end-->
+        <tr>
+            <td colspan="2">
+                <br />
+                <%URL%>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" colspan="2">
+                <br /><%FeedbackURL%>
+            </td>
+        </tr>
+        <tr>
+            <td align="left" colspan="2">
+                <br />
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

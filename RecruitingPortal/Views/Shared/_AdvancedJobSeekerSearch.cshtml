@@ -1,0 +1,261 @@
+﻿@*ref: http://bootsnipp.com/snippets/featured/advanced-dropdown-search*@
+@using RecruitingPortal.Domain
+@using RecruitingPortal.BLL
+@using RecruitingPortal.Infrastructure
+@using RecruitingPortal.Models
+@model RecruitingPortal.Models.SearchViewModel
+@{
+    var session = WebUtil.GetSession<LoggedInUserViewModel>("LoggedInUserViewModel") != null ? WebUtil.GetSession<LoggedInUserViewModel>("LoggedInUserViewModel") : null;
+
+    if (session == null)
+    {
+        Response.Redirect("~/Account/Login");
+    }
+
+    bool isAuthenticated = HttpContext.Current.User.Identity.IsAuthenticated;
+
+    var isSearchEnabled = false;
+
+    if (session != null && isAuthenticated)
+    {
+        if (session.Role == EnumMemberRole.Administrator
+            | session.Role == EnumMemberRole.Company
+            | session.Role == EnumMemberRole.Staff
+            )
+        {
+            isSearchEnabled = true;
+        }
+    }
+}
+
+<style type="text/css">
+    .dropdown.dropdown-lg .dropdown-menu {
+        margin-top: -1px;
+        padding: 6px 20px;
+    }
+
+    .input-group-btn .btn-group {
+        display: flex !important;
+    }
+
+    .btn-group .btn {
+        border-radius: 0;
+        margin-left: -1px;
+    }
+
+        .btn-group .btn:last-child {
+            border-top-right-radius: 4px;
+            border-bottom-right-radius: 4px;
+        }
+
+    .btn-group .form-horizontal .btn[type="submit"] {
+        border-top-left-radius: 4px;
+        border-bottom-left-radius: 4px;
+    }
+
+    .form-horizontal .form-group {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .form-group .form-control:last-child {
+        border-top-left-radius: 4px;
+        border-bottom-left-radius: 4px;
+    }
+
+    @@media screen and (min-width: 768px) {
+        #adv-search {
+            width: 400px;
+            margin: 0 auto;
+        }
+
+        .dropdown.dropdown-lg {
+            position: static !important;
+        }
+
+            .dropdown.dropdown-lg .dropdown-menu {
+                min-width: 400px;
+            }
+    }
+</style>
+
+<!-- ref: http://forums.asp.net/t/1961426.aspx?Ajax+BeginForm+and+UpdateTargetId+not+working -->
+<!-- ref: http://stackoverflow.com/questions/16635460/ajax-beginform-and-validation -->
+@*<script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.min.js")" type="text/javascript"> </script>*@
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+@{ Html.EnableClientValidation(true); }
+
+
+
+<div class="row">
+    <div class="col-sm-8 col-md-8">
+        <h4 class="sub-heading">Search Guards <i class="fa fa-question-circle" data-toggle="tooltip" title="Unless you use Dropdown Advanced Search the filter will only search: First Name, Last Name, Addresss and Cellphone." style="color:black"></i></h4>
+    </div>
+    <div class="col-sm-4 col-md-4 pull-right" style="text-align:right">
+        @if (isSearchEnabled)
+        {
+            <button class="btn btn-link" id="resetAndGoDefaultJobSeeker"><span class="glyphicon glyphicon-refresh"></span> Reset & All Job Seekers </button>
+        }
+        else
+        {
+            <button class="btn btn-link" disabled id="resetAndGoDefaultJobSeeker"><span class="glyphicon glyphicon-refresh"></span> Reset & All Job Seekers </button>
+        }
+    </div>
+</div>
+
+
+
+
+<div class="input-group">
+    @using (Ajax.BeginForm("JobSeekerSearch", "Search", FormMethod.Post,
+                                    new AjaxOptions
+                                    {
+                                        InsertionMode = InsertionMode.Replace,
+                                        HttpMethod = "POST",
+                                        UpdateTargetId = "search-results-jobSeeker-list"
+                                    }, new { @class = "form-horizontal", @Id = "frmSeekerNameOrContent" }
+                                ))
+    {
+        if (isSearchEnabled)
+        {
+            <input type="text" class="form-control" name="jobSeekerNameOrContent" id="jobSeekerNameOrContent" placeholder="Find a Security Guard" />
+        }
+        else
+        {
+            <input type="text" disabled class="form-control" name="jobSeekerNameOrContent" id="jobSeekerNameOrContent" placeholder="Please log in as a company to use this function" />
+        }
+
+    }
+    <div class="input-group-btn">
+        <div class="btn-group" role="group">
+            <div class="dropdown dropdown-lg">
+                @if (isSearchEnabled)
+                {
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+                }
+                else
+                {
+                    <button type="button" disabled class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+                }
+
+                <div class="dropdown-menu dropdown-menu-right" role="menu">
+                    @using (Ajax.BeginForm("JobSeekerSearch", "Search", FormMethod.Post,
+                                new AjaxOptions
+                                {
+                                    InsertionMode = InsertionMode.Replace,
+                                    HttpMethod = "POST",
+                                    UpdateTargetId = "search-results-jobSeeker-list"
+                                }, new { @class = "form-horizontal", Id = "advancedJobSeekerSearchForm" }
+                            ))
+                    {
+
+                        @Html.Action("ShowProvinceCity", "Search", new { pageName = "JobSeekerSearch" })
+
+                        <div class="form-group">
+                            @Html.Label("Service")
+                            @Html.DropDownList("SeekerServiceType", Model.TypeOfServices, new { @class = "form-control" })
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Experience")
+                            @Html.DropDownList("ExpYears", Model.YearsOfExperience, new { @class = "form-control" })
+                        </div>
+
+                        <div class="form-group">
+                            @Html.Label("First Name or Last Name")
+                            @Html.TextBox("JobSeekerName", ViewData["JobSeekerName"], htmlAttributes: new { @class = "form-control" })
+                        </div>
+                        @*<div class="form-group">
+                            @Html.Label("Work Availability")*@
+                        @* ref: http://stackoverflow.com/questions/16688170/asp-net-mvc-html-checkboxfor *@
+                        @* ref: http://stackoverflow.com/questions/28987105/how-to-get-checkbox-value-from-formcollection *@
+                        @* ref: http://stackoverflow.com/questions/963683/asp-net-mvc-checkbox-headache *@
+
+                        @*@Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;")
+                            @for (int i = 0; i < Model.CheckBoxListTypeOfWorkAvailabilities.Count; i++)
+                            {*@
+                        @*@Html.CheckBoxFor(model => model.CheckBoxListTypeOfWorkAvailabilities[i].Checked, new { id = "CheckBoxListTypeOfWorkAvailabilities_" + i })*@
+                        @*@Html.CheckBox("chkAvailabilities")
+                            @Html.Raw("&nbsp;&nbsp;")*@
+                        @*@Html.HiddenFor(model => model.CheckBoxListTypeOfWorkAvailabilities)*@
+                        @*@Html.DisplayFor(m => m.CheckBoxListTypeOfWorkAvailabilities[i].Text)
+                                    @Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;")
+                                }
+
+
+                            </div>*@
+                        <div class="form-group">
+                            @* ref: http://stackoverflow.com/questions/16688170/asp-net-mvc-html-checkboxfor *@
+                            @Html.Label("Work Type")
+                            @Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;")
+
+                            @for (int i = 0; i < Model.CheckBoxListTypeOfWork.Count; i++)
+                            {
+                                @*@Html.CheckBoxFor(model => model.CheckBoxListTypeOfWork[i].Checked, new { id = "CheckBoxListTypeOfWork_" + i })*@
+                                @Html.CheckBox("chkWorkType")
+                                @Html.Raw("&nbsp;&nbsp;")
+                                @*@Html.HiddenFor(model => model.CheckBoxListTypeOfWork[i].Id)*@
+                                @Html.DisplayFor(m => m.CheckBoxListTypeOfWork[i].Text)
+                                @Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;")
+                            }
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Available Languages")
+                            @Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;")
+
+                            @for (int i = 0; i < Model.CheckBoxListLanguages.Count; i++)
+                            {
+                                @*@Html.CheckBoxFor(model => model.CheckBoxListLanguages[i].Checked, new { id = "CheckBoxListLanguages_" + i })*@
+                                @Html.CheckBox("chkLanguages")
+                                @Html.Raw("&nbsp;&nbsp;")
+                                @*@Html.HiddenFor(model => model.CheckBoxListLanguages[i].Id)*@
+                                @Html.DisplayFor(m => m.CheckBoxListLanguages[i].Text)
+                                @Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;")
+                            }
+                        </div>
+
+                        @Html.Partial("_SearchByPostalCode")
+
+                        <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+                        <button class="btn btn-danger" id="resetAdvancedJobSeekerSearchForm" type="reset">Reset</button>
+                    }
+
+                </div>
+            </div>
+            @if (isSearchEnabled)
+            {
+                <button type="submit" class="btn btn-primary" id="btnJobSeekerNameOrContent"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+            }
+            else
+            {
+                <button type="submit" disabled class="btn btn-primary" id="btnJobSeekerNameOrContent"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+            }
+
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    // prevent the form from submitting in a non-Ajax manner for all browsers
+    // $('form#frmSeekerNameOrContent').submit(function (event) { eval($(this).attr("onsubmit")); return false; });
+    $('#btnJobSeekerNameOrContent').click(function () {
+        $('form#frmSeekerNameOrContent').submit();
+    });
+
+    // ref: http://stackoverflow.com/questions/16635460/ajax-beginform-and-validation
+    function validateForm() {
+        return $('form').validate().form();
+    }
+
+    // ref: http://stackoverflow.com/questions/16452699/how-to-reset-a-form-using-jquery-with-reset-method
+    $('#resetAdvancedJobSeekerSearchForm').click(function () {
+        $('#advancedJobSeekerSearchForm')[0].reset();
+    });
+
+    $('#resetAndGoDefaultJobSeeker').click(function () {
+        $('#jobSeekerNameOrContent').val('');
+        $('#advancedJobSeekerSearchForm')[0].reset();
+        $('form#frmSeekerNameOrContent').submit();
+    });
+</script>

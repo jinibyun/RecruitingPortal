@@ -1,0 +1,98 @@
+﻿@{
+    var hostWebName = System.Configuration.ConfigurationManager.AppSettings["hostWebName"];
+    var controllerName = @HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString();
+    var actionName = @HttpContext.Current.Request.RequestContext.RouteData.Values["action"].ToString();
+    //var requestFromDate = Context.Request["fromDate"] != null ? Context.Request["fromDate"] : "";
+    //var requestToDate = Context.Request["toDate"] != null ? Context.Request["toDate"] : "";
+    var fromDate = ViewData["fromDate"] != null ? ViewData["fromDate"].ToString() : "";
+    var toDate = ViewData["toDate"] != null ? ViewData["toDate"].ToString() : "";
+}
+<!-- date range: two single date -->
+<i class="far fa-calendar-alt"></i>&nbsp;&nbsp;From
+<input type="text" name="rangeFrom" style="width:120px" id="showingDateFrom" /> - To
+<input type="text" name="rangeTo" style="width:120px" id="showingDate" />&nbsp;&nbsp;
+<button class="btn-info btn-sm" id="btnGetInfo">GET INTO</button>
+&nbsp;&nbsp;
+<!-- date range: predefined date-->
+@*<div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 30%">
+        <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+        <span></span> <b class="caret"></b>
+    </div>
+    <button class="btn-info btn-sm pull-right" id="btnGetInfo2">GET INTO</button>*@
+<script type="text/javascript">
+// ref: http://www.daterangepicker.com/
+    $(function () {
+        //var startRange = moment().subtract(29, 'days');
+        //var endRange = moment();
+
+        var oneMonthBefore = "";//moment().subtract(1, 'months').format('YYYY-MM-DD');
+        if ("@fromDate" != "") {
+            oneMonthBefore = "@fromDate";
+        }
+
+        var today = "";//moment().format('YYYY-MM-DD');
+        if ("@toDate" != "") {
+            today = "@toDate";
+        }
+
+        $('input[name="rangeFrom"]').val(oneMonthBefore);
+        $('input[name="rangeTo"]').val(today);
+
+        $("#btnGetInfo").click(function () {
+            var fromDate = $('input[name="rangeFrom"]').val();
+            var toDate = $('input[name="rangeTo"]').val();
+            location.href = "@hostWebName" + "@controllerName" + "/" + "@actionName" + "?fromDate=" + fromDate + "&toDate=" + toDate;
+        });
+
+        $('input[name="rangeFrom"]').daterangepicker(
+            {                
+                showDropdowns: true,
+                singleDatePicker: true,
+                locale: {
+                    format: 'YYYY-MM-DD'
+                }
+                //startDate: '2017-01-01',
+                //endDate: '2018-12-31'
+            }
+            //,
+            //function (start, end, label) {
+            //    alert("A new date range was chosen: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+            //}
+        );
+        $('input[name="rangeTo"]').daterangepicker(
+            {               
+                showDropdowns: true,
+                singleDatePicker: true,
+                locale: {
+                    format: 'YYYY-MM-DD'
+                }
+                //startDate: '2017-01-01',
+                // endDate: '2018-12-31'
+            }
+            //,
+            //function (start, end, label) {
+            //    alert("A new date range was chosen: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+            //}
+        );
+
+        //// report range
+        //function cb(start, end) {
+        //    $('#reportrange span').html(start.format('YYYY-MM-DD') + ' - ' + end.format('YYYY-MM-DD'));
+        //}
+
+        //$('#reportrange').daterangepicker({
+        //    startDate: startRange,
+        //    endDate: endRange,
+        //    ranges: {
+        //        'Today': [moment(), moment()],
+        //        'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+        //        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+        //        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+        //        'This Month': [moment().startOf('month'), moment().endOf('month')],
+        //        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        //    }
+        //}, cb);
+
+        //cb(start, end);
+    });
+</script>

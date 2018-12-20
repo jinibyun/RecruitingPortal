@@ -1,0 +1,85 @@
+﻿@model RecruitingPortal.Models.CompanyViewModel
+@using RecruitingPortal.BLL
+
+    <div class="form-group">
+        @Html.Label("Year of Experience", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(model => model.YearsOfExperience, new { @class = "form-control onlyInteger", maxlength = "3" })
+            @Html.ValidationMessageFor(model => model.YearsOfExperience, "", new { @class = "text-danger" })
+        </div>
+
+        @Html.Label("# of Employees", htmlAttributes: new { @class = "control-label col-md-2"})
+        <div class="col-md-4">
+            @Html.TextBoxFor(model => model.NumberOfEmployees, new { @class = "form-control onlyInteger", maxlength = "5" })
+            @Html.ValidationMessageFor(model => model.NumberOfEmployees, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div>&nbsp;</div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.LiabilityInsurance, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-4">
+            @*ref: http://stackoverflow.com/questions/23534642/radiobuttonfor-in-mvc-razor-syntax*@
+            @Html.Label("rbLiabilityInsurance", "Yes")
+            @Html.RadioButtonFor(model => model.LiabilityInsurance, true)
+
+            @Html.Label("rbLiabilityInsurance", "No")
+            @Html.RadioButtonFor(model => model.LiabilityInsurance, false)
+
+            @Html.ValidationMessageFor(model => model.LiabilityInsurance, "", new { @class = "text-danger" })
+        </div>
+
+        @Html.Label("Insurance Amount", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(model => model.LiabilityInsuranceAmount, new { @class = "form-control floatNumber", maxlength = "10" })
+            @Html.ValidationMessageFor(model => model.LiabilityInsuranceAmount, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div>&nbsp;</div>
+    <div class="form-group">
+        @Html.Label("Available Language(s)", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-4">
+            @* ref: http://stackoverflow.com/questions/16688170/asp-net-mvc-html-checkboxfor *@
+            @for (int i = 0; i < Model.CheckBoxListLanguages.Count; i++)
+            {
+                @Html.CheckBoxFor(model => model.CheckBoxListLanguages[i].Checked, new { id = "CheckBoxListLanguages_" + i })
+                @Html.Raw("&nbsp;&nbsp;")
+                @Html.HiddenFor(model => model.CheckBoxListLanguages[i].Id)
+                @Html.DisplayFor(m => m.CheckBoxListLanguages[i].Text)
+                @Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;")
+            }
+            @Html.ValidationMessageFor(model => model.CheckBoxListLanguages, "", new { @class = "text-danger" })
+        </div>       
+        @Html.Label("Type of work", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-4">
+            @* ref: http://stackoverflow.com/questions/16688170/asp-net-mvc-html-checkboxfor *@
+            <ul>
+                @for (int i = 0; i < Model.CheckBoxListTypeOfWork.Count; i++)
+                {
+                    @Html.Raw("<li>")
+                    @Html.CheckBoxFor(model => model.CheckBoxListTypeOfWork[i].Checked, new { id = "CheckBoxListTypeOfWork_" + i })
+                    @Html.Raw("&nbsp;&nbsp;")
+                    @Html.HiddenFor(model => model.CheckBoxListTypeOfWork[i].Id)
+                    @Html.DisplayFor(m => m.CheckBoxListTypeOfWork[i].Text)
+                    @Html.Raw("</li>")
+                    
+                }
+            </ul>
+            @Html.ValidationMessageFor(model => model.CheckBoxListTypeOfWork, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    @*<div>&nbsp;</div>
+    <div class="form-group">
+        @Html.Label("Terms And Condition", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextAreaFor(model => model.AgreeTermsAndCondition, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.AgreeTermsAndCondition, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div>&nbsp;</div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.LegalRight, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextAreaFor(model => model.LegalRight, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.LegalRight, "", new { @class = "text-danger" })
+        </div>
+    </div>*@

@@ -1,0 +1,174 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Paragon Security - Request Guard</title>
+<link rel="stylesheet" type="text/css" href="../assets/css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="../assets/css/style.css">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,600i,700,700i" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+
+</head>
+
+<body>
+
+<div class="rsTopBar">
+	<img src="../assets/img/ppl-logo.png">
+</div>
+
+<div id="rsPageWrap">
+
+        <!-- Sidebar -->
+        <div id="rsSidebarWrap" data-spy="affix" data-offset-top="15">
+            <ul class="rsSidebarNav affix" data-spy="affix" data-offset-top="15">
+                <li class="rsLogo">
+                    <a href="#menu-toggle" class="btn btn-secondary" id="menu-toggle">
+                    	<i class="fas fa-bars"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="active">
+                    	<img src="../assets/img/sidebarIcon-overview-w.png">Overview
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                    	<img src="../assets/img/sidebarIcon-mjp.png">Manage job Postings
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                    	<img src="../assets/img/sidebarIcon-rl.png">Request List
+                     </a>
+                </li>
+                <li>
+                    <a href="#">
+                    	<img src="../assets/img/sidebarIcon-vsg.png">View Security Guards
+                    </a>
+                </li>
+            </ul>
+            
+            <div class="rsSidebarLoginSNS">
+            	SNS AD Posting
+                <ul>
+                	<li>
+                    	<div class="rsIconCircle facebook">
+                        	<i class="fab fa-facebook-f"></i>
+                        </div>
+                    </li>
+                    <li>
+                    	<div class="rsIconCircle twitter">
+                        	<i class="fab fa-twitter"></i>
+                        </div>
+                    </li>
+                    <li>
+                    	<div class="rsIconCircle linkedin">
+                        	<i class="fab fa-linkedin-in"></i>
+                        </div>
+                    </li>
+                </ul>
+                
+                <input type="text">
+                <input type="text">
+                <button class="btn rsBtnDefault">
+                   Sign in
+                </button>
+                <a href="#" class="pull-right">Go to page</a>
+            </div>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="rsPageContentWrap">
+        <h3>Request Guard</h3>
+            <div class="rsBackCard">
+                <div class="rsMsgWrap">
+                	<div class="rsCircle rsWarn">
+                    	<i class="fas fa-exclamation"></i>
+                    </div>
+                    Once a guard is requested, it will notify HR so that they can create a job online
+                    <span class="pull-right">x</span>
+                </div>
+                
+                <div class="rsFormTitle-l">
+                	Request Information Detail
+                </div>
+                <br>
+                
+                <div class="row">
+                    <div class="col-xs-12 rs-mtb-1">
+                        <label>Type of work</label>
+                        <input type="checkbox"> Full Time
+                        <input type="checkbox"> Part Time
+                        <input type="checkbox"> Seasonal
+                    </div>
+                    
+                    <div class="col-sm-6 col-xs-12">
+                        <label>Position</label>
+                        <select>
+                           <option>Select person</option>
+                        </select>
+                        
+                        <br><br>
+                        <label>Service Location</label>
+                        <input type="text">
+                        
+                        <br><br>
+                        <label class="pull-left">Special Remarks</label>
+                        <textarea></textarea>
+                        <span class="pull-right rsRed" style="font-size: 13px;">
+                        	Office Use Only
+                        </span>
+                        
+                        <br><br>
+                        <label>Central Office</label>
+                        <select>
+                           <option>Select office</option>
+                        </select>
+                    
+                    </div>
+                    
+                    <div class="col-sm-6 col-xs-12">
+                    	<label>Service type</label>
+                        <select>
+                           <option>Select service type</option>
+                        </select>
+                        
+                        <br><br>
+                        <label class="pull-left">Description</label>
+                        <textarea style="height: 9em;"></textarea>
+                        
+                        <br><br>
+                        <label>Requested By Team</label>
+                        <select>
+                           <option>Select team</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-sm-3 col-xs-6 pull-right rs-mtb-3">
+                        <button class="btn rsBtnDefault">
+                             Find Security Guard
+                        </button>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+<script src="../assets/js/bootstrap.js"></script>
+<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+
+<!-- Menu Toggle Script -->
+    <script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#rsPageWrap").toggleClass("toggled");
+    });
+    </script>
+</body>
+</html>

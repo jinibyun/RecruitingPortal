@@ -1,0 +1,473 @@
+﻿@model RecruitingPortal.Models.JobSeekerViewModel
+@using RecruitingPortal.Domain
+@using RecruitingPortal.BLL
+@using System.Configuration
+
+<blockquote>
+    <h5>Uploading your file will overwrite the existing one</h5>
+</blockquote>
+
+<ul class="list-group">
+    <li class="list-group-item">
+        <!-- resume -->
+        <div class="row">
+            <div class="form-group">
+                <div class="col-md-2">
+                    <i class="far fa-file-alt" aria-hidden="true"></i> <label>Resume File</label>
+                </div>
+                <div class="col-md-4">
+                    <a class="btn btn-success" href='javascript:;'>
+                        Choose Resume File...
+                        <input type="file" name="fileAttachedResume" size="40"
+                               style="position:absolute;z-index:2;top:0;
+                                left:0;filter: alpha(opacity=0); opacity:0;
+                                background-color:transparent;color:transparent;"
+                               onchange='$("#upload-file-info-resume").html($(this).val());'>
+                    </a>
+                    <span class="label label-info" id="upload-file-info-resume"></span>
+
+                </div>
+                <div class="col-md-2">
+                    <label>Uploaded</label>
+                </div>
+                <div class="col-md-4">
+                    @if (Model.JobSeekerFiles != null && Model.JobSeekerFiles.Where(x => !string.IsNullOrEmpty(x.ResumeFilePath)).Count() == 1)
+                    {
+                        var jobSeekerFile = Model.JobSeekerFiles.Where(x => !string.IsNullOrEmpty(x.ResumeFilePath)).SingleOrDefault<JobSeekerFile>();
+                        <span class="fileResumeYes">
+                            <span class="fileLinkResume">@Html.ActionLink(Path.GetFileName(jobSeekerFile.ResumeFilePath), "DownloadFile", new { name = "JobSeekerFile", fileId = jobSeekerFile.Id, filePostType = EnumFilePostType.Resume })</span>
+                            @Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;")
+                            <span class="delResume"><a href="#_" id="@jobSeekerFile.Id" class="btn btn-danger"><i class="far fa-trash-alt"></i></a></span>
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="fileResumeNo">
+                            @Html.Raw("No Resume");
+                        </span>
+                    }
+                </div>
+            </div>
+        </div>
+        <!-- // resume -->
+    </li>
+
+    @*<li class="list-group-item">
+        <!-- Security Certificate -->
+        <div class="row">
+            <div class="form-group">
+                <div class="col-md-2">
+                    <i class="fa fa-file-text-o" aria-hidden="true"></i> <label>Security Certificate</label>
+                </div>
+                <div class="col-md-4">
+                    <a class='btn' href='javascript:;'>
+                        Choose Security Certificate...
+                        <input type="file" name="SecurityLicenseCertificate" size="40"
+                               style="position:absolute;z-index:2;top:0;
+                                left:0;filter: alpha(opacity=0); opacity:0;
+                                background-color:transparent;color:transparent;"
+                               onchange='$("#upload-file-info-Certificate").html($(this).val());'>
+                    </a>
+                    <span class='label label-info' id="upload-file-info-Certificate"></span>
+
+                </div>
+                <div class="col-md-2">
+                    <label>Uploaded</label>
+                </div>
+                <div class="col-md-4">
+                    @if (Model.JobSeekerFiles != null && Model.JobSeekerFiles.Where(x => !string.IsNullOrEmpty(x.SecurityLicenseCertificateFilePath)).Count() == 1)
+                    {
+                        var jobSeekerFile = Model.JobSeekerFiles.Where(x => !string.IsNullOrEmpty(x.SecurityLicenseCertificateFilePath)).SingleOrDefault<JobSeekerFile>();
+                        <span class="fileCertificateYes">
+                            <span class="fileLinkCertificate">@Html.ActionLink(Path.GetFileName(jobSeekerFile.SecurityLicenseCertificateFilePath), "DownloadFile", new { name = "JobSeekerFile", fileId = jobSeekerFile.Id, filePostType = EnumFilePostType.SecurityLicenseCertificate })</span>
+                            @Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;")
+                            <span class="delCertificate"><a href="#_" id="@jobSeekerFile.Id" class="btn btn-danger"><i class="fa fa-trash-o"></i></a></span>
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="fileCertificateNo">
+                            @Html.Raw("No Security Certificate");
+                        </span>
+                    }
+                </div>
+            </div>
+            <!-- // Security Certificate -->
+        </div>
+    </li>
+
+    <li class="list-group-item">
+        <!-- Eligibility -->
+        <div class="row">
+            <div class="form-group">
+                <div class="col-md-2">
+                    <i class="fa fa-file-text-o" aria-hidden="true"></i> <label>Eligibility Proof File</label>
+                </div>
+                <div class="col-md-4">
+                    <a class='btn' href='javascript:;'>
+                        Choose Eligibility...
+                        <input type="file" name="Eligibility" size="40"
+                               style="position:absolute;z-index:2;top:0;
+                                left:0;filter: alpha(opacity=0); opacity:0;
+                                background-color:transparent;color:transparent;"
+                               onchange='$("#upload-file-info-Eligibility").html($(this).val());'>
+                    </a>
+                    <span class='label label-info' id="upload-file-info-Eligibility"></span>
+
+                </div>
+                <div class="col-md-2">
+                    <label>Uploaded</label>
+                </div>
+                <div class="col-md-4">
+                    @if (Model.JobSeekerFiles != null && Model.JobSeekerFiles.Where(x => !string.IsNullOrEmpty(x.EligibilityFilePath)).Count() == 1)
+                    {
+                        var jobSeekerFile = Model.JobSeekerFiles.Where(x => !string.IsNullOrEmpty(x.EligibilityFilePath)).SingleOrDefault<JobSeekerFile>();
+                        <span class="fileEligibilityYes">
+                            <span class="fileLinkEligibility">@Html.ActionLink(Path.GetFileName(jobSeekerFile.EligibilityFilePath), "DownloadFile", new { name = "JobSeekerFile", fileId = jobSeekerFile.Id, filePostType = EnumFilePostType.EligibilityFile })</span>
+                            @Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;")
+                            <span class="delEligibility"><a href="#_" id="@jobSeekerFile.Id" class="btn btn-danger"><i class="fa fa-trash-o"></i></a></span>
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="fileEligibility">
+                            @Html.Raw("No Eligibility Proof");
+                        </span>
+                    }
+                </div>
+            </div>
+            <!-- // Eligibility Certificate -->
+        </div>
+    </li>
+
+    <li class="list-group-item">
+        <!-- CPR / First Aid Certificate -->
+        <div class="row">
+            <div class="form-group">
+                <div class="col-md-2">
+                    <i class="fa fa-file-text-o" aria-hidden="true"></i> <label>CPR/First Aid Certificate</label>
+                </div>
+                <div class="col-md-4">
+                    <a class='btn' href='javascript:;'>
+                        Choose CPR/First Aid Certificate...
+                        <input type="file" name="CPRFirstAid" size="40"
+                               style="position:absolute;z-index:2;top:0;
+                                left:0;filter: alpha(opacity=0); opacity:0;
+                                background-color:transparent;color:transparent;"
+                               onchange='$("#upload-file-info-CPRFirstAid").html($(this).val());'>
+                    </a>
+                    <span class='label label-info' id="upload-file-info-CPRFirstAid"></span>
+
+                </div>
+                <div class="col-md-2">
+                    <label>Uploaded</label>
+                </div>
+                <div class="col-md-4">
+                    @if (Model.JobSeekerFiles != null && Model.JobSeekerFiles.Where(x => !string.IsNullOrEmpty(x.CPRFirstAidCertificateFilePath)).Count() == 1)
+                    {
+                        var jobSeekerFile = Model.JobSeekerFiles.Where(x => !string.IsNullOrEmpty(x.CPRFirstAidCertificateFilePath)).SingleOrDefault<JobSeekerFile>();
+                        <span class="fileCPRFirstAidYes">
+                            <span class="fileLinkCPRFirstAid">@Html.ActionLink(Path.GetFileName(jobSeekerFile.CPRFirstAidCertificateFilePath), "DownloadFile", new { name = "JobSeekerFile", fileId = jobSeekerFile.Id, filePostType = EnumFilePostType.CPRFirstAidCertificate })</span>
+                            @Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;")
+                            <span class="delCPRFirstAid"><a href="#_" id="@jobSeekerFile.Id" class="btn btn-danger"><i class="fa fa-trash-o"></i></a></span>
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="fileCPRFirstAidNo">
+                            @Html.Raw("No CPR / First Aid Certificate");
+                        </span>
+                    }
+                </div>
+            </div>
+            <!-- // CPR / First Aid Certificate -->
+        </div>
+    </li>
+   
+    <li class="list-group-item">
+        <!-- Education -->
+        <div class="row">
+            <div class="form-group">
+                <div class="col-md-2">
+                    <i class="fa fa-file-text-o" aria-hidden="true"></i> <label>Education Certificate</label>
+                </div>
+                <div class="col-md-4">
+                    <a class='btn' href='javascript:;'>
+                        Choose Education Certificate...
+                        <input type="file" name="Education" size="40"
+                               style="position:absolute;z-index:2;top:0;
+                                left:0;filter: alpha(opacity=0); opacity:0;
+                                background-color:transparent;color:transparent;"
+                               onchange='$("#upload-file-info-Education").html($(this).val());'>
+                    </a>
+                    <span class='label label-info' id="upload-file-info-Education"></span>
+
+                </div>
+                <div class="col-md-2">
+                    <label>Uploaded</label>
+                </div>
+                <div class="col-md-4">
+                    @if (Model.JobSeekerFiles != null && Model.JobSeekerFiles.Where(x => !string.IsNullOrEmpty(x.EducationFilePath)).Count() == 1)
+                    {
+                        var jobSeekerFile = Model.JobSeekerFiles.Where(x => !string.IsNullOrEmpty(x.EducationFilePath)).SingleOrDefault<JobSeekerFile>();
+                        <span class="fileEducationYes">
+                            <span class="fileLinkEducation">@Html.ActionLink(Path.GetFileName(jobSeekerFile.EducationFilePath), "DownloadFile", new { name = "JobSeekerFile", fileId = jobSeekerFile.Id, filePostType = EnumFilePostType.EducationFile })</span>
+                            @Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;")
+                            <span class="delEducation"><a href="#_" id="@jobSeekerFile.Id" class="btn btn-danger"><i class="fa fa-trash-o"></i></a></span>
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="fileEducationNo">
+                            @Html.Raw("No Education Certificate");
+                        </span>
+                    }
+                </div>
+            </div>
+            <!-- // Education -->
+        </div>
+    </li>*@
+</ul>
+
+
+<script type="text/jscript">
+    // resume
+    $('.delResume a').click(function () {
+        var url = "@Url.Action("DeleteFile", "Common")";
+        var fileId = $(this).attr('id');
+        var fileName = $(".fileLinkResume a").text();
+        var mode = "JobSeeker";
+        var filePostType = $(".fileLinkResume a").attr("href").split("&")[2].split("=")[1];
+        // ref: http://stackoverflow.com/questions/30133132/jquery-to-call-action-method-in-asp-net-mvc-c-sharp-by-ajax
+        // ref: http://stackoverflow.com/questions/17873926/invalid-json-primitive-error
+
+        fancyConfirm('Are you sure deleting resume file?',
+                    function () { // ok click
+                        $.ajax(
+                        {
+                            url: url, // '@Url.Action("UpdateOrder")', // to get the right path to controller from TableRoutes of Asp.Net MVC
+                            dataType: "json",
+                            type: "POST",
+                            contentType: 'application/json; charset=utf-8',
+                            cache: false,
+                            data: JSON.stringify({
+                                FileId: fileId,
+                                fileName: fileName,
+                                mode: mode,
+                                filePostType: filePostType
+                            }),
+                            success: function (data) {
+                                // data is your result from controller
+                                if (data.success) {
+                                    alert(fileName + ' was successfully deleted');
+                                    $('.fileResumeYes').hide();
+                                    $('.fileResumeNo').show();
+                                    $('.fileResumeNo').text("No Resume");
+                                }
+                            },
+                            error: function (xhr) {
+                                fancyAlert('error');
+                            }
+                        }
+                    );
+                    },
+                    function () { // cancel click
+                        // do nothing
+                    }
+                );
+
+    });
+
+    // Certificate
+    $('.delCertificate a').click(function () {
+        var url = "@Url.Action("DeleteFile", "Common")";
+        var fileId = $(this).attr('id');
+        var fileName = $(".fileLinkCertificate a").text();
+        var mode = "JobSeeker";
+        var filePostType = $(".fileLinkCertificate a").attr("href").split("&")[2].split("=")[1];
+        // ref: http://stackoverflow.com/questions/30133132/jquery-to-call-action-method-in-asp-net-mvc-c-sharp-by-ajax
+        // ref: http://stackoverflow.com/questions/17873926/invalid-json-primitive-error
+
+
+        fancyConfirm('Are you sure deleting security certificate file?',
+                    function () { // ok click
+                        $.ajax(
+                            {
+                                url: url, // '@Url.Action("UpdateOrder")', // to get the right path to controller from TableRoutes of Asp.Net MVC
+                                dataType: "json",
+                                type: "POST",
+                                contentType: 'application/json; charset=utf-8',
+                                cache: false,
+                                data: JSON.stringify({
+                                    FileId: fileId,
+                                    fileName: fileName,
+                                    mode: mode,
+                                    filePostType: filePostType
+                                }),
+                                success: function (data) {
+                                    // data is your result from controller
+                                    if (data.success) {
+                                        alert(fileName + ' was successfully deleted');
+                                        $('.fileCertificateYes').hide();
+                                        $('.fileCertificateNo').show();
+                                        $('.fileCertificateNo').text("No Security Certificate");
+                                    }
+                                },
+                                error: function (xhr) {
+                                    fancyAlert('error');
+                                }
+                            }
+                        );
+                    },
+                    function () { // cancel click
+                        // do nothing
+                    }
+                );
+
+
+    });
+
+    // Eligibility
+    $('.delEligibility a').click(function () {
+        var url = "@Url.Action("DeleteFile", "Common")";
+        var fileId = $(this).attr('id');
+        var fileName = $(".fileLinkEligibility a").text();
+        var mode = "JobSeeker";
+        var filePostType = $(".fileLinkEligibility a").attr("href").split("&")[2].split("=")[1];
+        // ref: http://stackoverflow.com/questions/30133132/jquery-to-call-action-method-in-asp-net-mvc-c-sharp-by-ajax
+        // ref: http://stackoverflow.com/questions/17873926/invalid-json-primitive-error
+
+        fancyConfirm('Are you sure deleting eligibility proof file?',
+            function () { // ok click
+                $.ajax(
+                    {
+                        url: url, // '@Url.Action("UpdateOrder")', // to get the right path to controller from TableRoutes of Asp.Net MVC
+                        dataType: "json",
+                        type: "POST",
+                        contentType: 'application/json; charset=utf-8',
+                        cache: false,
+                        data: JSON.stringify({
+                            FileId: fileId,
+                            fileName: fileName,
+                            mode: mode,
+                            filePostType: filePostType
+                        }),
+                        success: function (data) {
+                            // data is your result from controller
+                            if (data.success) {
+                                alert(fileName + ' was successfully deleted');
+                                $('.fileEligibilityYes').hide();
+                                $('.fileEligibilityNo').show();
+                                $('.fileEligibilityNo').text("No Eligibility Proof File");
+                            }
+                        },
+                        error: function (xhr) {
+                            fancyAlert('error');
+                        }
+                    }
+                );
+            },
+            function () { // cancel click
+                // do nothing
+            }
+        );
+
+
+    });
+
+    // CPR / First Aid Certificate
+    $('.delCPRFirstAid a').click(function () {
+        var url = "@Url.Action("DeleteFile", "Common")";
+        var fileId = $(this).attr('id');
+        var fileName = $(".fileLinkCPRFirstAid a").text();
+        var mode = "JobSeeker";
+        var filePostType = $(".fileLinkCPRFirstAid a").attr("href").split("&")[2].split("=")[1];
+        // ref: http://stackoverflow.com/questions/30133132/jquery-to-call-action-method-in-asp-net-mvc-c-sharp-by-ajax
+        // ref: http://stackoverflow.com/questions/17873926/invalid-json-primitive-error
+
+        fancyConfirm('Are you sure deleting CPR / First Aid Certificate file?',
+            function () { // ok click
+                $.ajax(
+                    {
+                        url: url, // '@Url.Action("UpdateOrder")', // to get the right path to controller from TableRoutes of Asp.Net MVC
+                        dataType: "json",
+                        type: "POST",
+                        contentType: 'application/json; charset=utf-8',
+                        cache: false,
+                        data: JSON.stringify({
+                            FileId: fileId,
+                            fileName: fileName,
+                            mode: mode,
+                            filePostType: filePostType
+                        }),
+                        success: function (data) {
+                            // data is your result from controller
+                            if (data.success) {
+                                alert(fileName + ' was successfully deleted');
+                                $('.fileCPRFirstAidYes').hide();
+                                $('.fileCPRFirstAidNo').show();
+                                $('.fileCPRFirstAidNo').text("No CPR / First Aid Certificate");
+                            }
+                        },
+                        error: function (xhr) {
+                            fancyAlert('error');
+                        }
+                    }
+                );
+            },
+            function () { // cancel click
+                // do nothing
+            }
+        );
+
+
+    });
+
+    // CPR / First Aid Certificate
+    $('.delEducation a').click(function () {
+        var url = "@Url.Action("DeleteFile", "Common")";
+        var fileId = $(this).attr('id');
+        var fileName = $(".fileLinkEducation a").text();
+        var mode = "JobSeeker";
+        var filePostType = $(".fileLinkEducation a").attr("href").split("&")[2].split("=")[1];
+        // ref: http://stackoverflow.com/questions/30133132/jquery-to-call-action-method-in-asp-net-mvc-c-sharp-by-ajax
+        // ref: http://stackoverflow.com/questions/17873926/invalid-json-primitive-error
+
+        fancyConfirm('Are you sure deleting Education Certificate file?',
+            function () { // ok click
+                $.ajax(
+                    {
+                        url: url, // '@Url.Action("UpdateOrder")', // to get the right path to controller from TableRoutes of Asp.Net MVC
+                        dataType: "json",
+                        type: "POST",
+                        contentType: 'application/json; charset=utf-8',
+                        cache: false,
+                        data: JSON.stringify({
+                            FileId: fileId,
+                            fileName: fileName,
+                            mode: mode,
+                            filePostType: filePostType
+                        }),
+                        success: function (data) {
+                            // data is your result from controller
+                            if (data.success) {
+                                alert(fileName + ' was successfully deleted');
+                                $('.fileEducationYes').hide();
+                                $('.fileEducationNo').show();
+                                $('.fileEducationNo').text("No Education Certificate");
+                            }
+                        },
+                        error: function (xhr) {
+                            fancyAlert('error');
+                        }
+                    }
+                );
+            },
+            function () { // cancel click
+                // do nothing
+            }
+        );
+
+
+    });
+</script>

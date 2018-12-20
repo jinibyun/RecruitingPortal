@@ -1,0 +1,125 @@
+﻿@using RecruitingPortal.Models
+@model List<ServiceTeamRequestViewModel>
+@{
+    ViewBag.Title = "Overview";
+    Layout = "~/Views/Shared/_LayoutSub.cshtml";
+    int guardRequestListCount = ViewData["guardRequestListCount"] != null ? int.Parse(ViewData["guardRequestListCount"].ToString()) : 0;
+    var fromDate = ViewData["fromDate"] != null ? ViewData["fromDate"].ToString() : "";
+    var toDate = ViewData["toDate"] != null ? ViewData["toDate"].ToString() : "";
+}
+
+<div id="rsPageContentWrap">
+
+    <div class="row">
+        <div class="col-sm-3">
+            <h3>Overview</h3>
+        </div>
+        <div class="col-md-9">
+            <div style="text-align:right">
+                @Html.Partial("_DatePicker", new ViewDataDictionary { { "fromDate", fromDate}, { "toDate", toDate} })
+            </div>
+        </div>
+    </div>
+    
+    <div class="rsBackCard">
+        @*<div class="row top-right">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="pull-right" id="printButton"><i class="fa fa-print" aria-hidden="true"></i> PRINT</div>
+                </div>
+            </div>*@
+        <div class="row">
+            <div class="col-sm-6 col-md-6 col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4>
+                            Job Requests
+                            <div class="pull-right"><a href="~/Company/Index" class="rsBtnDetail">See Detail</a></div>
+                        </h4>
+                    </div>
+                    <div class="penel-body" style="padding: 1em 0;">
+                        <div class="row">
+                            <div class="col-sm-5 col-xs-12">
+                                <h1 style="margin-left: 39%;">@guardRequestListCount</h1>
+                            </div>
+                            <div class="col-sm-6 col-xs-12" style="margin-right: 1em;">
+                                <table class="rsMainList">
+                                    @foreach (var member in Model)
+                                    {
+                                        <tr>
+                                            <td>@member.Name</td>
+                                            <td>@member.RequestCount</td>
+                                        </tr>
+                                    }
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-6 col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4>
+                            Applied Candidates
+                            <div class="pull-right"><a href="~/JobSeeker/Index" class="rsBtnDetail">See Detail</a></div>
+                        </h4>
+                    </div>
+                    <div class="penel-body" style="padding-top: 2em; padding-bottom: 2em; padding-right: 1em;">
+                        @Html.Action("AppliedCandidate", "GoogleChart", new { partialPage = "Analytics/Chart/_appliedCandidates_PieChart.cshtml", partialPageDiv = "divAppliedCandiate", fromDate = fromDate, toDate = toDate })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6 col-md-6 col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4>
+                            Hiring Statistics
+                            <div class="pull-right"><a href="~/JobPosting/CompanyPostedJob" class="rsBtnDetail">See Detail</a></div>
+                        </h4>
+                    </div>
+                    <div class="penel-body" style="padding: 1em 0;">
+                        @Html.Action("JobStatusStatistics", "GoogleChart", new { partialPage = "Analytics/Chart/_jobStatusStatistics_ColumnChart.cshtml", partialPageDiv = "divJobStatusStatistics", fromDate = fromDate, toDate = toDate })
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-6 col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4>
+                            Job Posting Statistics
+                            <div class="pull-right"><a href="~/JobPosting/CompanyPostedJob" class="rsBtnDetail">See Detail</a></div>
+                        </h4>
+                    </div>
+                    <div class="penel-body" style="padding: 1em 0;">
+                        @Html.Action("JobPostStatistics", "GoogleChart", new { partialPage = "Analytics/Chart/_jobPostStatistics_ColumnChart.cshtml", partialPageDiv = "divJobPostStatistics", fromDate = fromDate, toDate = toDate })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">    
+
+    // ref: https://github.com/DoersGuild/jQuery.print
+    // jquery print
+    $("#printButton").on('click', function () {
+        // window.print();
+        $("#rsPageContentWrap").print({
+            globalStyles: true,
+            mediaPrint: false,
+            stylesheet: null,
+            noPrintSelector: ".no-print",
+            iframe: false,
+            append: null,
+            prepend: null,
+            manuallyCopyFormValues: true,
+            deferred: $.Deferred(),
+            timeout: 750,
+            title: null,
+            doctype: '<!doctype html>'
+        });
+    });
+    
+</script>

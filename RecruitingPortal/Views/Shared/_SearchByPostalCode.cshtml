@@ -1,0 +1,33 @@
+﻿@model RecruitingPortal.Models.SearchViewModel
+<div class="form-group">
+    @*@Html.Label("Zip Code", htmlAttributes: new { @class = "control-label col-xs-4" })
+        <div class="col-xs-8">
+            @Html.TextBox("PostalCode", null, new { @class = "form-control", @maxLength = 7 })
+        </div>*@
+
+    <div class="row">        
+        @Html.LabelFor(model => model.PostalCode, htmlAttributes: new { @class = "control-label col-xs-4" })
+        <div class="col-xs-8">
+            @Html.TextBoxFor(model => model.PostalCode, new { @class = "form-control PostalCode", @maxLength = 7, @id = "postalCode" })
+        </div>
+    </div>
+    <div class="row">
+        <div class ="col-xs-4"></div>
+        <div class="col-xs-8">
+            @Html.ValidationMessageFor(model => model.PostalCode, "", new { @class = "text-danger" })
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="row">
+        @Html.Label("Within", htmlAttributes: new { @class = "control-label col-xs-4" })
+        <div class="col-xs-8">
+            <select name="distance" id="advs-distance" class="form-control">
+                <option value="15" dir="ltr">10 mi (15km)</option>
+                <option value="40" dir="ltr">25 mi (40 km)</option>
+                <option value="55" dir="ltr">35 mi (55 km)</option>
+            </select>
+        </div>
+    </div>
+</div>

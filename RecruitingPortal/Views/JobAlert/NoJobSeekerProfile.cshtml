@@ -1,0 +1,12 @@
+﻿@model RecruitingPortal.Models.ExternalLoginConfirmationViewModel
+@{
+    Layout = "~/Views/Shared/_LayoutSub.cshtml";
+    ViewBag.Title = "No Job Applicant Profile";
+}
+<h2>@ViewBag.Title.</h2>
+<h3>In order to create job alert service, please fill out profile information</h3>
+
+<div>
+    <input type="button" class="btn btn-info" value="Go My Profile Page" onclick="location.href='@Url.Action("CreateOrEdit", "JobPosting")'" />
+</div>
+

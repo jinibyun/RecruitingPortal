@@ -1,0 +1,12 @@
+﻿@using RecruitingPortal.Domain
+@using RecruitingPortal.BLL
+@using RecruitingPortal.Infrastructure
+@model IEnumerable<RecruitingPortal.Models.JobPostingViewModel>
+
+<div class="panel panel-default">
+    @Html.Action("JobSearch", "Search")
+    &nbsp;
+    <div id="search-results">        
+        @Html.Partial("_SearchResult_JobPostingList", Model) @*, new ViewDataDictionary { { "enumMemberRole", enumMemberRole }, { "JobSeekerId", session.JobSeekers.First<JobSeeker>().Id } })*@
+    </div>
+</div>

@@ -1,0 +1,162 @@
+﻿@*ref: http://bootsnipp.com/snippets/featured/advanced-dropdown-search*@
+@using RecruitingPortal.Domain
+@using RecruitingPortal.BLL
+@using RecruitingPortal.Infrastructure
+@model RecruitingPortal.Models.SearchViewModel
+
+<style type="text/css">
+    .dropdown.dropdown-lg .dropdown-menu {
+        margin-top: -1px;
+        padding: 6px 20px;
+    }
+
+    .input-group-btn .btn-group {
+        display: flex !important;
+    }
+
+    .btn-group .btn {
+        border-radius: 0;
+        margin-left: -1px;
+    }
+
+        .btn-group .btn:last-child {
+            border-top-right-radius: 4px;
+            border-bottom-right-radius: 4px;
+        }
+
+    .btn-group .form-horizontal .btn[type="submit"] {
+        border-top-left-radius: 4px;
+        border-bottom-left-radius: 4px;
+    }
+
+    .form-horizontal .form-group {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .form-group .form-control:last-child {
+        border-top-left-radius: 4px;
+        border-bottom-left-radius: 4px;
+    }
+
+    @@media screen and (min-width: 768px) {
+        #adv-search {
+            width: 800px;
+            margin: 0 auto;
+        }
+
+        .dropdown.dropdown-lg {
+            position: static !important;
+        }
+
+            .dropdown.dropdown-lg .dropdown-menu {
+                min-width: 800px;
+            }
+    }
+</style>
+
+<!-- ref: http://forums.asp.net/t/1961426.aspx?Ajax+BeginForm+and+UpdateTargetId+not+working -->
+<!-- ref: http://stackoverflow.com/questions/16635460/ajax-beginform-and-validation -->
+@*<script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.min.js")" type="text/javascript"> </script>*@
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+@{ Html.EnableClientValidation(true); }
+
+
+<div class="row">
+    <div class="col-sm-8 col-md-8">
+        <h4 class="sub-heading">Search Jobs <i class="fa fa-question-circle" data-toggle="tooltip" title="Unless you use Dropdown Advanced Search the filter will only search 'Job Title' and 'Job Description'" style="color:black"></i></h4>
+    </div>
+    <div class="col-sm-4 col-md-4 pull-right" style="text-align:right">
+        <button class="btn btn-link" id="resetAndGoDefaultJob"><span class="glyphicon glyphicon-refresh"></span> Reset & All Jobs </button>
+    </div>
+</div>
+
+<div class="input-group">
+    @using (Ajax.BeginForm("JobSearch", "Search", FormMethod.Post,
+                                    new AjaxOptions
+                                    {
+                                        InsertionMode = InsertionMode.Replace,
+                                        HttpMethod = "POST",
+                                        UpdateTargetId = "search-results-jobPosting-list"
+                                    }, new { @class = "form-horizontal", @Id = "frmNameOrContent" }
+                                )
+                    )
+    {
+        <input type="text" class="form-control" name="jobNameOrContent" id="jobNameOrContent" placeholder="Find a Job" />
+
+    }
+    <div class="input-group-btn">
+        <div class="btn-group" role="group">
+            <div class="dropdown dropdown-lg">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+                <div class="dropdown-menu dropdown-menu-right" role="menu">
+
+
+                    @using (Ajax.BeginForm("JobSearch", "Search", FormMethod.Post,
+                                    new AjaxOptions
+                                    {
+                                        InsertionMode = InsertionMode.Replace,
+                                        HttpMethod = "POST",
+                                        UpdateTargetId = "search-results-jobPosting-list"
+                                    }, new { @class = "form-horizontal", Id = "advancedJobSearchForm" }
+                                ))
+                    {
+
+                        @Html.Action("ShowProvinceCity", "Search", new { pageName = "JobSearch" })
+
+                        <div class="form-group">
+                            @Html.Label("Service", htmlAttributes: new { @class = "control-label" })
+                            @Html.DropDownList("ServiceType", Model.TypeOfServices, new { @class = "form-control" })
+                        </div>
+
+                        <div class="form-group">
+                            @Html.Label("Job Title", htmlAttributes: new { @class = "control-label" })
+                            @Html.TextBox("Title", ViewData["Title"], htmlAttributes: new { @class = "form-control" })
+                        </div>
+
+                        <div class="form-group">
+                            @Html.Label("Job Content", htmlAttributes: new { @class = "control-label" })
+                            @Html.TextBox("Description", ViewData["Description"], htmlAttributes: new { @class = "form-control" })
+                        </div>
+
+                        @Html.Partial("_SearchByPostalCode")
+
+                        <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+                        <button class="btn btn-danger" id="resetAdvancedJobSearchForm" type="reset">Reset</button>
+                    }
+
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary" id="btnJobNameOrContent" name="btnJobNameOrContent"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    //prevent the form from submitting in a non-Ajax manner for all browsers
+    //$('form#frmNameOrContent').submit(function (event) { eval($(this).attr("onsubmit")); return false; });
+    $('#btnJobNameOrContent').click(function () {
+        $("form#frmNameOrContent").submit();
+    });
+
+    // ref: http://stackoverflow.com/questions/16635460/ajax-beginform-and-validation
+    function validateForm() {
+        return $('form').validate().form();
+    }
+
+    // ref: http://stackoverflow.com/questions/16452699/how-to-reset-a-form-using-jquery-with-reset-method
+    $('#resetAdvancedJobSearchForm').click(function () {
+        $('#advancedJobSearchForm')[0].reset();
+    });
+
+    $('#resetAndGoDefaultJob').click(function () {
+        $('#jobNameOrContent').val('');
+        $('#advancedJobSearchForm')[0].reset();
+        $("form#frmNameOrContent").submit();
+    });
+
+</script>
+

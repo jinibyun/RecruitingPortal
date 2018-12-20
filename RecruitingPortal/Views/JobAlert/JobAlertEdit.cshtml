@@ -1,0 +1,98 @@
+﻿@using RecruitingPortal.Domain
+@using RecruitingPortal.BLL
+@using RecruitingPortal.Infrastructure
+@using RecruitingPortal.Models
+@model RecruitingPortal.Models.JobAlertViewModel
+@{
+    ViewBag.Title = "JobAlert Edit";
+    Layout = "~/Views/Shared/_LayoutSub.cshtml";
+
+    var postalCode = Model.JobSeeker != null ? Model.JobSeeker.PostalCode : string.Empty;
+}
+<style type="text/css">
+    h3 {
+        margin-top: 0px;
+    }
+</style>
+
+<div>
+    <h3>
+        Edit Job Alert
+    </h3>
+</div>
+
+<div>      
+    <p style="text-align:right">
+        @*ref: http://stackoverflow.com/questions/4774265/set-anonymous-type-to-null*@
+        @Html.ActionLink("Back to List", "JobAlert", new { Id = new Nullable<int>() })
+    </p>  
+    @Html.AntiForgeryToken()
+    @using (Html.BeginForm("EditAlert", "JobAlert", FormMethod.Post))
+    {
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(m => m.Id)
+        <div class="form-group">
+            <div class="col-md-2">
+                <label>Post Code</label>
+            </div>
+            <div class="col-md-4">
+                <i class="glyphicon glyphicon-map-marker"></i><a href="#mapcontainer" class="mapToShowGoogle" id="||@postalCode">
+                    @postalCode.ToUpper()
+                </a>                
+            </div>
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.WithinKilometer, htmlAttributes: new { @class = "control-label" })
+            </div>
+            <div class="col-md-4">
+                @Html.DropDownListFor(model => model.WithinKilometer, Model.Distance, new { @class = "form-control required" })
+                @Html.ValidationMessageFor(model => model.WithinKilometer, "Please select a distance", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div>&nbsp;</div>
+        <div class="form-group">
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.Keyword, htmlAttributes: new { @class = "control-label" })
+            </div>
+            <div class="col-md-4">
+                @Html.TextBoxFor(model => model.Keyword, new { @class = "form-control", maxLength = 50, placeholder = "Keyword" })
+                @Html.ValidationMessageFor(model => model.Keyword, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.JobAlertFrequency, htmlAttributes: new { @class = "control-label" })
+            </div>
+            <div class="col-md-4">
+                @Html.DropDownListFor(model => model.JobAlertFrequencyId, Model.Frequencies, new { @class = "form-control required" })
+                @Html.ValidationMessageFor(model => model.JobAlertFrequencyId, "Please select a frequency", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div>&nbsp;</div>
+        @*<div class="form-group">
+            
+        </div>*@
+        @*<div class="form-group">
+                @Html.LabelFor(model => model.EducationLevels, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-4">
+                    @Html.DropDownListFor(model => model.EducationLevelId, Model.EducationLevels, new { @class = "form-control required" })
+                    @Html.ValidationMessageFor(model => model.EducationLevelId, "Please select education level", new { @class = "text-danger" })
+                </div>
+
+                @Html.LabelFor(model => model.TypeOfServices, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-4">
+                    @Html.DropDownListFor(model => model.TypeOfServiceId, Model.TypeOfServices, new { @class = "form-control required" })
+                    @Html.ValidationMessageFor(model => model.TypeOfServiceId, "Please select service type", new { @class = "text-danger" })
+                </div>
+            </div>*@
+
+        <div class="form-group">
+            <div class="col-md-offset-6">
+                <button type="submit" class="btn btn-primary">Edit Alert</button>
+            </div>
+        </div>
+    }    
+
+    <p style="text-align:right">
+        @Html.ActionLink("Back to List", "JobAlert", new { Id = new Nullable<int>() })
+    </p>
+</div>
+

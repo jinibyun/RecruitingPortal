@@ -1,0 +1,43 @@
+﻿@using RecruitingPortal.Models
+@model ReconfirmEmailViewModel
+@{
+    ViewBag.Title = "Email Confirmation";
+}
+
+<br /><br /><br />
+<div class="row">
+    <div class="col-xs-12 col-sm-8 col-md-4 col-lg-4 col-center-block">
+        <div class="rsSignInCard center-block">
+            <h3>@ViewBag.Title</h3>
+            <p>
+                We have send you a confirmation email with which you can activate your account. Please check it out. <br />
+                If you do not get email, please request email confirmation again below.
+            </p>
+            <section id="loginForm">
+                @using (Html.BeginForm("ReconfirmEmail", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Email Confirmation" class="btn btn-group-sm btn-info" />
+                </div>
+            </div>
+}
+            </section>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

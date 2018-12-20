@@ -1,0 +1,176 @@
+﻿@using RecruitingPortal.Domain
+@using RecruitingPortal.BLL
+@using RecruitingPortal.Infrastructure
+@using RecruitingPortal.Models
+@using System.Configuration
+@using PagedList;
+@using PagedList.Mvc;
+@model RecruitingPortal.Models.SearchViewModel
+<style type="text/css">
+    /*ref: http://jsfiddle.net/a163wsba/*/
+    .list-inline {
+        display: block;
+    }
+
+        .list-inline li {
+            display: inline-block;
+        }
+
+            .list-inline li:after {
+                margin: 0 5px;
+            }
+</style>
+@{
+    var locationLink = ConfigurationManager.AppSettings["locationLink"];
+    var hostWebName = ConfigurationManager.AppSettings["hostWebName"];
+
+    var session = WebUtil.GetSession<LoggedInUserViewModel>("LoggedInUserViewModel") != null ? WebUtil.GetSession<LoggedInUserViewModel>("LoggedInUserViewModel") : null;
+
+    if (session == null)
+    {
+        Response.Redirect("~/Account/Login");
+    }
+
+    bool isAuthenticated = HttpContext.Current.User.Identity.IsAuthenticated;
+
+    EnumMemberRole enumMemberRole = session.Role;
+}
+
+@if (TempData["searchJobSeekerCondition"] != null)
+{
+    var dictionaryFilter = TempData["searchJobSeekerCondition"] as Dictionary<string, object>;
+
+    var Region = dictionaryFilter.ContainsKey("Region") && dictionaryFilter["Region"] != "" && dictionaryFilter["Region"] != null ? dictionaryFilter["Region"] : "ALL";
+    var City = dictionaryFilter.ContainsKey("City") && dictionaryFilter["City"] != "" && dictionaryFilter["City"] != null ? dictionaryFilter["City"] : "ALL";
+    var ServiceType = dictionaryFilter.ContainsKey("ServiceType") && dictionaryFilter["ServiceType"] != "" && dictionaryFilter["ServiceType"] !=null ? dictionaryFilter["ServiceType"] : "ALL";
+    var jobSeekerNameOrContent = dictionaryFilter.ContainsKey("jobSeekerNameOrContent") && dictionaryFilter["jobSeekerNameOrContent"] != "" && dictionaryFilter["jobSeekerNameOrContent"] != null ? dictionaryFilter["jobSeekerNameOrContent"] : "ALL";
+
+    var JobSeekerName = dictionaryFilter.ContainsKey("JobSeekerName") && dictionaryFilter["JobSeekerName"] != "" && dictionaryFilter["JobSeekerName"] != null ? dictionaryFilter["JobSeekerName"] : "ALL";
+    var ExpYears = dictionaryFilter.ContainsKey("ExpYears") && dictionaryFilter["ExpYears"] != "" && dictionaryFilter["ExpYears"]  != null? dictionaryFilter["ExpYears"] : "ALL";
+    //var MinRate = dictionaryFilter.ContainsKey("MinRate") ? dictionaryFilter["MinRate"] : string.Empty;
+
+    var isWeekday = dictionaryFilter.ContainsKey("isWeekday") && dictionaryFilter["isWeekday"] != "" && dictionaryFilter["isWeekday"] != null ? dictionaryFilter["isWeekday"] : "yes";
+    var isShift = dictionaryFilter.ContainsKey("isShift") && dictionaryFilter["isShift"] != "" && dictionaryFilter["isShift"] != null ? dictionaryFilter["isShift"] : "yes";
+
+    var isFulltimePermanent = dictionaryFilter.ContainsKey("isFulltimePermanent") && dictionaryFilter["isFulltimePermanent"] != "" && dictionaryFilter["isFulltimePermanent"] != null ? dictionaryFilter["isFulltimePermanent"] : "yes";
+    var isFullTimeContract = dictionaryFilter.ContainsKey("isFullTimeContract") && dictionaryFilter["isFullTimeContract"] != "" && dictionaryFilter["isFullTimeContract"] != null ? dictionaryFilter["isFullTimeContract"] : "yes";
+    var isPartTimeContract = dictionaryFilter.ContainsKey("isPartTimeContract") && dictionaryFilter["isPartTimeContract"] != "" && dictionaryFilter["isPartTimeContract"] != null ? dictionaryFilter["isPartTimeContract"] : "yes";
+
+    var isEnglish = dictionaryFilter.ContainsKey("isEnglish") && dictionaryFilter["isEnglish"] != "" && dictionaryFilter["isEnglish"] != null ? dictionaryFilter["isEnglish"] : "yes";
+    var isFrench = dictionaryFilter.ContainsKey("isFrench") && dictionaryFilter["isFrench"] != "" && dictionaryFilter["isFrench"] != null ? dictionaryFilter["isFrench"] : "yes";
+    
+    var PostalCode = dictionaryFilter.ContainsKey("PostalCode") && dictionaryFilter["PostalCode"] != "" && dictionaryFilter["PostalCode"]  != null ? dictionaryFilter["PostalCode"] : "ALL";
+    var Distance = dictionaryFilter.ContainsKey("Distance") && dictionaryFilter["Distance"] != "" && dictionaryFilter["Distance"]!=null ? dictionaryFilter["Distance"] : "ALL";
+    <div class="alert alert-info alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <i class="fa fa-asterisk"></i> Result: <sapn class="badge">@Model.TotalFilteredJobSeekerCount</sapn>&nbsp;&nbsp;&nbsp;&nbsp;
+        <i class="fa fa-asterisk"></i> Filtered Options
+        <!-- ref: http://jsfiddle.net/a163wsba/-->
+        <ul class="list-inline">            
+            <li><b>Province:</b> <mark>@Region</mark></li>
+            <li><b>City:</b> <mark>@City</mark></li>
+            <li><b>Service:</b> <mark>@ServiceType</mark>
+            <li><b>Name or Address or Cellphone:</b> <mark>@jobSeekerNameOrContent</mark></li>
+            <li><b>Job Seeker Name:</b><mark> @JobSeekerName</mark></li>
+            <li><b>Exp Years:</b> <mark>@ExpYears</mark></li>
+            @*<li><b>Min Rates:</b> @ExpYears</li>*@
+
+            <li><b>Work Availability(Weekday):</b> <mark>@isWeekday</mark></li>
+            <li><b>Work Availability(Shift):</b> <mark>@isShift</mark></li>
+
+            <li><b>Work Type(Fulltime perm):</b> <mark>@isFulltimePermanent</mark></li>
+            <li><b>Work Type(Fulltime cont):</b> <mark>@isFullTimeContract</mark></li>
+            <li><b>Work Type(Parttime cont):</b> <mark>@isPartTimeContract</mark></li>
+
+            <li><b>Languages(English):</b> <mark>@isEnglish</mark></li>
+            <li><b>Languages(French):</b> <mark>@isFrench</mark></li>
+
+            <li><b>Postal Code:</b> <mark>@PostalCode</mark></li>
+            <li><b>Distance:</b> <mark>@Distance</mark></li>
+        </ul>
+    </div>
+}
+
+@if (Model != null && Model.JobSeekerResults != null && Model.JobSeekerResults.Count() > 0)
+{
+
+    foreach (var jobSeeker in Model.JobSeekerResults.Select(x => x))
+    {
+        if (isAuthenticated && enumMemberRole != EnumMemberRole.JobSeeker)
+        {
+            <div class="index_result_01" style="width:100%; background-color:#F8F8F8; padding:10px; border-bottom:1px solid #B5B5B5;">
+                <a href="#jobSeekerDetail" class="jobSeekerTitle" id="@jobSeeker.Id|@locationLink|@hostWebName">
+                    <span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;
+                    @string.Format("{0}, {1} | {2} years exp.", @jobSeeker.LastName, @jobSeeker.FirstName, @jobSeeker.YearsOfExperience)
+                </a>
+                <p><i class="glyphicon glyphicon-calendar"></i> @string.Format("Last Updated: {0:MMM dd yyyy}", @jobSeeker.CreateDate)</p>
+                <p>
+                    <i class="glyphicon glyphicon-map-marker"></i>&nbsp;
+                    <a href="#mapcontainer" class="mapToShowGoogle" id="@jobSeeker.city.City1|@jobSeeker.city.Region.Region1|@jobSeeker.PostalCode">
+                        @Html.Raw(string.Format("{0}, {1} &#x25ba; {2}", @jobSeeker.city.City1, @jobSeeker.city.Region.Region1, @jobSeeker.PostalCode.ToUpper()))
+                    </a>
+                </p>
+            </div>
+        }
+        else
+        {
+            <div class="index_result_01" style="width:100%; background-color:#F8F8F8; padding:10px; border-bottom:1px solid #B5B5B5;">
+                <span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;
+                @string.Format("{0} years exp.", @jobSeeker.YearsOfExperience)
+                <p><i class="glyphicon glyphicon-calendar"></i> @string.Format("Last Updated: {0:MMM dd yyyy}", @jobSeeker.CreateDate)</p>
+                <p>
+                    <i class="glyphicon glyphicon-map-marker"></i>&nbsp;
+
+                    @Html.Raw(string.Format("{0}, {1} &#x25ba; {2}", @jobSeeker.city.City1, @jobSeeker.city.Region.Region1, @jobSeeker.PostalCode.ToUpper()))
+                </p>
+            </div>
+        }
+    }
+
+
+    if (isAuthenticated && enumMemberRole != EnumMemberRole.JobSeeker)
+    {
+        <div class="btn-group pull-right">
+            @Html.PagedListPager(
+                                 @Model.JobSeekerResults,
+                                  page => Url.Action("JobSeekerSearchWithPage",
+                                               new RouteValueDictionary(new
+                                                                           {
+                                                                               page = page,
+                                                                               RegionId = @Model.RegionId,
+                                                                               CityId = @Model.CityId,
+                                                                               ServiceTypeId = @Model.ServiceTypeId,
+                                                                               ExpYears = @Model.ExpYears,
+                                                                               JobSeekerName = @Model.JobSeekerName,
+                                                                               JobSeekerNameOrContent = @Model.JobSeekerNameOrContent,
+                                                                               isWeekday = @Model.isWeekday,
+                                                                               isShift = @Model.isShift,
+                                                                               isFulltimePermanent = @Model.isFulltimePermanent,
+                                                                               isFullTimeContract = @Model.isFullTimeContract,
+                                                                               isPartTimeContract = @Model.isPartTimeContract,
+                                                                               isEnglish = @Model.isEnglish,
+                                                                               isFrench = @Model.isFrench,
+                                                                               PostalCode = @Model.PostalCode,
+                                                                               distance = @Model.distance
+                                                                           }
+                                                )
+                                    ),
+                                PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing
+                                (
+                                    new AjaxOptions()
+                                    {
+                                        HttpMethod = "GET",
+                                        UpdateTargetId = "search-results-jobSeeker-list"
+                                    }
+                                )
+                            )
+        </div>
+    }
+
+}
+else
+{
+    <div class="index_result_01" style="width:100%; background-color:#F8F8F8; padding:10px; border-bottom:1px solid #B5B5B5;">
+        There are no job security guard(s) found meeting search criteria. Please try it again
+    </div>
+}

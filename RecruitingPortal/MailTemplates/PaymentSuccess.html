@@ -1,0 +1,112 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Successful Payment Confirmation</title>
+    <style type="text/css">
+    body {
+	    background-color: #FFF;
+	    color: #777;
+	    font-family: "Open Sans", Arial, sans-serif;
+	    font-size: 14px;
+	    line-height: 22px;
+	    margin: 0;
+    }
+    </style>
+</head>
+<body>
+        <table style="width: 90%;color: #777;font-family: Arial, sans-serif;font-size: 14px;" border="0">
+            <tr>
+                <td colspan="2" valign ="top"><h2>Successful Payment Confirmation</h2></td>
+            </tr>
+            <tr>
+                <td width="30%" valign ="top">
+                    <b>Subscription Plan:</b>
+                </td>
+                <td width="*">
+                    <%SubscriptionPlan%>
+                </td>
+            </tr>
+            <tr>
+                <td valign ="top">
+                    <b>Payer Name:</b></td>
+                <td>
+                    <%PayerName%></td>
+            </tr>
+            <tr>
+                <td valign ="top">
+                    <b>Net Amount</b></td>
+                <td>
+                    $<%NetAmount%></td>
+            </tr>
+            <tr>
+                <td valign ="top">
+                    <b>Tax Amount</b></td>
+                <td>
+                    $<%TaxAmount%></td>
+            </tr>
+            <tr>
+                <td valign ="top">
+                    <b>Total Amount</b></td>
+                <td>
+                    $<%TotalAmount%></td>
+            </tr>
+            <tr>
+                <td valign ="top">
+                    <b>Transaction ID:</b>
+                </td>
+                <td>
+                    <%TransactionId%>
+                </td>
+            </tr>
+            <tr>
+                <td valign ="top">
+                    <b>Service Period:</b>
+                </td>
+                <td>
+                    <%ServicePeriod%>
+                </td>
+            </tr>
+            <tr>
+                <td valign ="top">
+                    <b>Payment Date:</b>
+                </td>
+                <td>
+                    <%PaymentDate%>
+                </td>
+            </tr>
+            <tr>
+                <td valign="top">
+                    <b>Recurring Billing</b>
+                </td>
+                <td>
+                    <%RecurringBilling%>
+                </td>
+            </tr>
+            <tr>
+                <td valign ="top">
+                    <b>URL:</b>
+                </td>
+                <td>
+                    Please check
+                    <%URL%>  to confirm your subscription plan
+                </td>
+            </tr>
+            <tr>
+                <td valign ="top" colspan ="2">
+                    &nbsp;
+                </td>
+            </tr>
+            <tr>
+                <td valign ="top" colspan ="2">
+                    <br /><%FeedbackURL%>
+                </td>
+            </tr>
+            <tr>
+            <td align="left" colspan="2">
+                <br />
+            </td>
+        </tr>
+        </table>
+</body>
+</html>

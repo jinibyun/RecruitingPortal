@@ -1,0 +1,86 @@
+﻿@model RecruitingPortal.Models.JobSeekerViewModel
+@{
+    ViewBag.Title = "CreateContactLog";
+    Layout = "~/Views/Shared/_LayoutSub.cshtml";
+
+    var fullName = "";
+    var jobSeekerId = Model.Id;
+    var jobApplyId = Model.LastJobAppliedId;
+
+    if (string.IsNullOrEmpty(Model.MiddleName))
+    {
+        fullName = string.Format("{0} {1}", Model.FirstName, Model.LastName);
+    }
+    else
+    {
+        fullName = string.Format("{0} {1} {2}", Model.FirstName, Model.MiddleName, Model.LastName);
+    }
+}
+
+<div id="rsPageContentWrap">
+    <h3>Add Contact Log</h3>
+    <div class="rsBackCard">
+        <div>
+            <div class="rsBlockWrap">
+                <div class="rsMsgWrap">
+                    <div class="rsCircle rsSuccess">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    Any information can be input for a job seeker and it will be checked anytime.
+                    <br />
+                </div>
+                <!--
+                <div class="alert alert-success">
+                    <ul class="fa-ul">
+                        <li>
+                            <i class="fa fa-check-square-o fa-lg fa-li"></i>
+                            Any information can be input for a job seeker and it will be checked anytime.
+                        </li>
+                    </ul>
+                </div>
+                    -->
+
+                <h4>Job Seeker: @fullName</h4>
+
+                @using (Html.BeginForm("CreateContactLog", "JobSeeker", FormMethod.Post))
+    {
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.Hidden("jobSeekerId", jobSeekerId)
+            @Html.Hidden("jobApplyId", jobApplyId)
+            @Html.Hidden("fullName", fullName)
+            <div class="form-group">
+                <div>
+                    @Html.Label("Contact Log", htmlAttributes: new { @class = "control-label col-md-2 requiredLabel" })
+                    <div class="col-md-6">
+                        <!--
+        note: TextBoxFor does not work with ValidationMessageFor
+        ref: http://stackoverflow.com/questions/10294699/jquery-validate-unobtrusive-is-not-working-for-textarea
+
+        note: TinyMCE
+        ref: http://www.codeproject.com/Articles/830925/Integrating-TinyMCE-into-an-MVC-Project
+    -->
+                        @Html.TextArea("ContactLog", "", htmlAttributes: new { @class = "form-control", @id = "contactLog", @rows = 3, PlaceHolder = "Please type any information" })
+                        @*@Html.ValidationMessage(model => model.ContactLog, "", new { @class = "text-danger" })*@
+
+                        <p></p>
+                        <button type="submit" class="btn rsBtnDefault pull-right" id="addLog">Add Log</button>
+                        <a href="@Url.Action("Index", "JobSeeker")" class="btn rsBtnDefault-o pull-right" style="margin-right: 1em;">Back to list page</a>
+                    </div>
+                </div>
+                <p id="errorMsg" class="rsRed"></p>
+
+            </div>
+}
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $("#errorMsg").text();
+    $("#addLog").click(function (e) {
+        if ($("#contactLog").val() == "") {
+            $("#errorMsg").text("Please type contact log");
+            return false;
+        }        
+    });
+</script>

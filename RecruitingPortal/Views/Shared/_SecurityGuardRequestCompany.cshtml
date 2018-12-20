@@ -1,0 +1,236 @@
+﻿@using RecruitingPortal.Domain
+@using RecruitingPortal.BLL
+@using RecruitingPortal.Infrastructure
+@using System.Configuration
+
+@{
+    var FileDownLoadedUrl = ConfigurationManager.AppSettings["hostWebName"] + "FileUploaded/JobPosting/";
+    var locationLink = ConfigurationManager.AppSettings["locationLink"];
+}
+<style>
+    #searchByPosted {
+        cursor: pointer;
+    }
+</style>
+
+<h4 class="sub-heading">Security Guard Request(s)</h4>
+
+<div>
+    <div class="rsMsgWrap">
+        <div class="rsCircle rsSuccess">
+            <i class="fas fa-check"></i>
+        </div>
+        Based on request for guard, you can post a job. it will be notified to the requestor<br />
+        <div class="rsCircle rsWarn">
+            <i class="fas fa-check"></i>
+        </div>
+        Once the request is responded (job posted), then it will moved to the <a href="~/JobPosting/CompanyPostedJob">job posting list page</a>
+    </div>
+    <!--
+    <div class="alert alert-success">
+        <ul class="fa-ul">
+            <li>
+                <i class="fa fa-check-square-o fa-lg fa-li"></i>
+                Based on request for guard, you can post a job. it will be notified to the requestor
+            </li>
+            <li>
+                <i class="fa fa-check-square-o fa-lg fa-li"></i>
+                Once the request is responded (job posted), then it will moved to the <a href="~/JobPosting/CompanyPostedJob">job posting list page</a>
+            </li>
+        </ul>
+    </div>-->
+    @if (TempData["message"] != null)
+    {
+        <div class="alert alert-info alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <span class="glyphicon glyphicon-ok"></span> <strong>@TempData["message"]</strong>
+        </div>
+    }
+    <div class="row">
+        <div class="col-md-6">
+            @Html.Action("GetJobPostedOrNotPosted", "Common")
+            <div class="btn rsBtnDefault" aria-hidden="true" id="searchByPosted"> <i class="fas fa-search"></i>Find By Posted(Responded)</div>
+        </div>
+        <div class="col-md-6">
+            <span class="pull-right">
+                <a href="@Url.Action("ExportToExcel", "Common", new { reportType = ReportType.GUARDREQUEDST })" class="btn rsExportBtn"><i class="far fa-file-excel" aria-hidden="true"></i> Export All Guard Request Data</a>
+            </span>
+
+        </div>
+    </div>
+    <p></p>
+    <div class="row">
+        <div class="col-xs-12">
+            <table id="table_GuardRequest">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Service Location</th>
+                        <th>Requestor</th>
+                        @*<th>Hiring Process</th>*@
+                        @*<th>Candidates</th>*@
+                        <th>Request Date</th>
+                        <th>Job Post Date</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/jscript">
+    $(document).ready(function () {
+
+        // ref: https://www.echosteg.com/jquery-datatables-asp.net-mvc5-server-side
+        var oTable = $('#table_GuardRequest').DataTable({
+            iDisplayLength: 25,
+            serverSide: true,
+            ajax: {
+                type: "POST",
+                url: "@Url.Action("GetGuardRequest", "ServiceTeam")",
+                contentType: 'application/json; charset=utf-8',
+                dataType: "json",
+                dataSrc: "data",
+                data: function (data) {
+                    data.PostedOrNotPosted = $('#JobPostedOrNotPosted').val()
+                    return JSON.stringify(data);
+                },
+                error: function (request, status, error) {
+                    console.log("request: " + request);
+                    console.log("status: " + status);
+                    console.log("error: " + error);
+                }
+            },
+            //"dom": 'frtiS',
+            //"scrollY": 500,
+            //"scrollX": true,
+            //"scrollCollapse": true,
+            "scroller": {
+                loadingIndicator: false
+            },
+            processing: true,
+            select: true,
+            destroy: true,
+            paging: true,
+            bInfo: true, // hide 1 of n record
+            bFilter: true, // hide search box
+            bLengthChange: true, // hide entries dropdown list
+            // sDom: 't', // hide paging // ref: https://datatables.net/forums/discussion/2850/remove-pagination  // ref: http://legacy.datatables.net/usage/options#sDom
+            // ordering: true,
+            // deferRender: true,
+
+            // ref: http://stackoverflow.com/questions/19777075/datatables-merge-columns-together
+            columns: [
+                     {
+                         data: "Id"
+                     },
+                     {
+                         data: "ServiceLocation",
+                         render: function (data, type, row) {
+                             if (row["ServiceLocation"].length > 20) {
+                                 return row["ServiceLocation"].substr(0, 20) + "...";
+                             }
+                             return row["ServiceLocation"];
+                         }
+
+                     },
+                     {
+                         data: "Requestor",
+                         render: function (data, type, row) {
+                             if (row["Requestor"] != '' && row["Requestor"] != null) {
+                                 return "<a href=mailto:" + row["Requestor"] + ">" + row["Requestor"] + "</a>";
+                             } else {
+                                 return "";
+                             }
+                         }
+                     },
+                     {
+                         data: "CreateDate",
+                         render: function (value) {
+                             var date = new Date(parseInt(value.replace("/Date(", "").replace(")/", "")));
+                             return date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+                         }
+                     },
+                     {
+                         data: "JobPostDate",
+                         render: function (data, type, row) {
+
+                             if (row["JobPostDate"] != '' && row["JobPostDate"] != null) {
+                                 var date = new Date(parseInt(row["JobPostDate"].replace("/Date(", "").replace(")/", "")));
+                                 return date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+                             }
+                             return "N/A";
+
+                         }
+                     },
+                     {
+                         // this is Actions Column
+                         // ref: http://stackoverflow.com/questions/30627026/jquery-datatables-how-to-add-an-edit-and-delete-option
+
+                         mRender: function (data, type, row) {
+                             var viewLink = "<a href='#guardRequestDetail' class='guardRequestDetail btn btn-info btn-xs' id='" + row["Id"] + "'>VIEW REQUEST</a>";
+
+                             var postLink = "";
+                             if (row["IsResponded"] == false) {
+                                 postLink = '@Html.ActionLink("POST AD", "CreateOrEdit", "JobPosting", new { RequestId = -1, TypeOfServiceId = -2, TypeOfPositionId = -3 }, htmlAttributes: new { @class = "btn btn-success btn-xs" })';
+                                 postLink = postLink.replace("-1", row["Id"]).replace("-2", row["TypeOfServiceId"]).replace("-3", row["TypeOfPositionId"]);
+                             } else {
+                                 postLink = "<a href='#jobPostingDetail' class='jobPostingDetail' id='" + row["JobPostId"] + "'>" + row["JobId"] + "</a>";
+                             }
+
+                             return postLink + " " + viewLink;
+                         }
+                     }
+            ],
+            order: [0, "desc"],
+            columnDefs: [
+                {
+                    className: "dt-left", "targets": [0], "visible": false
+                },
+                {
+                    className: "dt-left", "targets": [1]//, "width": "10%"
+                },
+                {
+                    className: "dt-center", "targets": [2]//, "width": "15%"
+                },
+                {
+                    className: "dt-center", "targets": [3]//, "width": "15%"
+                },
+                {
+                    className: "dt-center", "targets": [4]
+                },
+                {
+                    className: "dt-right", "targets": [5], "orderable": false
+                }
+            ]
+        });
+
+
+        $("body").on("click", ".guardRequestDetail", function (e) {
+            e.preventDefault();
+            var requestId = $(this).attr('id'); // request id
+            var url = "@Url.Action("GetGuardRequestDetail", "ServiceTeam")"
+            GetGuardRequestDetal(requestId, url);
+        });
+
+        // job posting Detail
+        $("body").on("click", ".jobPostingDetail", function (e) {
+            e.preventDefault();
+            var id = $(this).attr('id');
+            var url = "@Url.Action("JobPostingDetail", "JobPosting")";
+            var fileDownloadUrl = "@FileDownLoadedUrl";
+            GetJobPostingDetail(id, url, fileDownloadUrl);
+        });
+
+        $("#searchByPosted").click(function (e) {
+            oTable.draw();
+        });
+
+    }); // end of document load
+
+</script>
+@Html.Partial("_guardRequestDetail")
+@Html.Partial("_JobPostingDetail")

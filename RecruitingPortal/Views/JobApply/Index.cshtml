@@ -1,0 +1,156 @@
+﻿@using RecruitingPortal.Domain
+@using RecruitingPortal.BLL
+@using RecruitingPortal.Infrastructure
+@using System.Configuration
+
+@{
+    //ref: http://www.mikesdotnetting.com/article/164/nested-layout-pages-with-razor
+    Layout = "~/Views/Shared/_LayoutSub.cshtml";
+    ViewBag.Title = "Job Apply";
+    var FileDownLoadedUrl = ConfigurationManager.AppSettings["hostWebName"] + "FileUploaded/JobPosting/";
+}
+
+<div id="rsPageContentWrap">
+    <h3>Applied Jobs</h3>
+    <div class="rsBackCard">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="rsBlockWrap">
+                    <div class="rsMsgWrap">
+                        <div class="rsCircle rsWarn">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        You can check out a list of jobs you have applied.
+                        <br />
+                    </div>
+                    <!--
+                    <div class="alert alert-success">
+                        <ul class="fa-ul">
+                            <li>
+                                <i class="fa fa-check-square-o fa-lg fa-li"></i>
+                                You can check out a list of jobs you have applied.
+                            </li>
+                        </ul>
+                    </div>
+                        -->
+                <div>
+                    <table id="table_JobApply" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Service</th>
+                                <th>City</th>
+                                <th>Applied</th>
+                                @*<th># Of Applicants</th>*@
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/jscript">
+    $(document).ready(function () {
+
+        // ref: https://www.echosteg.com/jquery-datatables-asp.net-mvc5-server-side
+        var oTable = $('#table_JobApply').DataTable({
+            iDisplayLength: 25,
+            serverSide: true,
+            ajax: {
+                type: "POST",
+                url: "@Url.Action("GetJobApply", "JobApply")",
+                contentType: 'application/json; charset=utf-8',
+                dataType: "json",
+                dataSrc: "data",
+                data: function (data) {
+                    return JSON.stringify(data);
+                },
+                error: function (request, status, error) {
+                    console.log("request: " + request);
+                    console.log("status: " + status);
+                    console.log("error: " + error);
+                }
+            },
+            //"dom": 'frtiS',
+            //"scrollY": 500,
+            //"scrollX": true,
+            //"scrollCollapse": true,
+            "scroller": {
+                loadingIndicator: false
+            },
+            processing: true,
+            select: true,
+            destroy: true,
+            paging: true,
+            bInfo: true, // hide 1 of n record
+            bFilter: true, // hide search box
+            bLengthChange: true, // hide entries dropdown list
+            // sDom: 't', // hide paging // ref: https://datatables.net/forums/discussion/2850/remove-pagination  // ref: http://legacy.datatables.net/usage/options#sDom
+            // ordering: true,
+            // deferRender: true,
+
+            // ref: http://stackoverflow.com/questions/19777075/datatables-merge-columns-together
+            columns: [
+                     {
+                         data: "JobPostingTitle",
+                         render: function (data, type, row) {
+                             if (row["JobPostingTitle"].length > 50)
+                                 return "<a href='#jobPostingDetail' class='jobPostingDetail' id='" + row["Id"] + "'>" + row["JobPostingTitle"].substring(0, 50) + "..." + "</a>";
+
+                             return "<a href='#jobPostingDetail' class='jobPostingDetail' id='" + row["Id"] + "'>" + row["JobPostingTitle"] + "..." + "</a>";
+                         }
+
+                     },
+                     {
+                         data: "typeOfServiceName"
+
+                     },
+                     {
+                         data: "cityName"
+
+                     },
+                     {
+                         data: "AppliedDate",
+                         render: function (value) {
+                             var date = new Date(parseInt(value.replace("/Date(", "").replace(")/", "")));
+                             return date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+                         }
+                     }
+                     //,
+                     //{
+                     //    data: "jobApplyCount"
+
+                     //}
+            ],
+            order: [1, "desc"],
+            columnDefs: [
+                {
+                    className: "dt-left", "targets": [0]
+                },
+                {
+                    className: "dt-left", "targets": [1]
+                },
+                {
+                    className: "dt-left", "targets": [2]
+                },
+                //{
+                //    className: "dt-center", "targets": [4]
+                //}
+            ]
+        });
+
+        // job posting Detail
+        $("body").on("click", ".jobPostingDetail", function (e) {
+            e.preventDefault();
+            var id = $(this).attr('id');
+            var url = "@Url.Action("JobPostingDetail", "JobPosting")";
+            var fileDownloadUrl = "@FileDownLoadedUrl";
+            GetJobPostingDetail(id, url, fileDownloadUrl);
+        });
+
+    }); // end of document loading
+
+</script>
+@Html.Partial("_JobPostingDetail")

@@ -1,0 +1,445 @@
+﻿@using RecruitingPortal.Domain
+@using RecruitingPortal.BLL
+@using RecruitingPortal.Infrastructure
+@using System.Configuration
+
+@{
+    Layout = "~/Views/Shared/_LayoutSub.cshtml";
+    var hostWebName = ConfigurationManager.AppSettings["hostWebName"];
+    var FileDownLoadedUrl = hostWebName + "FileUploaded/JobPosting/";
+}
+<style>
+    #searchByService {
+        cursor: pointer;
+    }
+
+    .statusDiv {
+        width: 180px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        overflow: hidden;
+        display: inline-block;
+        margin: 0px 10px 5px 5px;
+        vertical-align: top;
+    }
+
+    .progressbar {
+        color: #fff;
+        text-align: center;
+        height: 20px;
+        width: 0;
+        background-color: #0ba1b5;
+        border-radius: 3px;
+    }
+</style>
+
+<div id="rsPageContentWrap">
+    <h3>Manage Job Posting</h3>
+    <div class="rsBackCard">
+        <div class="col-xs-12">
+            <div class="rsBlockWrap">
+                <div>
+                    <div class="rsMsgWrap">
+                        <div class="rsCircle rsWarn">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        Once <a href="~/Company/Index">the guard request</a> is responded (job posted), then it will be showing this list<br />
+                        <div class="rsCircle rsSuccess">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        All listed requests on this page will be exposed to security job seeker<br />
+                        <div class="rsCircle rsSuccess">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        In order to hire an applicant(s), please click candidate link where a number of applicants are listed
+                    </div>
+
+                    <!--<div class="alert alert-success">
+                        <ul class="fa-ul">
+                            <li>
+                                <i class="fa fa-check-square-o fa-lg fa-li"></i>
+                                Once <a href="~/Company/Index">the guard request</a> is responded (job posted), then it will be showing this list
+                            </li>
+                            <li>
+                                <i class="fa fa-check-square-o fa-lg fa-li"></i>
+                                All listed requests on this page will be exposed to security job seeker
+                            </li>
+                            <li>
+                                <i class="fa fa-check-square-o fa-lg fa-li"></i>
+                                In order to hire an applicant(s), please click candidate link where a number of applicants are listed
+                            </li>
+                        </ul>
+                    </div>-->
+
+                    @if (TempData["message"] != null)
+                    {
+                        <div class="alert alert-info alert-dismissible" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <span class="glyphicon glyphicon-ok"></span> <strong>@TempData["message"]</strong>
+                        </div>
+                    }
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            @Html.Action("GetTypeOfService", "Common")
+                            <div class="btn rsBtnDefault" aria-hidden="true" id="searchByService"> <i class="fas fa-search"></i>Find By Service</div>
+                        </div>
+                        <div class="col-md-6">
+                            <span class="pull-right">
+                                <a href="@Url.Action("ExportToExcel", "Common", new { reportType = ReportType.JOBPOSTING })" class="btn rsExportBtn"><i class="far fa-file-excel" aria-hidden="true"></i> Export All Job Posted Data</a>
+                            </span>
+                        </div>
+                    </div>
+                    <p></p>
+                    <table id="table_JobPosting" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Job Id</th>
+                                <th>Title</th>
+                                <th>Job Status</th>
+                                <th>Post Date</th>
+                                <th>Candidates</th>
+                                @*<th>Hired</th>*@
+                                <th>Change</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<a href="#content-delJobForm" id="divRemoveJob" style="display: none;"></a>
+<div id="content-delJobForm" style="display: none;width:300px; overflow:hidden!important;height:auto">
+    <h4>Remove Job</h4>
+    <div class="form-group">
+        <div class="row">
+            <div class="col-sm-12">
+                <span id="jobId"></span> <span id="Id" style="visibility:hidden"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                (If any, please type the reason to remove)
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-sm-12">
+                <textarea id="removeReason" rows="3" name="removeReason" class="form-control" style="resize: none;"></textarea>
+            </div>
+
+        </div>
+        <br />
+        <div class="row">
+            <input class="btn btn-primary btn-block" type="button" value="Remove Job" id="btnRemoveJob" />
+        </div>
+    </div>
+</div>
+
+<script type="text/jscript">
+    $(document).ready(function () {
+        var hostWebName = "@hostWebName";
+        // ref: https://www.echosteg.com/jquery-datatables-asp.net-mvc5-server-side
+        var oTable = $('#table_JobPosting').DataTable({
+            iDisplayLength: 25,
+            serverSide: true,
+            ajax: {
+                type: "POST",
+                url: "@Url.Action("GetJobPosting", "JobPosting")",
+                contentType: 'application/json; charset=utf-8',
+                dataType: "json",
+                dataSrc: "data",
+                data: function (data) {
+                    data.ServiceType = ($('#SeekerServiceType').val() == null || $('#SeekerServiceType').val() == "") ? "0" : $('#SeekerServiceType').val();
+                    return JSON.stringify(data);
+                },
+                error: function (request, status, error) {
+                    console.log("request: " + request);
+                    console.log("status: " + status);
+                    console.log("error: " + error);
+                }
+            },
+            //"dom": 'frtiS',
+            //"scrollY": 500,
+            //"scrollX": true,
+            //"scrollCollapse": true,
+            "scroller": {
+                loadingIndicator: false
+            },
+            processing: true,
+            select: true,
+            destroy: true,
+            paging: true,
+            bInfo: true, // hide 1 of n record
+            bFilter: true, // hide search box
+            bLengthChange: true, // hide entries dropdown list
+            // sDom: 't', // hide paging // ref: https://datatables.net/forums/discussion/2850/remove-pagination  // ref: http://legacy.datatables.net/usage/options#sDom
+            // ordering: true,
+            // deferRender: true,
+
+            // ref: http://stackoverflow.com/questions/19777075/datatables-merge-columns-together
+            columns: [
+                     {
+                         data: "Id"
+                     },
+                     //{
+                     //    data: "GuardRequestId"
+                     //},
+                     {
+                         data: "JobId",
+                         render: function (data, type, row) {
+                             return "<a href='#jobPostingDetail' class='jobPostingDetail' id='" + row["Id"] + "'>" + row["JobId"] + "</a>";
+                         }
+                     },
+                     {
+                         data: "Title"
+
+                     },
+                     {
+                        data:"JobStatus",
+                        render: function (data, type, row) {
+                            // ref: http://hayageek.com/jquery-progress-bar-example/
+                             return "<div class='statusDiv'><div class='progressbar' id='progress" + row["Id"] + "'></div></div>";
+                         }
+                     },
+                     {
+                         data: "CreateDate",
+                         render: function (value) {
+                             var date = new Date(parseInt(value.replace("/Date(", "").replace(")/", "")));
+                             return date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+                         }
+                     },
+                     {
+                         data: "JobApplyCount",
+                         render: function (data, type, row) {
+                             if (row["JobApplyCount"] == "0") {
+                                 return "NONE";
+                             }
+                             return '<a class="label label-success" href="' + hostWebName + 'JobApply/AppliedList/' + row["Id"] + '">' + row["JobApplyCount"] + '</a>';
+                         }
+                     },
+                     //{
+                     //    data: "IsHired",
+                     //    render: function (data, type, row) {
+                     //       if(data) { // hired
+                     //           return "HIRED"
+                     //       } else { // not hired
+                     //           var hireLink = '<a href="#_" class="hireJobPosting btn btn-info btn-xs" id=' + row["Id"] + '>HIRE</a>';
+                     //           return hireLink;
+                     //       }
+                     //    }
+                     //},
+                     {
+                         // this is Actions Column
+                         // ref: http://stackoverflow.com/questions/30627026/jquery-datatables-how-to-add-an-edit-and-delete-option
+
+                         mRender: function (data, type, row) {
+                             // close job (hired, deleted or expired)
+                             if (row["IsHired"] == true || row["IsDeleted"] == true || row["IsExpired"] == true){
+                                return "N/A";
+                             }
+                             // open job (requested, posted or applied)
+                             else {
+                                 var editLink = "";
+                                 // request or posted
+                                 if (row["JobApplyCount"] == "0") {
+                                     editLink = '@Html.ActionLink("EDIT", "CreateOrEdit", "JobPosting", new { Id = -1 }, htmlAttributes: new { @class = "btn btn-warning btn-xs" })';
+                                     editLink = editLink.replace("-1", row["Id"]);
+                                 }
+                                 // applied: Once at least one applicants applied, it cannot be edited
+                                 // delete is common
+                                 var delLink = '<a href="#_" class="delJobPosting" id=' + row["Id"] + "|" + row["JobId"] + '><i class="fa fa-times" aria-hidden="true"></i></a>';
+                                 return editLink + "&nbsp;&nbsp;&nbsp;&nbsp;" + delLink;
+                            }
+                         }
+                     }
+            ],
+            order: [4, "desc"],
+            columnDefs: [
+                {
+                    className: "dt-center", "targets": [0],
+                    "visible": false,
+                },
+                {
+                    className: "dt-center", "targets": [1]
+                },
+                {
+                    className: "dt-center", "targets": [4]
+                },
+                {
+                    className: "dt-center", "targets": [5]
+                },
+                {
+                    className: "dt-right", "targets": [6], "orderable": false
+                }
+            ],
+            drawCallback: function( settings ) {
+                var api = this.api();
+                var json = api.ajax.json();
+                // console.log(json.data[0].JobStatus);
+                /*
+                    (refer to EnumJobStatus.cs)
+                    (JobStatus Value)
+                    Requested = 1, -->> 25%
+                    Posted = 2,    -->> 50%
+                    Applied = 3,   -->> 75%
+                    Hired = 4,     -->> 100%
+                    Removed = 5, -->> no effect to job progress
+                    Expired = 6  -->> no effect to job progress
+                */
+                var progressString = "";
+                var progressNumber = 0;
+                for(i =0; i < json.data.length; i++){
+
+                    var controlName = "progress" + json.data[i].Id;
+                    switch(json.data[i].JobStatus){
+                        case 1:
+                            progressString = "Requested";
+                            progressNumber = 25;
+                        break;
+                        case 2:
+                            progressString = "Posted";
+                            progressNumber = 50;
+                        break;
+                        case 3:
+                            progressString = "Applied";
+                            progressNumber = 75;
+                        break;
+                        case 4:
+                            progressString = "Hired";
+                            progressNumber = 100;
+                        break;
+                        case 5:
+                            progressString = "Removed";
+                        break;
+                        case 6:
+                            progressString = "Expired";
+                        break;
+
+                    }
+                    // console.log(controlName);
+                    setProgress("#" + controlName, progressString, progressNumber);
+                }
+
+                function setProgress(controlName, progressString, progressNumber)
+                {
+                    var progressBarWidth = progressNumber * $(".statusDiv").width()/ 100;
+                    $(controlName).width(progressBarWidth).html(progressString);
+                }
+            }
+        }); // end of datatable
+
+        @*$('body').on('click', '.hireJobPosting', function(e) {
+            e.preventDefault();
+            var id = $(this).attr('id');
+            $.ajax({
+		        type: "POST",
+		        cache: false,
+		        dataType: "json",
+		        contentType: 'application/json; charset=utf-8',
+		        url: "@Url.Action("ChangeToHire", "JobPosting")",
+		        data: JSON.stringify({
+			        Id: id
+		        }),
+		        success: function (data) {
+			        // data is your result from controller
+			        if (data.success) {
+                        fancyAlert("Job " + id + " has been successfully hired and the confirmation email has been sent");
+                        $('#table_JobPosting').DataTable().ajax.reload();
+			        }
+			        else {
+				        alert('Job was not changed to "Hired" status.Please try it again');
+			        }
+		        },
+		        error: function (request, status, error) {
+			        alert('Job was not changed to "Hired" status. Please try it again');
+
+		        },
+		        complete: function () {
+
+		        }
+	        });
+
+        });*@
+
+        // job posting Detail
+        $("body").on("click", ".jobPostingDetail", function (e) {
+            e.preventDefault();
+            var id = $(this).attr('id');
+            var url = "@Url.Action("JobPostingDetail", "JobPosting")";
+            var fileDownloadUrl = "@FileDownLoadedUrl";
+            GetJobPostingDetail(id, url, fileDownloadUrl);
+
+        });
+
+        // delete job posting
+        $('body').on('click', '.delJobPosting', function (e) {
+            var IdAndJobId = $(this).attr('id');
+
+            var Id = IdAndJobId.split("|")[0];
+            var JobId = IdAndJobId.split("|")[1];
+
+            $("#Id").text(Id);
+            $("#jobId").text(JobId);
+            e.preventDefault();
+            $("#divRemoveJob").fancybox().trigger('click');
+        });
+
+        $('body').on('click', '#btnRemoveJob', function (e) {
+            $.ajax({
+                type: "POST",
+                cache: false,
+                dataType: "json",
+                contentType: 'application/json; charset=utf-8',
+                url: "@Url.Action("Delete", "JobPosting")",
+                data: JSON.stringify({
+                    Id: $("#Id").text(),
+                    deleteReason: $("#removeReason").val()
+                }),
+                success: function (data) {
+                    // data is your result from controller
+                    if (data.success) {
+                        // TODO: fancyAlert is not called or executed
+                        fancyAlert("Job has been successfully removed and the confirmation email has been sent");
+                        $('#table_JobPosting').DataTable().ajax.reload();
+                    }
+                    else {
+                        alert('Job posted was not deleted. Please try it again');
+                    }
+                },
+                error: function (request, status, error) {
+                    alert('Job posted was not deleted. Please try it again');
+
+                },
+                complete: function () {
+                    parent.$.fancybox.close();
+                }
+            });
+        });
+
+        // fancybox format
+        $("#divRemoveJob").fancybox({
+            type: 'inline',
+            margin: [10, 10, 10, 10],
+            padding: 20,
+            width: 400,
+            height: 'auto',
+            scrolling: 'yes',
+            autoSize: false,
+            tpl: {
+                wrap: '<div class="fancybox-wrap fancybox-login-form" tabIndex="-1"><div class="fancybox-skin"><div class="fancybox-outer"><div class="fancybox-inner"></div></div></div></div>'
+            },
+            openEffect: 'elastic',
+            closeEffect: 'elastic',
+        });
+
+        $("#searchByService").click(function (e) {
+            oTable.draw();
+        });
+    }); // end of document load
+
+</script>
+@Html.Partial("_JobPostingDetail")

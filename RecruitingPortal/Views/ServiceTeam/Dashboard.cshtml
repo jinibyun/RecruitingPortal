@@ -1,0 +1,80 @@
+﻿
+@{
+    ViewBag.Title = "Overview";
+    Layout = "~/Views/Shared/_LayoutSub.cshtml";
+    var fromDate = ViewData["fromDate"] != null ? ViewData["fromDate"].ToString() : "";
+    var toDate = ViewData["toDate"] != null ? ViewData["toDate"].ToString() : "";
+}
+
+<div id="rsPageContentWrap">
+    <div class="row">
+        <div class="col-sm-3">
+            <h3>Overview</h3>
+        </div>
+        <div class="col-md-9">
+            <div style="text-align:right">
+                @Html.Partial("_DatePicker", new ViewDataDictionary { { "fromDate", fromDate }, { "toDate", toDate } })
+            </div>
+        </div>
+    </div>
+    <div class="rsBackCard">
+        <div class="row">
+            <div class="col-sm-6 col-md-6 col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4>
+                            Job Requests and Response(Posted)
+                            <div class="pull-right"><a href="~/ServiceTeam/Index" class="rsBtnDetail">See Detail</a></div>
+                        </h4>
+                    </div>
+                    <div class="penel-body" style="padding: 1em 0;">
+                        @Html.Action("RequestGuardStatistics", "GoogleChart", new { partialPage = "Analytics/Chart/_jobRequestAndResponse_ComboChart.cshtml", partialPageDiv = "divRequestGuardStatistics", fromDate = fromDate, toDate = toDate })
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-6 col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4>
+                            Applied Candidates
+                            <div class="pull-right"><a href="~/JobSeeker/Index" class="rsBtnDetail">See Detail</a></div>
+                        </h4>
+                    </div>
+                    <div class="penel-body" style="padding: 1em 0;">
+                        @Html.Action("AppliedCandidate", "GoogleChart", new { partialPage = "Analytics/Chart/_appliedCandidates_PieChart.cshtml", partialPageDiv = "divAppliedCandiate", fromDate = fromDate, toDate = toDate })
+                    </div>
+                </div>
+            </div>
+         </div>
+         <div class="row">
+            <div class="col-sm-6 col-md-6 col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4>
+                            Hiring Statistics
+                            <div class="pull-right"><a href="~/JobPosting/CompanyPostedJob" class="rsBtnDetail">See Detail</a></div>
+                        </h4>
+                    </div>
+                    <div class="penel-body" style="padding-bottom: 1em;">
+                        @Html.Action("JobStatusStatistics", "GoogleChart", new { partialPage = "Analytics/Chart/_jobStatusStatistics_ColumnChart.cshtml", partialPageDiv = "divJobStatusStatistics", fromDate = fromDate, toDate = toDate })
+                    </div>
+                </div>
+            </div> 
+            <div class="col-sm-6 col-md-6 col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4>
+                            Job Posting Statistics
+                            <div class="pull-right"><a href="~/JobPosting/CompanyPostedJob" class="rsBtnDetail">See Detail</a></div>
+                        </h4>
+                    </div>
+                        <div class="penel-body" style="padding-bottom: 1em;">
+                            @Html.Action("JobPostStatistics", "GoogleChart", new { partialPage = "Analytics/Chart/_jobPostStatistics_ColumnChart.cshtml", partialPageDiv = "divJobPostStatistics", fromDate = fromDate, toDate = toDate })
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+         </div>
+     </div>
+

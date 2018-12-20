@@ -1,0 +1,254 @@
+﻿@using RecruitingPortal.Domain
+@using RecruitingPortal.BLL
+@using RecruitingPortal.Infrastructure
+@using RecruitingPortal.Models
+@model RecruitingPortal.Models.JobAlertViewModel
+@{
+    ViewBag.Title = "JobAlert";
+    Layout = "~/Views/Shared/_LayoutSub.cshtml";
+    var postalCode = ViewData["PostalCode"] != null ? ViewData["PostalCode"].ToString() : string.Empty;
+}
+
+<div id="rsPageContentWrap">
+    <h3>Job Alert</h3>
+    <div class="rsBackCard">
+        <div class="col-xs-12">
+            <div class="rsBlockWrap">
+                <div>
+                    <div class="rsMsgWrap">
+                        <div class="rsCircle rsWarn">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        Once you add job alert, you will be notified via email about your preference regarding job posting
+                        <br />
+                    </div>
+                    <!--
+                    <div class="alert alert-success">
+                        <ul class="fa-ul">
+                            <li>
+                                <i class="fa fa-check-square-o fa-lg fa-li"></i>
+                                Once you add job alert, you will be notified via email about your preference regarding job posting
+                            </li>
+                        </ul>
+                    </div>
+                        -->
+
+                    @using (Html.BeginForm("CreateAlert", "JobAlert", FormMethod.Post))
+    {
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="rsFilterArea-o">
+                        <div class="row" style="margin: 0;">
+                            <div class="form-group">
+                                <div class="col-md-2">
+                                    <label>Post Code</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <i class="glyphicon glyphicon-map-marker"></i><a href="#mapcontainer" class="mapToShowGoogle" id="||@postalCode">
+                                        @postalCode.ToUpper()
+                                    </a>
+                                </div>
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.WithinKilometer, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-4">
+                                    @Html.DropDownListFor(model => model.WithinKilometer, Model.Distance, new { @class = "form-control required" })
+                                    @Html.ValidationMessageFor(model => model.WithinKilometer, "Please select a distance", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div>&nbsp;</div>
+                        <div class="row" style="margin: 0;">
+                            <div class="form-group">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.Keyword, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-4">
+                                    @Html.TextBoxFor(model => model.Keyword, htmlAttributes: new { @class = "form-control", maxLength = 50, placeholder = "Keyword" })
+                                    @Html.ValidationMessageFor(model => model.Keyword, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.JobAlertFrequency, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-4">
+                                    @Html.DropDownListFor(model => model.JobAlertFrequencyId, Model.Frequencies, new { @class = "form-control required" })
+                                    @Html.ValidationMessageFor(model => model.JobAlertFrequencyId, "Please select a frequency", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                     </div>
+
+                <div class="col-xs-12 rs-mtb-1">
+                    <div class="pull-right">
+                        <button type="submit" class="btn btn-primary">Create Alert</button>
+                    </div>
+                </div>
+
+                <p></p><br />
+}
+
+                    <h4>Job Alert List</h4>
+                    @if (TempData["message"] != null)
+    {
+                <div class="alert alert-info alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <span class="glyphicon glyphicon-ok"></span> <strong>@TempData["message"]</strong>
+                </div>
+}
+
+                    <table id="table_JobApply" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Alert Keyword</th>
+                                <th>Frequency</th>
+                                <th>Distance</th>
+                                <th>Created</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        // ref: https://www.echosteg.com/jquery-datatables-asp.net-mvc5-server-side
+        var oTable = $('#table_JobApply').DataTable({
+            iDisplayLength: 25,
+            serverSide: true,
+            ajax: {
+                type: "POST",
+                url: "@Url.Action("GetJobAlerts", "JobAlert")",
+                contentType: 'application/json; charset=utf-8',
+                dataType: "json",
+                dataSrc: "data",
+                data: function (data) {
+
+                    return JSON.stringify(data);
+                },
+                error: function (request, status, error) {
+                    console.log("request: " + request);
+                    console.log("status: " + status);
+                    console.log("error: " + error);
+                }
+            },
+            //"dom": 'frtiS',
+            //"scrollY": 500,
+            //"scrollX": true,
+            //"scrollCollapse": true,
+            "scroller": {
+                loadingIndicator: false
+            },
+            processing: true,
+            select: true,
+            destroy: true,
+            paging: true,
+            bInfo: true, // hide 1 of n record
+            bFilter: true, // hide search box
+            bLengthChange: true, // hide entries dropdown list
+            // sDom: 't', // hide paging // ref: https://datatables.net/forums/discussion/2850/remove-pagination  // ref: http://legacy.datatables.net/usage/options#sDom
+            // ordering: true,
+            // deferRender: true,
+
+            // ref: http://stackoverflow.com/questions/19777075/datatables-merge-columns-together
+            columns: [
+                     {
+                         data: "Keyword"
+                     },
+                     {
+                         data: "frequencyString"
+                     },
+                     {
+                         data: "WithinKilometer",
+                         render: function (data, type, row) {
+                             return row["WithinKilometer"] + " km";
+                         }
+                     },
+                     {
+                         data: "CreateDate",
+                         render: function (value) {
+                             var date = new Date(parseInt(value.replace("/Date(", "").replace(")/", "")));
+                             return date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+                         }
+                     },
+                     {
+                         // this is Actions Column
+                         // ref: http://stackoverflow.com/questions/30627026/jquery-datatables-how-to-add-an-edit-and-delete-option
+
+                         mRender: function (data, type, row) {
+                             var delLink = '<a href="#_" class="delJobAlert btn btn-warning btn-xs" id=' + row["Id"] + '>DELETE</a>';
+
+                             return delLink;
+                         },
+                         "bSortable": false
+
+                     }
+            ],
+            order: [1, "desc"],
+            columnDefs: [
+                {
+                    className: "dt-left", "targets": [0]
+                },
+                {
+                    className: "dt-left", "targets": [1]
+                },
+                {
+                    className: "dt-left", "targets": [2]
+                },
+                {
+                    className: "dt-left", "targets": [3]
+                },
+                {
+                    className: "dt-right", "targets": [4]
+                },
+            ]
+        });
+
+        // delete job alert
+        $('body').on('click', '.delJobAlert', function (event) {
+
+            var Id = $(this).attr('id');
+            var url = "@Url.Action("DeleteJobAlert", "JobAlert")";
+
+            fancyConfirm('Are you sure deleting selected job alert?',
+                    function () { // ok click
+                        $.ajax({
+                            type: "POST",
+                            cache: false,
+                            dataType: "json",
+                            contentType: 'application/json; charset=utf-8',
+                            url: url,
+                            data: JSON.stringify({
+                                Id: Id
+                            }),
+                            success: function (data) {
+                                // data is your result from controller
+                                if (data.success) {
+
+                                    window.location.href = "@Url.Action("Index", "JobAlert")";
+                                    window.location.reload(true);
+                                }
+                                else {
+                                    alert('Job alert was not deleted. Please try it again');
+                                }
+                            },
+                            error: function (request, status, error) {
+                                alert(error);
+                            },
+                            complete: function () {
+                            }
+                        });
+                    },
+                    function () { // cancel click
+                        // do nothing
+                    }
+                );
+        });
+    });
+</script>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

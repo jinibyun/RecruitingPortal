@@ -1,0 +1,85 @@
+﻿<div id="jobSeekerScore" style="display: none; overflow:hidden!important;height:auto" class="panel panel-info">
+    <div class="panel-heading">Job Seeker Scoring Detail</div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="form-group">
+                @Html.Label("Total Score", htmlAttributes: new { @class = "control-label col-sm-4" })
+                <div class="col-sm-8">
+                    @Html.Raw("<span id = \"SeekerTotalScore\" />")
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                @Html.Label("Security Experiences", htmlAttributes: new { @class = "control-label col-sm-4" })
+                <div class="col-sm-2">
+                    @Html.Raw("<span id = \"SeekerSecurityExperiencePoint\" />")
+                </div>
+                @Html.Label("Valid CPR/First Aid Certificate", htmlAttributes: new { @class = "control-label col-sm-4" })
+                <div class="col-sm-2">
+                    @Html.Raw("<span id = \"SeekerValidCPRPoint\" />")
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                @Html.Label("Security License", htmlAttributes: new { @class = "control-label col-sm-4" })
+                <div class="col-sm-2">
+                    @Html.Raw("<span id = \"SeekerHasSecurityLicensePoint\" />")
+                </div>
+                @Html.Label("Law & Security Community College Certificate", htmlAttributes: new { @class = "control-label col-sm-4" })
+                <div class="col-sm-2">
+                    @Html.Raw("<span id = \"SeekerCommunityCollegePoint\" />")
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                @Html.Label("Background", htmlAttributes: new { @class = "control-label col-sm-4" })
+                <div class="col-sm-2">
+                    @Html.Raw("<span id = \"SeekerBackgroundPoint\" />")
+                </div>
+                @Html.Label("Have Vehicle", htmlAttributes: new { @class = "control-label col-sm-4" })
+                <div class="col-sm-2">
+                    @Html.Raw("<span id = \"SeekerHasCarPoint\" />")
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                @Html.Label("Languages", htmlAttributes: new { @class = "control-label col-sm-4" })
+                <div class="col-sm-2">
+                    @Html.Raw("<span id = \"SeekerLanguagesPoint\" />")
+                </div>
+                @Html.Label("Experience in MS Office S/W", htmlAttributes: new { @class = "control-label col-sm-4" })
+                <div class="col-sm-2">
+                    @Html.Raw("<span id = \"SeekerMSOfficePoint\" />")
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                @Html.Label("Shift Work Available", htmlAttributes: new { @class = "control-label col-sm-4" })
+                <div class="col-sm-2">
+                    @Html.Raw("<span id = \"SeekerShiftWorkAvailablePoint\" />")
+                </div>
+                @Html.Label("Currently Working", htmlAttributes: new { @class = "control-label col-sm-4" })
+                <div class="col-sm-2">
+                    @Html.Raw("<span id = \"SeekerCurrentlyWorkingPoint\" />")
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                @Html.Label("Service", htmlAttributes: new { @class = "control-label col-sm-4" })
+                <div class="col-sm-2">
+                    @Html.Raw("<span id = \"SeekerTypeOfServicePoint\" />")
+                </div>
+                @Html.Label("Resume Attached", htmlAttributes: new { @class = "control-label col-sm-4" })
+                <div class="col-sm-2">
+                    @Html.Raw("<span id = \"SeekerResumeAttachPoint\" />")
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,123 @@
+﻿@model RecruitingPortal.Models.JobPostingViewModel
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<script type="text/javascript" src="@Url.Content("~/scripts/jHtmlArea-0.8.min.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/scripts/jHtmlArea.ColorPickerMenu-0.8.min.js")"></script>
+<link rel="Stylesheet" type="text/css" href="@Url.Content("~/Content/jHtmlArea/jHtmlArea.css")" />
+<link rel="Stylesheet" type="text/css" href="@Url.Content("~/Content/jHtmlArea/jHtmlArea.ColorPickerMenu.css")" />
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>JOB POSTING - Edit</h4>
+        <hr />
+
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.Title, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.Description, 10, 75, new { @class = "form-control", @id="txtDescription" })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.TextBoxFor(model => model.Address, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+            </div>
+            @Html.LabelFor(model => model.PostalCode, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.TextBoxFor(model => model.PostalCode, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.PostalCode, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.MinRate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-2">
+                @Html.TextBoxFor(model => model.MinRate, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.MinRate, "", new { @class = "text-danger" })
+            </div>
+            @Html.LabelFor(model => model.MaxRate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-2">
+                @Html.TextBoxFor(model => model.MaxRate, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.MaxRate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        @*ref: http://stackoverflow.com/questions/21878673/html-enumdropdownlistfor-showing-a-default-text *@
+        <div class="form-group">
+            @Html.LabelFor(model => model.EducationLevel, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EnumDropDownListFor(model => model.EducationLevel, "Select Education Level", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.EducationLevel, "", new { @class = "text-danger" })
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TypeOfService, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EnumDropDownListFor(model => model.TypeOfService, "Select Service Type", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.TypeOfService, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TypeOfWork, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EnumDropDownListFor(model => model.TypeOfWork, "Select Work Type", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.TypeOfWork, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @Html.Action("List", "City", new { Model.CityId })
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="POST JOB" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@*@section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }*@
+
+<script type="text/jscript">
+    // ref: http://jhtmlarea.codeplex.com/
+    $('#txtDescription').htmlarea({
+        toolbar: [
+            ["bold", "italic", "underline"],
+            ["p"],
+            // ["h1", "h2", "h3"],
+            // ["increasefontsize", "decreasefontsize"],
+            ["link", "unlink"],
+            ["Cut", "Copy", "Paste"],
+            ["orderedList", "unorderedList"],
+            ["indent", "outdent", "justifyleft", "justifycenter", "justifyright"],
+            ["forecolor"],
+            ["horizontalrule"]
+        ]
+    });
+</script>

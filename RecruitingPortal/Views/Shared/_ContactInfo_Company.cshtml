@@ -1,0 +1,32 @@
+﻿@model RecruitingPortal.Models.CompanyViewModel
+
+<!-- Contact Info -->
+<div class="row">
+    <div class="form-group">
+        @Html.Label("Company", htmlAttributes: new { @class = "col-md-2" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+        </div>
+        @Html.Label("Web Site", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(model => model.WebSite, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.WebSite, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div>&nbsp;</div>
+    <div class="form-group">
+        @Html.Label("Introduction", htmlAttributes: new { @class = "control-label col-md-2" })       
+        <div class="col-md-10">
+            <!--
+            note: TextBoxFor does not work with ValidationMessageFor
+            ref: http://stackoverflow.com/questions/10294699/jquery-validate-unobtrusive-is-not-working-for-textarea
+        -->
+            @Html.EditorFor(model => model.Introduction, new { htmlAttributes = new { @cols = 35, @rows = 20, @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Introduction, "", new { @class = "text-danger" })
+        </div>
+        
+
+    </div>    
+</div>
+<!-- // Contact Info -->

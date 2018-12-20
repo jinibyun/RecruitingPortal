@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="d7fddba05d004105910ba00ee81bf6e6" Name="Diagram1" ZoomLevel="111">
+        <EntityTypeShape EntityType="RecruitingPortalModel.C__MigrationHistory" Width="1.5" PointX="0.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.AspNetRole" Width="1.5" PointX="0.75" PointY="2.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.AspNetUserClaim" Width="1.5" PointX="5.25" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.AspNetUserLogin" Width="1.5" PointX="5.25" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.AspNetUser" Width="1.5" PointX="3" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.BranchAddress" Width="1.5" PointX="3" PointY="34.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.city" Width="1.5" PointX="0.75" PointY="27" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.Company" Width="1.5" PointX="0.75" PointY="33.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.CompanyFile" Width="1.5" PointX="3" PointY="38.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.CompanyLang" Width="1.5" PointX="6" PointY="34.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.CompanyTypeOfWork" Width="1.5" PointX="6" PointY="31.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.Country" Width="1.5" PointX="1.5" PointY="21" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.EducationLevel" Width="1.5" PointX="14.25" PointY="29.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.GuardRequest" Width="1.5" PointX="8.25" PointY="36.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.GuardRequestTypeOfWork" Width="1.5" PointX="13.5" PointY="37.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.JobAlert" Width="1.5" PointX="16.5" PointY="44.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.JobAlertFrequency" Width="1.5" PointX="14.25" PointY="54.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.JobApply" Width="1.5" PointX="21.75" PointY="38.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.JobApplyStatu" Width="1.5" PointX="19.5" PointY="30.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.JobPosting" Width="1.5" PointX="16.5" PointY="34.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.JobPostingFile" Width="1.5" PointX="18.75" PointY="46.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.JobPostingTypeOfWork" Width="1.5" PointX="21.75" PointY="35.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.JobSeeker" Width="1.5" PointX="11.25" PointY="35.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.JobSeekerContactLog" Width="1.5" PointX="13.5" PointY="33.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.JobSeekerFile" Width="1.5" PointX="13.5" PointY="42.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.JobSeekerLang" Width="1.5" PointX="19.5" PointY="39.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.JobSeekerScore" Width="1.5" PointX="13.5" PointY="49" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.JobSeekerSecurityExperience" Width="1.5" PointX="19.5" PointY="36.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.JobSeekerStatu" Width="1.5" PointX="9" PointY="32.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.JobSeekerTypeOfWork" Width="1.5" PointX="19.5" PointY="42.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.JobSeekerTypeOfWorkAvailability" Width="1.5" PointX="19.5" PointY="33.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.Lang" Width="1.5" PointX="3.75" PointY="41.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.NotificationQueue" Width="1.5" PointX="21.75" PointY="43.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.NotificationType" Width="1.5" PointX="19.5" PointY="49.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.Reference" Width="1.5" PointX="13.5" PointY="63" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.Region" Width="1.5" PointX="1.5" PointY="42.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.SiteConfig" Width="1.5" PointX="2.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.StaffTeam" Width="1.5" PointX="6" PointY="28.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.sysdiagram" Width="1.5" PointX="4.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.TypeOfJobNotice" Width="1.5" PointX="9" PointY="49.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.TypeOfNotificationStatu" Width="1.5" PointX="19.5" PointY="52" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.TypeOfPhone" Width="1.5" PointX="6.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.TypeOfPosition" Width="1.5" PointX="6" PointY="44.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.TypeOfSecurityExperience" Width="1.5" PointX="17.25" PointY="27.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.TypeOfService" Width="1.5" PointX="6" PointY="47.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.TypeOfWork" Width="1.5" PointX="3.75" PointY="30.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.TypeOfWorkAvailability" Width="1.5" PointX="17.25" PointY="30.875" IsExpanded="true" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_BranchAddress_cities" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_BranchAddress_Company" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_GuardRequest_BranchAddress" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_JobPosting_BranchAddress" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_cities_Countries" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_cities_Regions" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_JobPosting_cities" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_CompanyFile_Company" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_CompanyLang_Company" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_TypeOfEmployment_Company" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_CompanyLang_Lang" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_TypeOfEmployment_TypeOfWork" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_Regions_Countries" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_JobPosting_EducationLevel" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_JobSeeker_EducationLevel" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_GuardRequest_StaffTeam" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_GuardRequest_TypeOfPosition" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_GuardRequest_TypeOfService" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_GuardRequestTypeOfWork_GuardRequest" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_JobPosting_GuardRequest" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_NotificationQueue_GuardRequest" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_GuardRequestTypeOfWork_TypeOfWork" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_JobAlert_JobAlertFrequency" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_JobAlert_JobSeeker" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_NotificationQueue_JobAlert" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_JobApply_JobApplyStatus" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_JobApply_JobPosting" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_JobApply_JobSeeker" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_JobPosting_TypeOfPosition" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_JobPosting_TypeOfService" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_JobPostingFile_JobPosting" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_JobPostingTypeOfWork_JobPosting" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_NotificationQueue_JobPosting" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_JobPostingTypeOfWork_TypeOfWork" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_JobSeeker_JobSeekerStatus" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_JobSeeker_TypeOfNotice" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_JobSeeker_TypeOfService" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_JobSeekerContactLog_JobSeeker" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_JobSeekerFile_JobSeeker" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_JobSeekerLang_JobSeeker" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_JobSeekerScore_JobSeeker" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_JobSeekerSecurityExperience_JobSeeker" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_JobSeekerTypeOfWork_JobSeeker" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_JobSeekerTypeOfWorkAvailability_JobSeeker" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_References_JobSeeker" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_JobSeekerLang_Lang" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_JobSeekerSecurityExperience_TypeOfSecurityExperience" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_JobSeekerTypeOfWork_TypeOfWork" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_JobSeekerTypeOfWorkAvailability_TypeOfWorkAvailability" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_NotificationQueue_NotificationType" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_NotificationQueue_TypeOfNotificationStatus" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_TypeOfSecurityExperience_TypeOfSecurityExperience" ManuallyRouted="false" />
+        <AssociationConnector Association="RecruitingPortalModel.AspNetUserRoles" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.AspNetUsersStaffTeam" Width="1.5" PointX="8.25" PointY="15.25" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_AspNetUsersStaffTeam_AspNetUsers" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_GuardRequest_AspNetUsers" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_JobSeeker_AspNetUsers" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_AspNetUsersStaffTeam_StaffTeam" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_JobSeeker_cities" />
+        <EntityTypeShape EntityType="RecruitingPortalModel.JobHire" Width="1.5" PointX="24" PointY="20.5" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_JobHire_AspNetUsers" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_JobPosting_AspNetUsers" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_JobHire_JobApply" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_NotificationQueue_AspNetUsers" />
+        <AssociationConnector Association="RecruitingPortalModel.FK_JobSeekerContactLog_JobSeeker1" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

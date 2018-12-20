@@ -1,0 +1,204 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Notify Provider Request</title>
+    <style type="text/css">
+        body
+        {
+            background-color: #FFF;
+            color: #777;
+            font-family: "Open Sans" , Arial, sans-serif;
+            font-size: 14px;
+            line-height: 22px;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <table style="width: 90%;color: #777;font-family: Arial, sans-serif;font-size: 14px;" border="0">
+        <tr>
+            <td colspan="2" valign="top">
+                <b><u>Customer Request</u></b>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" valign="top">
+                You received Customer request
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                Request #:
+            </td>
+            <td>
+                <%RequestConfirmationNo%>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                Request delivered:
+            </td>
+            <td>
+                <%DeliverDate%>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" valign="top">
+                <br />
+                <b>Please carefully review the request below and respond ASAP if you see fit</b>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                <b>Location:</b>
+            </td>
+            <td>
+                <%Location%>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                <b>Category:</b>
+            </td>
+            <td>
+                <%RequestCategory%>
+            </td>
+        </tr>
+        <tr>
+            <td width="30%" valign="top">
+                <b>Desirable Service Start Date:</b>
+            </td>
+            <td width="*">
+                <%ServiceStartDate%>
+            </td>
+        </tr>
+        <tr>
+            <td width="30%" valign="top">
+                <b>Desirable Service End Date:</b>
+            </td>
+            <td width="*">
+                <%ServiceEndDate%>
+            </td>
+        </tr>
+        <tr>
+            <td width="30%" valign="top">
+                <b>Preferred Language of Communication:</b>
+            </td>
+            <td width="*">
+                <%PreferredLanguage%>
+            </td>
+        </tr>
+        <tr>
+            <td width="30%" valign="top">
+                <b>Title of Request:</b>
+            </td>
+            <td width="*">
+                <%Title%>
+            </td>
+        </tr>
+        <tr>
+            <td width="30%" valign="top">
+                <b>Comments:</b>
+            </td>
+            <td width="*">
+                <%Comment%>
+            </td>
+        </tr>
+        <tr>
+            <td width="30%" valign="top">
+                <b>Attachment:</b>
+            </td>
+            <td width="*">
+                <%AttachmentFileName%>
+            </td>
+        </tr>
+        <tr>
+            <td width="30%" valign="top">
+                Please respond before:
+            </td>
+            <td width="*">
+                <b>
+                    <%DeadLineDate%></b>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <br />If selected, the customer will <i>
+                    <%ContactOptionString%></i> you.
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" colspan="2">
+                &nbsp;
+                <hr size="1" noshade />
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" colspan="2">
+                <font color="#4F81BD">BEFORE RESPONDING TO CUSTOMERS MAKE SURE THAT YOUR PROVIDER PROFILE
+                    IS IN GOOD SHAPE. CUSTOMERS DECIDE TO CONNECT WITH YOU BASED <strong>ONLY</strong> ON THE STRENGTH OF
+                    YOUR PROFILE</font>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" colspan="2">
+                <br />When signed in, review and update <font color="blue">Provider Profile</font> or delete (unregister) your account
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" colspan="2">
+                Your account Sign In is your <b>email address</b>
+            </td>
+        </tr>
+        <tr>
+            <td valign="bottom" colspan="2">
+                Click on <font color="blue">Forgot Password</font> and you will receive an email with a new password
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" colspan="2">
+                <hr size="1" noshade />
+            </td>
+        </tr>
+<!--        <tr>
+            <td colspan="2">
+                <font size="3"><b><%URL%></b></font><br />
+            </td>
+        </tr> -->
+        <tr>
+            <td colspan="2">
+                <table cellspacing="0" cellpadding="0" border="0" style=" font-family: Arial, sans-serif; margin-left: 5px; ">
+                <tbody><tr><td style=" padding: 10px 15px; border: 1px solid #114D97; background-color: #1F8DD6; "><%URL%>
+                </td></tr></tbody></table>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" colspan="2">
+                <br /><%FeedbackURL%>
+            </td>
+        </tr>
+
+        <tr>
+            <td width="30%" valign="top">
+                Our Web address:
+            </td>
+            <td width="*">
+                <%SiteName%><br />
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" colspan="2">
+                <br /><i>Reminder: We have a strict policy against spamming. We forbid the sending of unsolicited
+                    mass Emails or unsolicited Emails of any kind in connection with the marketing of
+                    other programs, products, and services. Your profile and information are completely
+                    private unless you decide to connect to a Customer.</i>
+            </td>
+        </tr>
+        <tr>
+            <td align="left" colspan="2">
+                <br />
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

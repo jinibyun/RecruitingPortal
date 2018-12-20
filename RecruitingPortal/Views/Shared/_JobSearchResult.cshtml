@@ -1,0 +1,228 @@
+﻿@using RecruitingPortal.Domain
+@using RecruitingPortal.BLL
+@using RecruitingPortal.Infrastructure
+@using RecruitingPortal.Models
+@using System.Configuration
+@using PagedList;
+@using PagedList.Mvc;
+@model RecruitingPortal.Models.SearchViewModel
+
+
+<style type="text/css">
+    /*ref: http://jsfiddle.net/a163wsba/*/
+    .list-inline {
+        display: block;
+    }
+
+        .list-inline li {
+            display: inline-block;
+        }
+
+            .list-inline li:after {
+                margin: 0 5px;
+            }
+</style>
+
+@{
+    var locationLink = ConfigurationManager.AppSettings["locationLink"];
+    var hostWebName = ConfigurationManager.AppSettings["hostWebName"];
+    var session = WebUtil.GetSession<LoggedInUserViewModel>("LoggedInUserViewModel") != null ? WebUtil.GetSession<LoggedInUserViewModel>("LoggedInUserViewModel") : null;
+
+    if (session == null)
+    {
+        Response.Redirect("~/Account/Login");
+    }
+
+    var enumMemberRole = session.Role;
+    var cityName = "city: n/a";
+    var regionName = "province: n/a";
+    var postalCode = "";
+
+
+}
+
+@if (TempData["searchJobCondition"] != null)
+{
+    var dictionaryFilter = TempData["searchJobCondition"] as Dictionary<string, object>;
+
+    var Region = dictionaryFilter.ContainsKey("Region") && dictionaryFilter["Region"] != "" && dictionaryFilter["Region"] != null ? dictionaryFilter["Region"] : "ALL";
+    var City = dictionaryFilter.ContainsKey("City") && dictionaryFilter["City"] != "" && dictionaryFilter["City"] != null ? dictionaryFilter["City"] : "ALL";
+    var ServiceType = dictionaryFilter.ContainsKey("ServiceType") && dictionaryFilter["ServiceType"] != "" && dictionaryFilter["ServiceType"] != null ? dictionaryFilter["ServiceType"] : "ALL";
+    var jobNameOrContent = dictionaryFilter.ContainsKey("jobNameOrContent") && dictionaryFilter["jobNameOrContent"] != "" && dictionaryFilter["jobNameOrContent"] != null ? dictionaryFilter["jobNameOrContent"] : "ALL";
+    var Title = dictionaryFilter.ContainsKey("Title") && dictionaryFilter["Title"] != "" && dictionaryFilter["Title"] != null ? dictionaryFilter["Title"] : "ALL";
+    var Description = dictionaryFilter.ContainsKey("Description") && dictionaryFilter["Description"] != "" && dictionaryFilter["Description"] != null ? dictionaryFilter["Description"] : "ALL";
+    var PostalCode = dictionaryFilter.ContainsKey("PostalCode") && dictionaryFilter["PostalCode"] != "" && dictionaryFilter["PostalCode"] != null ? dictionaryFilter["PostalCode"] : "ALL";
+    var Distance = dictionaryFilter.ContainsKey("Distance") && dictionaryFilter["Distance"] != "" && dictionaryFilter["Distance"] != null ? dictionaryFilter["Distance"] : "ALL";
+    <div class="alert alert-info alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <i class="fa fa-asterisk"></i> Result: <sapn class="badge">@Model.TotalFilteredJobPostCount</sapn>&nbsp;&nbsp;&nbsp;&nbsp;
+        <i class="fa fa-asterisk"></i> Filtered Options
+        <!-- ref: http://jsfiddle.net/a163wsba/-->
+        <ul class="list-inline">
+            <li><b>Province:</b> <mark>@Region</mark></li>
+            <li><b>City:</b> <mark>@City</mark></li>
+            <li><b>Service:</b> <mark>@ServiceType</mark>
+            <li><b>Job Title or Content:</b> <mark>@jobNameOrContent</mark></li>
+            <li><b>Title:</b> <mark>@Title</mark></li>
+            <li><b>Content:</b> <mark>@Description</mark></li>
+            <li><b>Postal Code:</b> <mark>@PostalCode</mark></li>
+            <li><b>Distance:</b> <mark>@Distance</mark></li>
+        </ul>
+    </div>
+}
+
+@if (Model != null && Model.JobPostResults != null && Model.JobPostResults.Count() > 0)
+{
+    var canApply = false;
+    var applyMessage = "Only Logged-in job seeker who created a profile can apply for the job";
+    var jobTitle = "";
+    foreach (var jobPosting in Model.JobPostResults.Select(x => x))
+    {
+        if (Context.User.Identity.IsAuthenticated)
+        {
+            if (enumMemberRole == EnumMemberRole.Company || enumMemberRole == EnumMemberRole.Staff)
+            {
+                canApply = false;
+                applyMessage = "A Company cannot apply for a job";
+            }
+            else if(enumMemberRole == EnumMemberRole.JobSeeker)
+            {
+                if (@session != null)
+                {
+
+                    ////TODO
+                    //if (@session.JobSeekers != null && @session.JobSeekers.Count > 0) // if job seeker has profile
+                    //{
+                    //    if (!jobPosting.JobApplies.Any(x => x.JobSeeker.AspNetUsersId == @session.Id) )
+                    //    {
+                    //        canApply = true;
+                    //        applyMessage = "You can apply for this job";
+                    //    }
+                    //    else
+                    //    {
+                    //        canApply = false;
+                    //        applyMessage = "You have already applied for this job";
+                    //    }
+                    //}
+                    //else //  if job seeker does not have profile
+                    //{
+                    //    canApply = false;
+                    //    applyMessage = "Please go to your account to create your profile to apply for the job";
+                    //}
+                }
+                else
+                {
+                    canApply = false;
+                    applyMessage = "Only Logged-in job seeker can apply for the job";
+                }
+            }
+        }
+
+        if (@jobPosting.city != null && @jobPosting.city.City1 != null)
+        {
+            cityName = @jobPosting.city.City1;
+        }
+
+        if (@jobPosting.city != null && @jobPosting.city.Region != null && @jobPosting.city.Region.Region1 != null)
+        {
+            regionName = @jobPosting.city.Region.Region1;
+        }
+
+        if (@jobPosting.PostalCode != null)
+        {
+            postalCode = @jobPosting.PostalCode;
+        }
+
+        if (@jobPosting.Title.Length > 38)
+        {
+            jobTitle = @jobPosting.Title.Substring(0, 38) + "...";
+        }
+        else
+        {
+            jobTitle = @jobPosting.Title;
+        }
+
+        <div class="index_result_01" style="width:100%; background-color:#F8F8F8; padding:10px; border-bottom:1px solid #B5B5B5;">
+            <a href="#jobPostingDetail" class="jobPostingTitle" id="@jobPosting.Id|@locationLink|@hostWebName|@canApply.ToString()|@applyMessage">
+                <span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;
+                @Html.Raw("TODO")
+                @*@string.Format("{0} | min. {1:C} / hr | @{2}", @jobTitle, @jobPosting.MinRate, @jobPosting.company.Name)*@
+            </a>
+            <p><i class="glyphicon glyphicon-calendar"></i>&nbsp;@string.Format("Posted: {0:MMM dd yyyy}", @jobPosting.CreateDate)</p>
+            <p>
+                @if (!string.IsNullOrEmpty(postalCode))
+                {
+                    <i class="glyphicon glyphicon-map-marker"></i>@Html.Raw("&nbsp;")
+                    <a href="#mapcontainer" class="mapToShowGoogle" id="@cityName|@regionName|@postalCode">
+                        @Html.Raw(string.Format("{0}, {1} &#x25ba; {2}", @cityName, @regionName, @postalCode.ToUpper()))
+                    </a>
+                }
+                else
+                {
+                    <i class="glyphicon glyphicon-map-marker"></i>@Html.Raw("&nbsp;")
+                    @Html.Raw(string.Format("{0}, {1} &#x25ba; {2}", @cityName, @regionName, "No Post Code"))
+                }
+            </p>
+        </div>
+    }
+
+    <div class="btn-group pull-right">
+        @Html.PagedListPager(
+                                @Model.JobPostResults,
+                                    page => Url.Action("JobSearchWithPage", new RouteValueDictionary(new
+                                    {
+                                        page = page,
+                                        RegionId = @Model.RegionId,
+                                        CityId = @Model.CityId,
+                                        ServiceTypeId = @Model.ServiceTypeId,
+                                        Title = @Model.Title,
+                                        Description = @Model.Description,
+                                        JobNameOrContent = @Model.JobNameOrContent,
+                                        PostalCode = @Model.PostalCode,
+                                        distance = @Model.distance
+                                    }
+                                                       )),
+                                PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing
+                                (
+                                    new AjaxOptions()
+                                    {
+                                        HttpMethod = "GET",
+                                        UpdateTargetId = "search-results-jobPosting-list"
+                                    }
+                                )
+                            )
+    </div>
+
+}
+else
+{
+    <div class="index_result_01" style="width:100%; background-color:#F8F8F8; padding:10px; border-bottom:1px solid #B5B5B5;">
+        There are no jobs found meeting search criteria. Please try it again
+    </div>
+}
+
+<script type="text/jscript">
+    // TODO: how to define below function in global level
+    // ref: http://stackoverflow.com/questions/10446122/javascript-jquery-callback-for-fancybox-yes-no-confirm
+    function fancyConfirm(msg, callbackYes, callbackNo) {
+        var ret;
+
+        jQuery.fancybox({
+            'modal': true,
+            'content': "<div style=\"margin:1px;width:300px;\"><b>" + msg + "</b><div style=\"text-align:right;margin-top:10px;\">" +
+                       "<input id=\"fancyconfirm_cancel\"  type=\"button\" value=\"Cancel\" class=\"btn btn-warning\">&nbsp;&nbsp;&nbsp;&nbsp;" +
+                       "<input id=\"fancyConfirm_ok\" type=\"button\" value=\"Ok\" class=\"btn btn-success\"></div></div>",
+            'beforeShow': function () {
+                jQuery("#fancyconfirm_cancel").click(function () {
+                    $.fancybox.close();
+                    callbackNo();
+                });
+
+                jQuery("#fancyConfirm_ok").click(function () {
+                    $.fancybox.close();
+                    callbackYes();
+                });
+            }
+        });
+    }
+</script>

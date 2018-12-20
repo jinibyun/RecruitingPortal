@@ -1,0 +1,16 @@
+﻿@{
+    ViewBag.Title = "Login Failure";
+}
+
+<br /><br /><br />
+<div class="row">
+    <div class="col-xs-12 col-sm-8 col-md-4 col-lg-4 col-center-block">
+        <div class="rsSignInCard center-block">
+            <h3>@ViewBag.Title</h3>
+            <p>
+                Unsuccessful login with SNS service. Please try it again.
+            </p>
+            <a href="@Url.Action("Login", "Account")" class="btn btn-group-sm btn-info">Back To Login Page</a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,1232 @@
+﻿/* @charset "UTF-8"; */
+/* CSS Document */
+
+/* Table of Contents
+
+	1. General Setting
+	2. Sing In
+	3. Sidebar Style
+	4. Common Global Css Style
+    5. Overwrite Original Style
+    6. Main Dashboard
+    7. Login SNS
+	
+*/
+
+
+/*---------------- 1. General Setting ----------------*/
+
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,600i,700,700i');
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    background-color: #e3e4e5;
+    color: #2b3244;
+}
+
+
+h3, h4, h5 {
+    margin: 0;
+    padding: 0.5em 0;
+}
+
+h4 {
+    color: #9fa1a3;
+}
+
+
+select {
+    border-radius: 5px;
+    height: 2.2em;
+    outline: none;
+    border: 1px solid #ddd;
+}
+
+::placeholder {
+    color: #9fa1a3;
+    opacity: 1; /* Firefox */
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: #9fa1a3;
+}
+
+
+::-ms-input-placeholder { /* Microsoft Edge */
+    color: #9fa1a3;
+}
+
+
+
+.btn {
+    /* width: 100%; */
+    border-radius: 5px;
+    outline: none;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+footer {
+    background: #333d4f;
+    color: #fff;
+    padding: 1em;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3em;
+    text-align: center;
+}
+
+    footer p,
+    footer a {
+        margin: 0px;
+        line-height: 100%;
+        font-size: 14px;
+    }
+
+label {
+    /*width: 100%;*/
+    font-weight: 600;
+    color: #5e6c7f;
+}
+
+table {
+    width: 100%;
+}
+
+textarea {
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+    background: #fff;
+    color: #5e6c7f;
+    border: 1px solid #ddd;
+    outline: none;
+    margin: 0.3em 0;
+}
+
+input[type=text] {
+    width: 100%;
+    border-radius: 5px;
+    background: #fff;
+    color: #5e6c7f;
+    border: 1px solid #ddd;
+    height: 2.2em;
+    margin: 0.3em 0;
+    padding: 0 0.5em;
+    outline: none;
+}
+
+    input[type=text]:focus,
+    textarea:focus,
+    select:focus {
+        border-color: #006ee7;
+    }
+
+
+/*---------------------------------------------------*/
+
+
+/*---------------- 2. Sign In ----------------*/
+
+.rsSignInCard {
+    width: 400px;
+    height: 430px;
+    display: block;
+    background: #fff;
+    padding: 1em 2em;
+    margin-top: 2em;
+    box-shadow: 3px 3px 4px #aeaeae;
+    text-align: center;
+}
+
+    .rsSignInCard h3,
+    .rsSignUpCard h3 {
+        color: #2b3244;
+        font-weight: 600;
+    }
+
+    .rsSignInCard .btn,
+    .rsSignUpCard .btn {
+        width: 100%;
+        margin: 0.3em 0;
+        padding: 0.2em 0;
+    }
+
+        .rsSignInCard .btn span {
+            font-size: 21px;
+            margin-right: 0.5em;
+        }
+
+    .rsSignInCard a {
+        color: #2b3244;
+        font-size: 14px;
+    }
+
+    .rsSignInCard .facebook {
+        border-color: transparent;
+        background: #335d98;
+        color: #fff;
+        cursor: pointer;
+    }
+
+    .rsSignInCard .twitter {
+        border-color: transparent;
+        background: #1bb1ef;
+        color: #fff;
+        cursor: pointer;
+    }
+
+    .rsSignInCard .linkedin {
+        border-color: transparent;
+        background: #177fb9;
+        color: #fff;
+        cursor: pointer;
+    }
+
+    .rsSignInCard .googlePlus {
+        border-color: transparent;
+        background: #f75001;
+        color: #fff;
+        cursor: pointer;
+    }
+
+a.rsSignUp {
+    color: #006ee7 !important;
+    font-weight: 600;
+}
+
+.rsSignUpCard {
+    width: 400px;
+    /*height: 430px;*/
+    height: 350px;
+    display: block;
+    background: #fff;
+    padding: 1em 2em;
+    margin-top: 2em;
+    box-shadow: 3px 3px 4px #aeaeae;
+    text-align: center;
+
+}
+
+    .rsSignUpCard h4 {
+        color: #2b7ccc;
+        font-weight: 600;
+    }
+
+    .rsSignUpCard a {
+        color: #fff;
+        font-size: 14px;
+    }
+
+/*---------------------------------------------------*/
+
+
+/*---------------- 3. Sidebar Style ----------------*/
+
+#rsPageWrap {
+    padding-top: 40px;
+    padding-left: 70px;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+    #rsPageWrap.toggled {
+        padding-left: 250px;
+    }
+
+#rsSidebarWrap {
+    z-index: 1000;
+    position: fixed;
+    left: 180px;
+    width: 70px;
+    height: 100%;
+    margin-left: -180px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: #2b3244;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+#rsPageWrap.toggled #rsSidebarWrap {
+    width: 250px;
+}
+
+#rsPageContentWrap {
+    width: 100%;
+    position: relative;
+    padding: 15px;
+}
+
+#rsPageWrap.toggled #rsPageContentWrap {
+    position: relative;
+    margin-right: -250px;
+}
+
+
+/* Sidebar Styles */
+
+.rsSidebarNav {
+    position: relative;
+    top: 0;
+    width: 250px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+
+    .rsSidebarNav li {
+        text-indent: 15px;
+        line-height: 60px;
+    }
+
+
+        .rsSidebarNav li a {
+            display: block;
+            text-decoration: none;
+            color: #9093a0;
+            border-left: 7px solid #2b3244;
+        }
+
+            .rsSidebarNav li a img {
+                position: relative;
+                left: -8px;
+                top: -2px;
+                width: 45px;
+                margin-right: 5px;
+            }
+
+            .rsSidebarNav li a:hover,
+            .rsSidebarNav li a.active {
+                text-decoration: none;
+                color: #fff;
+                font-weight: 600;
+                background: #333d4f;
+                border-left: 7px solid #006ee7;
+            }
+
+            .rsSidebarNav li a:active, .rsSidebarNav li a:focus {
+                text-decoration: none;
+            }
+
+    .rsSidebarNav > .rsLogo {
+        height: 100%;
+    }
+
+    .rsSidebarNav li.rsLogo a:hover {
+        border-left: 7px solid transparent;
+    }
+
+    .rsSidebarNav > .rsLogo a {
+        color: #fff;
+        text-align: left;
+        font-size: 21px;
+        line-height: 60px;
+        margin-left: -7px;
+    }
+
+        .rsSidebarNav > .rsLogo a:hover {
+            color: #fff;
+            background: none;
+        }
+
+
+@media(min-width:1280px) {
+    #rsPageWrap {
+        padding-left: 250px;
+    }
+
+        #rsPageWrap.toggled {
+            padding-left: 70px;
+        }
+
+    #rsSidebarWrap {
+        width: 250px;
+    }
+
+    #rsPageWrap.toggled #rsSidebarWrap {
+        width: 70px;
+    }
+
+    #rsPageContentWrap {
+        padding: 20px;
+        position: relative;
+    }
+
+    #rsPageWrap.toggled #rsPageContentWrap {
+        position: relative;
+        margin-right: 0;
+    }
+}
+
+.rsSidebarLoginSNS {
+    display: block;
+    position: relative;
+    color: #9093a0;
+    padding: 1em;
+    border-top: 1px solid #9093a0;
+    margin-top: 4em;
+}
+
+    .rsSidebarLoginSNS ul {
+        width: 250px;
+        margin-left: -40px !important;
+        list-style: none;
+        margin: 1em 0;
+    }
+
+        .rsSidebarLoginSNS ul li {
+            width: 33%;
+            float: left;
+        }
+
+    .rsSidebarLoginSNS .rsIconCircle {
+        display: inline-block;
+        position: relative;
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        border: 2px solid #9093a0;
+        padding: 0.3em;
+        text-align: center;
+        font-size: 21px;
+        margin-bottom: 1em;
+    }
+
+        /*.rsSidebarLoginSNS ul:after {
+	content: '';
+	display: block;
+	position: relative;
+	top: 60px;
+	background-color: #fff;
+	height: 1px;
+	width: 100%;
+}*/
+
+        .rsSidebarLoginSNS .rsIconCircle.facebook:hover {
+            border-color: transparent;
+            background: #335d98;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .rsSidebarLoginSNS .rsIconCircle.twitter:hover {
+            border-color: transparent;
+            background: #1bb1ef;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .rsSidebarLoginSNS .rsIconCircle.linkedin:hover {
+            border-color: transparent;
+            background: #177fb9;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .rsSidebarLoginSNS .rsIconCircle.googlePlus:hover {
+            border-color: transparent;
+            background: #f75001;
+            color: #fff;
+            cursor: pointer;
+        }
+
+    .rsSidebarLoginSNS .btn {
+        width: 100%;
+        margin: 0.3em 0;
+    }
+
+    .rsSidebarLoginSNS a {
+        color: #fff;
+    }
+
+/*rsTopBar {
+	display: block;
+	position: relative;
+	width: 100%;
+	height: 50px;
+	top: 0;
+	background: #fff;
+	padding: 0.6em 1em;
+}
+
+.rsTopBar img {
+	width: 80px;
+}*/
+
+
+li.rsSidebarSetting {
+    border-top: 1px solid #445066;
+    margin-top: 2em;
+}
+
+li.rsSidebarSetting a svg {
+    margin-right: 1em;
+    margin-left: 0.7em;
+}
+
+li.rsSidebarSetting a:hover {
+    border-color: #2b3244;
+    background: unset;
+    color: #fff;
+}
+
+/*---------------------------------------------------*/
+
+
+/*---------------- 4. Common Global Css Style ----------------*/
+.rs-mpr-0 {
+    margin-right: 0;
+    padding-right: 0;
+}
+
+.rs-mtb-1 {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+.rs-mtb-3 {
+    margin-top: 3em;
+    margin-bottom: 3em;
+}
+
+.rsBackCard {
+    display: block;
+    position: relative;
+    background: #fff;
+    min-height: 300px;    
+    padding: 1.5em;
+    box-shadow: 4px 4px 2px #d7d7d7;
+    overflow-x: auto;
+}
+
+.affix {
+    top: 0;
+}
+
+.rsBtnDefault {
+    display: inline-block;
+    height: 2.2em;
+    color: #fff;
+    background: #2b7ccc;
+    padding: 0.3em 0.7em;
+    opacity: .9;
+    outline: none;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+    .rsBtnDefault:hover,
+    .rsBtnDefault:focus {
+        text-decoration: none;
+        color: #fff;
+        opacity: 1;
+    }
+
+.rsBtnReverse {
+    display: block;
+    height: 2.2em;
+    color: #006ee7;
+    background: #fff;
+    padding: 0.3em 0.7em;
+    outline: none;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+    .rsBtnReverse:hover {
+        text-decoration: none;
+        color: #fff;
+        background: #006ee7;
+        border: 2px solid #fff;
+        font-weight: 500;
+    }
+
+    .rsBtnDefault-o,
+    .rsBtnReverse.rsSelected {
+        display: block;
+        height: 2.2em;
+        color: #2b7ccc;
+        background: #fff;
+        border: 2px solid #2b7ccc !important;
+        padding: 0.3em 0.7em;
+        outline: none;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .rsBtnDefault-o:hover {
+        background: #f4f4f4;
+        color: #2b7ccc
+    }
+
+    .rsBtnDefault-o:hover a {
+        text-decoration: none;
+        color: #2b7ccc
+    }
+
+    a.rsBtnDetail {
+        color: #006ee7;
+        font-size: 13px;
+        text-decoration: underline;
+        font-weight: 600;
+    }
+
+
+    a.rsBtnDetail:hover {
+        color: #5e6c7f;
+    } 
+
+.rsBtnFilter {
+    display: block;
+    border: 2px solid #ddd;
+    color: #5e6c7f;
+    background: #fff;
+    border-radius: 5px;
+    padding: 0.3em 0.5em;
+    font-size: 14px;
+}
+
+    .rsBtnFilter:hover,
+    .rsBtnFilter .active {
+        background: #5e6c7f;
+        color: #fff;
+        cursor: pointer;
+    }
+
+.rsFilterArea {
+    display: block;
+    position: relative;
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid #dddddd;
+    background: #eaeaea;
+    padding: 0.7em;
+}
+
+    .rsFilterArea select {
+        margin-right: 1em;
+        width: 100%;
+    }
+
+.rsFilterArea-o {
+    display: block;
+    position: relative;
+    width: 100%;
+    min-height: 115px;
+    height: 100%;
+    border-radius: 5px;
+    border: 1px solid #eaeaea;
+    padding: 1em 0;
+} 
+
+.rsFilterArea-o:after {
+    content: '';
+    display: table;
+}
+
+.rsRed {
+    color: #f94a60 !important;
+}
+
+.rsSearchWrap input,
+.rsSearchWrap select {
+    width: 100%;
+    margin-bottom: 1em;
+}
+
+.rsMsgWrap {
+    display: block;
+    width: 100%;
+    font-size: 14px;
+    background: #eaeaea;
+    border: 1px solid #dddddd;
+    color: #5e6c7f;
+    border-radius: 5px;
+    padding: 0.5em;
+    margin-bottom: 1em;
+}
+
+.rsMsgWrap .fa-question-circle {
+    color: #5e6c7f;
+}
+
+.rsMsgWrap .fa-question-circle:hover {
+    cursor: pointer;
+}
+
+.rsCircle {
+    position: relative;
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    margin-right: 0.5em;
+    margin-bottom: 0.3em;
+    margin-top: 0.3em;
+    color: #fff;
+    padding: 0.2em;
+    /* float: left; */
+    border-radius: 50%;
+    text-align: center;
+}
+
+    .rsCircle.rsWarn {
+        background: #f7aa4d !important;
+        color: #fff;
+    }
+
+    .rsCircle.rsSuccess {
+        background: #07d398 !important;
+        color: #fff;
+    }
+
+    .rsCircle.rsError {
+        background: #f94a60 !important;
+        color: #fff;
+    }
+
+.rsFormTitle-l {
+    font-weight: 600;
+    font-size: 17px;
+    color: #006ee7;
+}
+
+    .rsFormTitle-l:after {
+        content: '';
+        display: block;
+        position: relative;
+        top: 0.5em;
+        height: 1px;
+        width: 100%;
+        background: #ddd;
+    }
+
+.rsFormTitle-panel {
+    font-weight: 600;
+    font-size: 17px;
+    color: #006ee7 !important;
+} 
+
+
+.rsExportBtn {
+    background: #5e6c7f;
+    color: #fff !important;
+    opacity: .9;
+    font-size: 13px;
+}
+
+.rsExportBtn:hover {
+    text-decoration: none;
+    color: #fff ;
+    opacity: 1;
+}
+
+.rsBtnWhite {
+    background: #fff;
+    color: #5e6c7f;
+    border: 2px solid #ddd;
+    opacity: .9;
+    font-size: 13px;
+}
+
+    .rsBtnWhite:hover,
+    .rsBtnWhite:focus,
+    .rsBtnWhite:active {
+        text-decoration: none;
+        color: #fff !important;
+        background: #5e6c7f;
+        opacity: 1;
+    }
+
+.rsTitleBlue {
+    color: #006ee7;
+    font-size: 17px;
+    font-weight: 600;
+    padding: 0.7em 0;
+    margin-bottom: 1em;
+    border-bottom: 1px solid #ddd;
+}
+
+.rsTitleBlue p,
+.rsTitleBlue a,
+p.rsBackText,
+p.rsBackText a {
+    font-size: 13px;
+    color: #5e6c7f;
+}
+
+ul.rsSummary {
+    list-style: none;
+    padding-left: 0;
+}
+
+    ul.rsSummary li {
+        padding: 0.3em 0;
+    }
+
+.jobPostingDetail {
+    color: #006ee7;
+} 
+
+/*---------------------------------------------------*/
+
+/*---------------- 5. Overwrite Original Style ----------------*/
+
+.nav > li > a {
+    padding-top: 0;
+}
+
+.nav > li.dropdown > a {
+    color: #2b3244;
+}
+
+.nav > li > a:hover {
+    color: #006ee7;
+}
+
+input#RememberMe {
+    margin-right: 0.5em;
+    position: relative;
+    top: 2px;
+}
+
+input.form-control {
+    margin-bottom: 0.5em;
+}
+
+input.form-control:focus {
+    border-color: #2b7ccc;
+}
+
+.control-label {
+    font-weight: 600;
+    color: #5e6c7f;
+}
+
+.btn-danger {
+    background: #f9576e;
+    font-weight: 600;
+}
+
+.btn-danger:hover {
+    background: #ea4b6a;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background: unset;
+    background-color: #2b7ccc;
+    border-color: transparent;
+    color: #fff !important;
+    font-weight: 600;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    padding: 0.2em 0.7em;
+}
+
+.fancybox-inner {
+    overflow: auto !important;
+}
+
+/*---------------------------------------------------*/
+/*---------------- 6. Main Dashboard ----------------*/
+.rsBlockWrap {
+    width: 100%;
+    display: inline-block;
+    position: relative;
+    padding: 0.5em 0;
+    margin: 1em 0;
+}
+
+    .rsBlockWrap h1 {
+        font-size: 42px;
+        float: left;
+        margin-right: 1em;
+    }
+
+table.rsMainList td {
+    font-size: 13px;
+    color: #686868;
+    border-bottom: 1px solid #cccccc;
+    padding: 2px !important;
+}
+
+    table.rsMainList td:first-child {
+        font-weight: 400;
+    }
+
+    table.rsMainList td:last-child {
+        width: 30%;
+        text-align: right;
+        font-weight: 600;
+    }
+
+.rsMainChartBlock {
+    display: block;
+    position: relative;
+    width: 150px;
+    padding: 0;
+    float: left;
+}
+
+    .rsMainChartBlock .chartPlaceholder {
+        display: inline-block;
+        vertical-align: middle;
+        background: #006ee7;
+        border-radius: 50%;
+        width: 120px;
+        height: 120px;
+    }
+
+.rsPostAddBtn {
+    display: block;
+    border-radius: 5px;
+    background-color: #07d398;
+    padding: 0.2em 0.4em;
+    float: left;
+    margin: 0 0.5em;
+    position: relative;
+    top: 4px;
+    color: #fff;
+    opacity: .9;
+}
+
+    .rsPostAddBtn a,
+    a.rsPostAddBtn {
+        color: #fff;
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    .rsPostAddBtn:hover {
+        opacity: 1;
+        text-decoration: none;
+        color: #fff;
+    }
+
+
+/*---------------------------------------------------*/
+
+/*---------------- 7. Login SNS ----------------*/
+
+.rsSNSLogin .facebook-l {
+    color: #335d98;
+}
+
+.rsSNSLogin .facebook-b {
+    background: #335d98;
+}
+
+.rsSNSLogin .twitter-l {
+    color: #1bb1ef;
+}
+
+.rsSNSLogin .twitter-b {
+    background: #1bb1ef;
+}
+
+.rsSNSLogin .linkedin-l {
+    color: #177fb9;
+}
+
+.rsSNSLogin .linkedin-b {
+    background: #177fb9;
+}
+
+.rsSNSLogin .googlePlus-l {
+    color: #f75001;
+}
+
+.rsSNSLogin .googlePlus-b {
+    background: #f75001;
+}
+
+.rsSNSLogin .insta-l {
+    color: #e74767;
+}
+
+.rsSNSLogin .insta-b {
+    background: #e74767;
+}
+
+.rsSNSLogin svg {
+    font-size: 50px;
+}
+
+/*---------------------------------------------------*/
+
+/* ---------------------------- JINI ------------------------------ */
+
+
+/*------------- Overwrite BootStrap Css ---------*/
+
+.navbar.navbar-fixed-top {
+    /*display: block;*/
+    /*position: relative;*/
+    width: 100%;
+    height: 50px;
+    top: 0;
+    background: #fff;
+    padding: 0.6em 1em;
+    box-shadow: 1px 1px 5px #ddd; /*Add by Rebecca*/
+}
+
+    .navbar.navbar-fixed-top img {
+        width: 80px;
+    }
+
+
+/************************************************
+*	default classes								*
+*************************************************/
+
+/* remove the default blue border color on focus for all inputs, textareas and select */
+select:focus, option:focus, textarea:focus, input[type="text"]:focus, input[type="password"]:focus,
+input[type="datetime"]:focus, input[type="datetime-local"]:focus,
+input[type="date"]:focus, input[type="month"]:focus, input[type="time"]:focus,
+input[type="week"]:focus, input[type="number"]:focus, input[type="email"]:focus,
+input[type="url"]:focus, input[type="search"]:focus, input[type="tel"]:focus,
+input[type="color"]:focus, .uneditable-input:focus {
+    border-color: #CCCCCC !important;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset !important;
+}
+
+table td {
+    padding: 5px 5px !important;
+}
+
+table a {
+    font-weight: bold;
+}
+
+table .job-location {
+    text-align: right;
+}
+
+i {
+    font-size: 10px;
+}
+
+/* the sub-title */
+.sub-heading {
+    margin-bottom: 25px;
+}
+
+/* special class to use the yellowish color */
+.yellowish {
+    color: #EEA236;
+}
+
+/*
+ Remove borders from the btns and inputs
+ and reduce the border-radius
+ */
+.btn {
+    border: none;
+    border-radius: 3px;
+}
+
+.form-control {
+    border-radius: 3px;
+}
+
+/************************************************
+*	header  									*
+*************************************************/
+.navbar {
+    background-color: #3276B1;
+}
+
+    .navbar .navbar-left {
+        margin-left: 100px;
+    }
+
+    .navbar .navbar-brand {
+        color: #f6f6f6;
+    }
+/************************************************
+*	search container    						*
+*************************************************/
+#search-container {
+    margin: -30px 0 30px;
+    background-color: #F5F5F5;
+    height: 250px;
+}
+
+    #search-container #search-box {
+        margin: auto;
+        width: 70%;
+        text-align: center;
+    }
+
+        #search-container #search-box h1 {
+            font-size: 3em;
+            padding: 10px 0 20px;
+        }
+
+            #search-container #search-box h1 strong {
+                color: #EEA236;
+            }
+
+        #search-container #search-box input {
+            background-image: url("../img/icon-search.png");
+            background-position: 15px 15px;
+            background-repeat: no-repeat;
+            border: medium none !important;
+            font-size: 30px !important;
+            font-weight: 200;
+            height: 60px;
+            padding: 0 65px;
+        }
+/************************************************
+*	all jobs 									*
+*************************************************/
+
+
+/* Give a special styling to paid or special jobs */
+#jobs .featured {
+    background-color: rgba(238,162,54,0.1);
+}
+
+    /* remove the background-color for any tr that has the default 2n+1 */
+    #jobs .featured:nth-child(2n+1) > td {
+        background-color: transparent;
+    }
+
+    /* boder color for paid or special jobs */
+    #jobs .featured:after {
+        border-right: 2px solid #EEA236;
+        content: " ";
+        display: block;
+        height: 101px;
+        position: absolute;
+        right: 15px;
+    }
+
+/************************************************
+*	job detail 			 						*
+*************************************************/
+#job .content-inner-detail {
+    background-color: #F5F5F5;
+    border-radius: 3px;
+    padding: 20px;
+}
+
+
+/************************************************
+*	post job 			 						*
+*************************************************/
+#post .content-inner-detail {
+    background-color: #F5F5F5;
+    border-radius: 3px;
+    padding: 20px;
+}
+/************************************************
+*	clients container    						*
+*************************************************/
+.clients {
+    background-color: #F5F5F5;
+    height: 100px;
+    padding: 20px;
+    text-align: center;
+}
+
+
+
+/************************************************
+*	footer  									*
+*************************************************/
+/*footer {
+    background-color: #3276B1;
+    padding: 15px 0 5px;
+    color: #f6f6f6;
+}*/
+
+
+
+/* ref: http://cpratt.co/twitter-bootstrap-callout-css-styles/ */
+/* bootstrap call out */
+.bs-callout {
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #eee;
+    border-left-width: 5px;
+    border-radius: 3px;
+}
+
+    .bs-callout h4 {
+        margin-top: 0;
+        margin-bottom: 5px;
+    }
+
+    .bs-callout p:last-child {
+        margin-bottom: 0;
+    }
+
+    .bs-callout code {
+        border-radius: 3px;
+    }
+
+    .bs-callout + .bs-callout {
+        margin-top: -5px;
+    }
+
+.bs-callout-default {
+    border-left-color: #777;
+}
+
+    .bs-callout-default h4 {
+        color: #777;
+    }
+
+.bs-callout-primary {
+    border-left-color: #428bca;
+}
+
+    .bs-callout-primary h4 {
+        color: #428bca;
+    }
+
+.bs-callout-success {
+    border-left-color: #5cb85c;
+}
+
+    .bs-callout-success h4 {
+        color: #5cb85c;
+    }
+
+.bs-callout-danger {
+    border-left-color: #d9534f;
+}
+
+    .bs-callout-danger h4 {
+        color: #d9534f;
+    }
+
+.bs-callout-warning {
+    border-left-color: #f0ad4e;
+}
+
+    .bs-callout-warning h4 {
+        color: #f0ad4e;
+    }
+
+.bs-callout-info {
+    border-left-color: #5bc0de;
+}
+
+    .bs-callout-info h4 {
+        color: #5bc0de;
+    }
+
+.nonbulletList {
+    list-style-type: none
+}

@@ -1,0 +1,41 @@
+﻿@model RecruitingPortal.Models.JobSeekerViewModel
+
+<!-- Contact Info -->
+
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-2">@Html.LabelFor(model => model.FirstName)</div>
+        <div class="col-md-2">
+            @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-2">
+            @Html.LabelFor(model => model.MiddleName)
+        </div>
+        <div class="col-md-2">
+            @Html.TextBoxFor(model => model.MiddleName, new { @class = "form-control" })
+        </div>
+        <div class="col-md-2">@Html.LabelFor(model => model.LastName)</div>
+        <div class="col-md-2">
+            @Html.TextBoxFor(model => model.LastName, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <p></p>
+    <div class="row">
+        <div class="col-md-2">@Html.LabelFor(model => model.HomePhone)</div>
+        <div class="col-md-2">
+            @Html.TextBoxFor(model => model.HomePhone, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.HomePhone, "", new { @class = "text-danger" })
+    </div>
+    <div class="col-md-2">@Html.LabelFor(model => model.CellPhone)</div>
+    <div class="col-md-2">
+        @Html.TextBoxFor(model => model.CellPhone, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.CellPhone, "", new { @class = "text-danger" })
+    </div>
+
+</div>
+<p></p>
+</div>
+
+<!-- // Contact Info -->

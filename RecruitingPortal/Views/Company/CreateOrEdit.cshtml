@@ -1,0 +1,102 @@
+﻿@model RecruitingPortal.Models.CompanyViewModel
+@using RecruitingPortal.Domain
+@{
+    //ref: http://www.mikesdotnetting.com/article/164/nested-layout-pages-with-razor
+    Layout = "~/Views/Shared/_LayoutSub.cshtml";
+
+    ViewBag.Title = "Company Information";
+    if (ViewData["PageMode"] == null)
+    {
+        ViewData["PageMode"] = PageMode.EDIT;
+    }
+    var pageMode = (PageMode)Enum.Parse(typeof(PageMode), ViewData["PageMode"].ToString());
+    var buttonLabel = pageMode == PageMode.CREATE ? "CREATE" : "EDIT";
+}
+
+<style type="text/css">
+    /*.panel-heading a:after {
+        font-family: 'Glyphicons Halflings';
+        content: "\e114";
+        float: right;
+        color: grey;
+    }
+
+    .panel-heading a.collapsed:after {
+        content: "\e080";
+    }*/
+
+    h3 {
+        margin-top: 0px;
+    }
+</style>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+
+
+
+
+<div>
+    <h3>
+        Manage Profile
+    </h3>
+
+</div>
+<div>
+    <div class="alert alert-success">
+        <ul class="fa-ul">
+            <li>
+                <i class="fa fa-check-square-o fa-lg fa-li"></i>
+                Please review your profile and update if required
+            </li>
+        </ul>
+    </div>
+    @if (TempData["message"] != null)
+    {
+        <div class="alert alert-info alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <span class="glyphicon glyphicon-ok"></span> <strong>@TempData["message"]</strong>
+        </div>
+    }
+    @using (Html.BeginForm("CreateOrEdit", "Company", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        @* ref: http://stackoverflow.com/questions/26148793/how-to-solve-dbupdateconcurrencyexception-when-updating-a-row*@
+        @Html.HiddenFor(m => m.Id)
+        @Html.Hidden("PageMode", ViewData["PageMode"])
+
+        <div class="panel panel-default">
+            <div class="panel-heading">Basic Information</div>
+            <div class="panel-body">
+                @Html.Partial("_ContactInfo_Company", Model)
+            </div>
+        </div>
+        <br />
+        <div class="panel panel-default">
+            <div class="panel-heading">Location Information</div>
+            <div class="panel-body">
+                @Html.Partial("_LocationInfo_Company", Model)
+            </div>
+        </div>
+        <br />
+        <div class="panel panel-default">
+            <div class="panel-heading">Service &amp; Qualification</div>
+            <div class="panel-body">
+                @Html.Partial("_ServiceQualificationLicense", Model)
+            </div>
+        </div>
+        <br />
+        <div class="panel panel-default">
+            <div class="panel-heading">Attachment</div>
+            <div class="panel-body">
+                @Html.Partial("_Attachment_Company")
+            </div>
+        </div>
+
+        <br />
+        <button type="submit" class="btn btn-primary input-lg">@buttonLabel PROFILE</button>
+    }
+
+</div>
+
+
+

@@ -1,0 +1,21 @@
+﻿
+@{
+    ViewBag.Title = "Reconfirmation Notification";
+}
+
+<br /><br /><br />
+<div class="row">
+    <div class="col-xs-12 col-sm-8 col-md-4 col-lg-4 col-center-block">
+        <div class="rsSignInCard center-block">
+            <h3>@ViewBag.Title</h3>
+            <p>
+                We have send you a re-confirmation email with which you can activate your account. Please check it out. <br />
+                If you do not get email, please send us email at <a href="mailto:administrator@recruitingportal.com">Administrator</a>
+
+            </p>
+            <a href="@Url.Action("Login", "Account")" class="btn btn-group-sm btn-info">Back To Login Page</a>
+        </div>
+    </div>
+</div>
+
+

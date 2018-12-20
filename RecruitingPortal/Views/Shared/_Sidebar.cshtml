@@ -1,0 +1,190 @@
+﻿@using RecruitingPortal.Domain
+@using RecruitingPortal.Models
+@using RecruitingPortal.Infrastructure
+@{
+    var session = WebUtil.GetSession<LoggedInUserViewModel>("LoggedInUserViewModel") != null ? WebUtil.GetSession<LoggedInUserViewModel>("LoggedInUserViewModel") : null;
+
+    if (session == null)
+    {
+        Response.Redirect("~/Account/Login");
+    }
+
+    EnumMemberRole? enumMemberRole = session.Role;
+    EnumLoginFrom enumLoginFrom = session.LoginFrom;
+
+    // left sidebar menu highligth and open
+    var controllerName = @HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString();
+    var actionName = @HttpContext.Current.Request.RequestContext.RouteData.Values["action"].ToString();
+    var activeDashboard = "";
+    var activeCompanyPostedJob = "";
+    var activeIndexCompany = "";
+    var activeIndexServiceTeam = "";
+    var activeIndexJobSeeker = "";
+    var activeCreateOrEdit = "";
+    var activeCreateOrEditGuardRequest = "";
+    var activeJobPosting = "";
+    var activeJobApply = "";
+    var activeJobAlert = "";
+}
+
+@if (enumMemberRole == EnumMemberRole.Company)
+{
+    switch (actionName)
+    {
+        case "Dashboard":
+            activeDashboard = "class=active";
+            break;
+        case "CompanyPostedJob":
+            activeCompanyPostedJob = "class=active";
+            break;
+        case "Index":
+            if (controllerName == "Company")
+            {
+                activeIndexCompany = "class=active";
+            }
+            else if (controllerName == "JobSeeker")
+            {
+                activeIndexJobSeeker = "class=active";
+            }
+            break;
+        case "CreateOrEdit":
+            activeCreateOrEdit = "class=active";
+            break;
+    }
+    <li>
+        <a href="@Url.Action("Dashboard", "Company")" @activeDashboard>
+            <img src="~/Images/sidebarIcon-overview-w.png">Dashboard
+        </a>
+    </li>
+    <li>
+        <a href="@Url.Action("CompanyPostedJob", "JobPosting")" @activeCompanyPostedJob>
+            <img src="~/Images/sidebarIcon-mjp.png">Manage Job Posting
+        </a>
+    </li>
+    <li>
+        <a href="@Url.Action("Index", "Company")" @activeIndexCompany>
+            <img src="~/Images/sidebarIcon-rl.png">Guard Request List
+        </a>
+    </li>
+    <li>
+        <a href="@Url.Action("Index", "JobSeeker")" @activeIndexJobSeeker>
+            <img src="~/Images/sidebarIcon-vsg.png">View Security Guards
+        </a>
+    </li>
+    <li>
+        <a href="@Url.Action("CreateOrEdit", "JobPosting")" @activeCreateOrEdit>
+            <img src="~/Images/sidebarIcon-rsg.png">Post Job
+        </a>
+    </li>
+    @*<li class="rsSidebarSetting">
+        <a href="#">
+            <img src="~/Images/sidebarIcon-sns.png">Social Media Posting
+        </a>
+    </li>*@
+}
+else if (enumMemberRole == EnumMemberRole.Staff)
+{
+    switch (actionName)
+    {
+        case "Dashboard":
+            activeDashboard = "class=active";
+            break;
+        case "CompanyPostedJob":
+            activeCompanyPostedJob = "class=active";
+            break;
+        case "Index":
+            if (controllerName == "ServiceTeam")
+            {
+                activeIndexServiceTeam = "class=active";
+            }
+            else if (controllerName == "JobSeeker")
+            {
+                activeIndexJobSeeker = "class=active";
+            }
+            break;
+        case "CreateOrEditGuardRequest":
+            activeCreateOrEditGuardRequest = "class=active";
+            break;
+    }
+    <li>
+        <a href="@Url.Action("Dashboard", "ServiceTeam")" @activeDashboard>
+            <img src="~/Images/sidebarIcon-overview-w.png">Dashboard
+        </a>
+    </li>
+    <li>
+        <a href="@Url.Action("CompanyPostedJob", "JobPosting")" @activeCompanyPostedJob>
+            <img src="~/Images/sidebarIcon-mjp.png">Manage Job Posting
+        </a>
+    </li>
+    <li>
+        <a href="@Url.Action("CreateOrEditGuardRequest", "ServiceTeam")" @activeCreateOrEditGuardRequest>
+            <img src="~/Images/sidebarIcon-rsg.png">Request Security Guard
+        </a>
+    </li>
+    <li>
+        <a href="@Url.Action("Index", "ServiceTeam")" @activeIndexServiceTeam>
+            <img src="~/Images/sidebarIcon-rl.png">Guard Request List
+        </a>
+    </li>
+    <li>
+        <a href="@Url.Action("Index", "JobSeeker")" @activeIndexJobSeeker>
+            <img src="~/Images/sidebarIcon-vsg.png">View Security Guards
+        </a>
+    </li>
+    @*<li class="rsSidebarSetting">
+        <a href="#">
+            <img src="~/Images/sidebarIcon-sns.png">Social Media Posting
+        </a>
+    </li>*@
+}
+else if (enumMemberRole == EnumMemberRole.JobSeeker)
+{
+    switch (actionName)
+    {
+        case "CreateOrEdit":
+            activeCreateOrEdit = "class=active";
+            break;
+        case "Index":
+            if (controllerName == "JobPosting")
+            {
+                activeJobPosting = "class=active";
+            }
+            else if (controllerName == "JobApply")
+            {
+                activeJobApply = "class=active";
+            }
+            else if (controllerName == "JobAlert")
+            {
+                activeJobAlert = "class=active";
+            }
+            break;
+        case "CreateOrEditGuardRequest":
+            activeCreateOrEditGuardRequest = "class=active";
+            break;
+    }
+    <li>
+        <a href="@Url.Action("CreateOrEdit", "JobSeeker")" @activeCreateOrEdit>
+            <img src="~/Images/sidebarIcon-vsg.png">My Profile
+        </a>
+    </li>
+    <li>
+        <a href="@Url.Action("Index", "JobPosting")" @activeJobPosting>
+            <img src="~/Images/sidebarIcon-rl.png">Job List
+        </a>
+    </li>
+    <li>
+        <a href="@Url.Action("Index", "JobApply")" @activeJobApply>
+            <img src="~/Images/sidebarIcon-aj.png">Applied Jobs
+        </a>
+    </li>
+    <li>
+        <a href="@Url.Action("Index", "JobAlert")" @activeJobAlert>
+            <img src="~/Images/sidebarIcon-noti.png">Job Alert
+        </a>
+    </li>
+    @*<li class="rsSidebarSetting">
+        <a href="#">
+            <img src="~/Images/sidebarIcon-sns.png">Social Media Posting
+        </a>
+    </li>*@
+}

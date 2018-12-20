@@ -1,0 +1,577 @@
+﻿@using RecruitingPortal.Domain
+@using RecruitingPortal.BLL
+@using RecruitingPortal.Infrastructure
+@using System.Configuration
+@using RecruitingPortal.Models
+
+@{
+    var FileDownLoadedUrl = ConfigurationManager.AppSettings["hostWebName"] + "FileUploaded/JobSeeker/";
+}
+
+<style>
+    .fancybox-inner {
+        width: 100% !important;
+    }
+
+    .fancybox-wrap {
+        width: 600px !important;
+    }
+
+    #table_ContactLog td:first-child {
+        font-weight: 600;
+        color: #006ee7;
+    }
+</style>
+
+<h4 class="sub-heading">All Security Guards</h4>
+@if (TempData["message"] != null)
+{
+    <div class="alert alert-info alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <span class="glyphicon glyphicon-ok"></span> <strong>@TempData["message"]</strong>
+    </div>
+}
+<div>
+    <table id="table_allSecurityGuard" style="width: 100%;">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Score</th>
+                <th>Postal Code</th>
+                <th>Contact Log</th>
+                <th>History</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+<a href="#content-HistoryList" id="divHistoryList" style="display: none;"></a>
+<div style="display: none">
+    <div id="content-HistoryList" style="overflow-x:hidden !important;">
+        <h3>Job Application History</h3>
+        <p>Job Seeker : <span id="jobSeekerName"></span></p>
+        <table id="table_History" class="display" cellspacing="0" style="width:950px">
+            <thead>
+                <tr>
+                    <th>Job ID</th>
+                    <th>Title</th>
+                    <th>Applied Date</th>
+                    <th>Job Posting Date</th>
+                    <th>Active</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+<a href="#content-ContactLog" id="divSeekerContactLog" style="display: none;"></a>
+<div id="content-ContactLog" style="display: none; overflow:hidden!important;height:auto">
+    <h4>Contact Log</h4>
+    <p>Job Seeker : <span id="jobContactLogJobSeekerName"></span></p>
+    <table id="table_ContactLog" class="display" cellspacing="0" style="width:100%">
+        <thead>
+            <tr>
+                <th>Logger</th>
+                <th>Log</th>
+                <th>Create Date</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+
+
+<script type="text/jscript">
+    $(document).ready(function () {
+
+        // ref: https://www.echosteg.com/jquery-datatables-asp.net-mvc5-server-side
+        var oTable = $('#table_allSecurityGuard').DataTable({
+            iDisplayLength: 25,
+            serverSide: true,
+            ajax: {
+                type: "POST",
+                url: "@Url.Action("GetSecurityGuard", "JobSeeker")",
+                contentType: 'application/json; charset=utf-8',
+                dataType: "json",
+                dataSrc: "data",
+                data: function (data) {
+                    data.ContactedBy = $("#ContactedBy").val() == null || $("#ContactedBy").val() == "" ? "" : $("#ContactedBy").val();
+                    data.ScoringRange = $("#ScoringRange").val() == null || $("#ScoringRange").val() == "" ? "0" : $("#ScoringRange").val();
+                    data.Region = $("#JobSeekerSearch_RegionID").val() == null || $("#JobSeekerSearch_RegionID").val() == "" ? "0" : $("#JobSeekerSearch_RegionID").val();
+                    data.City = $("#JobSeekerSearch_CityId").val() == null || $("#JobSeekerSearch_CityId").val() == "" ? "0" : $("#JobSeekerSearch_CityId").val();
+                    data.SeekerServiceType = $("#SeekerServiceType").val() == null || $("#SeekerServiceType").val() == "" ? "0" : $("#SeekerServiceType").val();
+                    data.ExpYears = $("#ExpYears").val() == null || $("#ExpYears").val() == "" ? "0" : $("#ExpYears").val();
+                    return JSON.stringify(data);
+                },
+                error: function (request, status, error) {
+                    console.log("request: " + request);
+                    console.log("status: " + status);
+                    console.log("error: " + error);
+                }
+            },
+            //"dom": 'frtiS',
+            //"scrollY": 500,
+            //"scrollX": true,
+            //"scrollCollapse": true,
+            "scroller": {
+                loadingIndicator: false
+            },
+            processing: true,
+            select: true,
+            destroy: true,
+            paging: true,
+            bInfo: true, // hide 1 of n record
+            bFilter: true, // hide search box
+            bLengthChange: true, // hide entries dropdown list
+            // sDom: 't', // hide paging // ref: https://datatables.net/forums/discussion/2850/remove-pagination  // ref: http://legacy.datatables.net/usage/options#sDom
+            // ordering: true,
+            // deferRender: true,
+
+            // ref: http://stackoverflow.com/questions/19777075/datatables-merge-columns-together
+            columns: [
+                     {
+                         data: "FirstName", // data : null (this does not sort)
+                         render: function (data, type, row) {
+                             if (row["MiddleName"] != '' && row["MiddleName"] != null) {
+                                 return "<a href='#jobSeekerDetail' class='jobSeekerTitle' id='" + row["Id"] + "'>" + row["FirstName"] + " " + row["MiddleName"] + " " + row["LastName"] + "</a>";
+                             } else {
+                                 return "<a href='#jobSeekerDetail' class='jobSeekerTitle' id='" + row["Id"] + "'>" + row["FirstName"] + " " + row["LastName"] + "</a>";
+                             }
+
+                         }
+                     },
+                     {
+                         data: "Score", // data : null (this does not sort)
+                         render: function (data, type, row) {
+                             if (row["Score"] == "0")
+                                 return row["Score"];
+                             return "<a href='#jobSeekerScore' class='jobSeekerScore' id='" + row["JobSeekerScoreId"] + "'>" + row["Score"] + "</a>";
+                         }
+                     },
+                     {
+                         data: "PostalCode", // data : null (this does not sort)
+                         render: function (data, type, row) {
+                             return "<a href='#mapcontainer' class='mapToShowGoogle' id='" + row["City"] + "|" + row["Region"] + "|" + row["PostalCode"] + "'>" + "<i class=\"glyphicon glyphicon-map-marker\"></i>" + row["PostalCode"] + "</a>";
+                         }
+                     },
+                     {
+                         data: null,
+                         render: function (data, type, row) {
+
+                             var viewLink = "N/A";
+                             // console.log(row["JobSeekerContactLogExist"]);
+                             if (row["JobSeekerContactLogExist"] != null && row["JobSeekerContactLogExist"] != false) {
+                                 viewLink = "<a href ='#jobSeekerContactLog' class='jobSeekerContactLog btn btn-success btn-xs' id='" + row["Id"] + "'>VIEW</a>";
+                             }
+
+                             var addLink = '@Html.ActionLink("ADD", "CreateContactLog", "JobSeeker", new { id = -1 }, new  { @class="btn btn-info btn-xs" })';
+                             addLink = addLink.replace("-1", row["Id"]);
+
+                             return viewLink + " " + addLink;
+                         }
+                     },
+                     {
+                         data: "AppliedDate",// data : null (this does not sort)
+                         render: function (data, type, row) {
+                             if (row["AppliedDate"] == "No History") {
+                                 return row["AppliedDate"];
+                             }
+                             return "<a href='#jobSeekerHistory' class='jobSeekerHistory' id='" + row["Id"] + "|" + row["FirstName"] + "|" + row["LastName"] + "'>" + row["AppliedDate"] + "</a>";
+                         }
+                     },
+
+            ],
+            order: [1, "desc"],
+            columnDefs: [
+                {
+                    className: "dt-left", "targets": [0]
+                },
+                {
+                    className: "dt-center", "targets": [1], "width": "10%"
+                },
+                {
+                    className: "dt-left", "targets": [2], "width": "20%"
+                },
+                {
+                    className: "dt-right", "targets": [3], "width": "20%"
+                },
+                {
+                    className: "dt-right", "targets": [4]
+                }
+            ]
+        });
+
+        // jobSeeker Score
+        $("body").on("click", ".jobSeekerScore", function (e) {
+            e.preventDefault();
+            var Id = $(this).attr('id'); // score id
+            $.ajax({
+                url: "@Url.Action("JobSeekerScoreDetail", "JobSeeker")",
+                dataType: "json",
+                type: "GET",
+                cache: false,
+                data: {
+                    Id: Id
+                },
+                success: function (returnData) {
+                    $('#jobSeekerScore').fancybox({
+                        type: 'inline',
+                        margin: [10, 10, 10, 10],
+                        padding: 20,
+                        width: 650,
+                        height: 'auto',
+                        scrolling: 'yes',
+                        autoSize: false,
+                        tpl: {
+                            wrap: '<div class="fancybox-wrap fancybox-login-form" tabIndex="-1"><div class="fancybox-skin"><div class="fancybox-outer"><div class="fancybox-inner"></div></div></div></div>'
+                        },
+                        openEffect: 'elastic',
+                        closeEffect: 'elastic'
+
+                    }).trigger('click');
+
+                    if (returnData.success != undefined && returnData.success == false) {
+                        // TODO: error message when there is no country information
+                        // console.log(returnData);
+                        alert('failed');
+                    }
+                    else {
+                        $("#SeekerTotalScore").html("<b><font color='red'>" + returnData.TotalScore + " points </font></b> out of 60");
+                        $("#SeekerSecurityExperiencePoint").text(returnData.SecurityGuardExp + " point");
+                        $("#SeekerValidCPRPoint").text(returnData.ValidAidCertificate + " point");
+                        $("#SeekerHasSecurityLicensePoint").text(returnData.SecurityGuardLicense + " point");
+                        $("#SeekerCommunityCollegePoint").text(returnData.SecurityCommunityCollegeCertificate + " point");
+                        $("#SeekerBackgroundPoint").text(returnData.PoliceMilitaryExp + " point");
+                        $("#SeekerHasCarPoint").text(returnData.HaveVehicle + " point");
+                        $("#SeekerLanguagesPoint").text(returnData.FluenInEnglish + " point");
+                        $("#SeekerShiftWorkAvailablePoint").text(returnData.AvailableAllShift + " point");
+                        $("#SeekerCurrentlyWorkingPoint").text(returnData.CurrentlyWorking + " point");
+                        $("#SeekerTypeOfServicePoint").text(returnData.ServiceTypeDesired + " point");
+                        $("#SeekerResumeAttachPoint").text(returnData.ResumeAttached + " point");
+                    }
+                },
+                error: function (request, status, error) {
+                    fancyAlert("Status:" + status + " Error Thrown: " + error);
+                }
+            });
+
+        });
+
+        // jobSeeker Contact Log
+        $("body").on("click", ".jobSeekerContactLog", function (e) {
+
+            var jobSeekerId = $(this).attr('id'); // job seeker id
+            e.preventDefault();
+            $("#divSeekerContactLog").fancybox().trigger('click');
+
+            // alert(jobSeekerId); return;
+            var oTable3 = $('#table_ContactLog').DataTable({
+                serverSide: true,
+                ajax: {
+                    type: "POST",
+                    url: "@Url.Action("JobSeekerGetContactLog", "JobSeeker")",
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: "json",
+                    dataSrc: "data",
+
+                    data: function (data) {
+                        data.Id = jobSeekerId;
+                        return data = JSON.stringify(data);
+                    },
+                    error: function (request, status, error) {
+                        console.log("request: " + request);
+                        console.log("status: " + status);
+                        console.log("error: " + error);
+                    }
+                },
+                "scroller": {
+                    loadingIndicator: false
+                },
+                processing: true,
+                select: true,
+                destroy: true,
+                paging: true,
+                bFilter: false, // hide search box
+                bLengthChange: false, // show entries dropdown list
+                ordering: true,
+                // deferRender: true,
+                columns: [
+                         {
+                             data: "Logger"
+                         },
+                         { data: "ContactLog" },
+                         {
+                             // ref: http://stackoverflow.com/questions/28733613/format-json-date-to-mm-dd-yy-format-before-displaying-in-a-jquery-datatable
+                             // ref: http://stackoverflow.com/questions/726334/asp-net-mvc-jsonresult-date-format
+                             data: "CreateDate",
+                             render: function (value) {
+                                 var date = new Date(parseInt(value.replace("/Date(", "").replace(")/", "")));
+                                 return date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+                             }
+                         }
+
+                ],
+                order: [2, "desc"],
+                columnDefs: [
+                    {
+                        "targets": 'no-sort',
+                        "orderable": false,
+                    }
+                ]
+            });
+
+            //ref: https://datatables.net/reference/api/ajax.json()
+            oTable3.on('xhr', function () {
+                var json = oTable3.ajax.json();
+                $("#jobContactLogJobSeekerName").html("<b>" + json.data[0].JobSeekerFullName + "</b>");
+            });
+        });
+
+
+
+        $("body").on("click", ".jobSeekerHistory", function (e) {
+            var compositeValue = $(this).attr('id').split('|');
+            var jobSeekerId = compositeValue[0];
+            var firstName = compositeValue[1];
+            var lastName = compositeValue[2];
+
+            e.preventDefault();
+            // ref: http://stackoverflow.com/questions/807271/how-to-launch-jquery-fancybox-on-page-load
+            $("#divHistoryList").fancybox().trigger('click');
+
+            // note: datatable inside popup should be inside "$("body").on("click",..."
+            // ref: https://www.echosteg.com/jquery-datatables-asp.net-mvc5-server-side
+            var oTable5 = $('#table_History').DataTable({
+                serverSide: true,
+
+                ajax: {
+                    type: "POST",
+                    url: "@Url.Action("JobSeekerHistory", "JobSeeker")",
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: "json",
+                    dataSrc: "data",
+
+                    data: function (data) {
+                        data.Id = jobSeekerId;
+                        $("#jobSeekerName").text(firstName + " " + lastName);
+                        return JSON.stringify(data);
+                    },
+                    error: function (request, status, error) {
+                        console.log("request: " + request);
+                        console.log("status: " + status);
+                        console.log("error: " + error);
+                    }
+                },
+                "scroller": {
+                    loadingIndicator: false
+                },
+                processing: true,
+                select: true,
+                destroy: true,
+                paging: true,
+                bFilter: false, // hide search box
+                bLengthChange: false, // show entries dropdown list
+                ordering: true,
+                // deferRender: true,
+
+
+                columns: [
+                         {
+                             data: "JobPostingJobId",
+                             render: function (data, type, row) {
+                                 return "<a href='#jobPostingDetail' class='jobPostingDetail' id='" + row["JobPostingId"] + "'>" + row["JobPostingJobId"] + "</a>";
+                             }
+                         },
+                         { data: "JobPostingTitle" },
+                         //{ data: "TotalAppliedNumber" },
+                         {
+                             // ref: http://stackoverflow.com/questions/28733613/format-json-date-to-mm-dd-yy-format-before-displaying-in-a-jquery-datatable
+                             // ref: http://stackoverflow.com/questions/726334/asp-net-mvc-jsonresult-date-format
+                             data: "AppliedDate",
+                             render: function (value) {
+                                 var date = new Date(parseInt(value.replace("/Date(", "").replace(")/", "")));
+                                 return date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+                             }
+                         },
+                         {
+                             // ref: http://stackoverflow.com/questions/28733613/format-json-date-to-mm-dd-yy-format-before-displaying-in-a-jquery-datatable
+                             // ref: http://stackoverflow.com/questions/726334/asp-net-mvc-jsonresult-date-format
+                             data: "PostingDate",
+                             render: function (value) {
+                                 var date = new Date(parseInt(value.replace("/Date(", "").replace(")/", "")));
+                                 return date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+                             }
+                         },
+                         {
+                             // ref: http://stackoverflow.com/questions/28733613/format-json-date-to-mm-dd-yy-format-before-displaying-in-a-jquery-datatable
+                             // ref: http://stackoverflow.com/questions/726334/asp-net-mvc-jsonresult-date-format
+                             data: "PostingIsActive",
+                             render: function (value) {
+                                 return value == "true" ? "Active" : "Inactive";
+                             }
+                         }
+
+                ],
+                order: [3, "desc"],
+                columnDefs: [
+                    {
+                        "targets": 'no-sort',
+                        "orderable": false,
+                    }
+                ]
+            });
+
+            return false;
+        });
+
+
+        // fancybox format
+        $("#divHistoryList").fancybox({
+            type: 'inline',
+            margin: [10, 10, 10, 10],
+            padding: 20,
+            width: 600,
+            height: 'auto',
+            scrolling: 'yes',
+            autoSize: false,
+            tpl: {
+                wrap: '<div class="fancybox-wrap fancybox-login-form" tabIndex="-1"><div class="fancybox-skin"><div class="fancybox-outer"><div class="fancybox-inner"></div></div></div></div>'
+            },
+            openEffect: 'elastic',
+            closeEffect: 'elastic',
+        });
+
+        $('#jobSeekerContactLog').fancybox({
+            type: 'inline',
+            margin: [10, 10, 10, 10],
+            padding: 20,
+            width: 800,
+            height: 'auto',
+            scrolling: 'yes',
+            autoSize: false,
+            tpl: {
+                wrap: '<div class="fancybox-wrap fancybox-login-form" tabIndex="-1"><div class="fancybox-skin"><div class="fancybox-outer"><div class="fancybox-inner"></div></div></div></div>'
+            },
+            openEffect: 'elastic',
+            closeEffect: 'elastic'
+
+        });
+
+
+
+        // ref:
+        // 1. http://stackoverflow.com/questions/10890948/jquery-fancybox-with-google-maps
+        // 2. http://stackoverflow.com/questions/10816130/fancybox-oncomplete-function-not-running
+        // 3. http://stackoverflow.com/questions/11371046/google-maps-api-v3-in-fancybox-2-0-6
+        // note: refer to #1 and #3 (not #2. bug just FYI)
+        $("body").on("click", ".mapToShowGoogle", function (e) {
+            e.preventDefault();
+
+            $("a.mapToShowGoogle").fancybox({
+                'width': 800,
+                'height': 500,
+                'hideOnContentClick': false, // so you can handle the map
+                'overlayColor': '#ccffee',
+                'overlayOpacity': 0.8,
+                'autoDimensions': true, // the selector #mapcontainer HAS css width and height
+                'beforeShow': function () {
+                    var array = this.element[0].id.split("|");
+                    var city = array[0]; // city name
+                    var province = array[1]; // province name
+                    var postalCode = array[2]; // postal code
+
+                    var cityProvince = city + "," + province;
+
+                    initialize(cityProvince, postalCode);
+                    google.maps.event.trigger(map, "resize");
+                    // codeAddress("M6h 2w9");
+                    $("#fancybox-close").css({ "opacity": 0.5 });
+
+
+                },
+                'onCleanup': function () {
+                    var myContent = this.href;
+                    $(myContent).unwrap();
+                } // fixes inline bug
+            });
+        });
+
+        $("body").on("click", ".jobSeekerTitle", function (e) {
+            e.preventDefault();
+
+            var id = $(this).attr('id');
+            var url = "@Url.Action("JobSeekerDetail", "JobSeeker")";
+            var fileDownloadUrl = "@FileDownLoadedUrl";
+            GetJobSeekerDetail(id, url, fileDownloadUrl);
+        });
+
+        $("body").on("click", "#findSecurityGuard", function (e) {
+            oTable.ajax.reload();
+        });
+
+        $("body").on("click", "#resetJobSeekerSearchForm", function (e) {
+
+            $("#ContactedBy").val("");
+            $("#ScoringRange").val("");
+            $("#JobSeekerSearch_RegionID").val("0");
+            $("#JobSeekerSearch_CityId").val("0");
+            $("#SeekerServiceType").val("");
+            $("#ExpYears").val("");
+            $("#postalCode").val("");
+            $("#advs-distance").val("15");
+
+            oTable.ajax.reload();
+        });
+
+
+        // job posting Detail
+        $("body").on("click", ".jobPostingDetail", function (e) {
+            e.preventDefault();
+            var id = $(this).attr('id');
+            var url = "@Url.Action("JobPostingDetail", "JobPosting")";
+            var fileDownloadUrl = "@FileDownLoadedUrl";
+            GetJobPostingDetail(id, url, fileDownloadUrl);
+        });
+
+
+    });
+
+    // ref: http://stackoverflow.com/questions/12554688/how-to-dynamically-change-the-centre-of-a-google-maps-without-erasing-markers
+    // ref: https://developers.google.com/maps/documentation/javascript/examples/geocoding-simple
+    // note: above two concepts have been used and merged together for proper use
+    function initialize(cityProvince, postalCode) {
+        var mapDiv = document.getElementById('map_canvas');
+
+        // addressParam can be eithere address or postal code
+        // TODO: if case postalCode is not valid, check with cityProvince which is not being used for now.
+        var address = postalCode;
+        geocoder = new google.maps.Geocoder();
+
+        // Get LatLng information by name
+        geocoder.geocode({
+            "address": address
+        }, function (results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                map = new google.maps.Map(mapDiv, {
+                    // Center map (but check status of geocoder)
+                    center: results[0].geometry.location,
+                    zoom: 15,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                });
+
+                map.setCenter(results[0].geometry.location);
+                var marker = new google.maps.Marker({
+                    map: map,
+                    position: results[0].geometry.location
+                });
+            } else {
+                alert('Geocode was not successful for the following reason: ' + status);
+            }
+        });
+    }
+
+</script>
+@Html.Partial("_JobSeekerDetail")
+@Html.Partial("_JobSeekerScoreDetail")
+@Html.Partial("_JobPostingDetail")

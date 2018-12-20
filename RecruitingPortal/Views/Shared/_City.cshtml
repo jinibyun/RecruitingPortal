@@ -1,0 +1,9 @@
+﻿@model RecruitingPortal.Models.CityViewModel
+
+<div class="form-group">
+    @Html.Label("City", htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.DropDownListFor(model => model.CityId, Model.ItemsInDropDown, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.CityId, "", new { @class = "text-danger" })
+    </div> 
+</div>

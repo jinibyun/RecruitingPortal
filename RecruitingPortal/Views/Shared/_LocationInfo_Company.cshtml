@@ -1,0 +1,30 @@
+﻿@model RecruitingPortal.Models.CompanyViewModel
+@using RecruitingPortal.Domain
+<div class="row">
+    
+        <!--ref: http://stackoverflow.com/questions/1169170/pass-additional-viewdata-to-a-strongly-typed-partial-view -->
+        
+    @Html.Partial("_ProvinceCity", (Model.Member != null) ? Model.Member.city : null, new ViewDataDictionary { { "regions", Model.RegionsInDropDown }, { "cities", Model.CitiesInDropDown }, { "searchControlDirection", SearchControlDirection.Horizontal }, { "isRequired", true }, { "fullsize", true} })
+    
+    <div>&nbsp;</div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(model => model.Address, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+        </div>
+        @Html.LabelFor(model => model.PostalCode, htmlAttributes: new { @class = "control-label col-md-2" })                
+        <div class="col-md-4">
+            @Html.TextBoxFor(model => model.PostalCode, new { @class = "form-control", placeholder = "Postal Code", @id = "postalCode" })
+            @Html.ValidationMessageFor(model => model.PostalCode, "", new { @class = "text-danger" })
+        </div>
+    </div>
+</div>
+
+<script type="text/jscript">
+    //$('#postalCode').keyup(function () {
+    //    // this.value = this.value.toUpperCase();
+    //    $(this).val($(this).val().toUpperCase());
+    //});
+
+</script>

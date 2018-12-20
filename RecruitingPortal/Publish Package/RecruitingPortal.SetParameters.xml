@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <setParameter name="IIS Web Application Name" value="Default Web Site/RecruitingPortal_deploy" />
+  <setParameter name="IdentityDbContext-Web.config Connection String" value="Data Source=107.172.168.120\SQLEXPRESSDEV;Initial Catalog=RecruitingPortal;Persist Security Info=True;User ID=RecruitingPortalUser;Password=1234567890!" />
+  <setParameter name="RecruitingPortalEntities-Web.config Connection String" value="metadata=res://*/Model.RecruitingPortalContext.csdl|res://*/Model.RecruitingPortalContext.ssdl|res://*/Model.RecruitingPortalContext.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=107.172.168.120\SQLEXPRESSDEV;initial catalog=RecruitingPortal;persist security info=True;user id=RecruitingPortalUser;password=1234567890!;MultipleActiveResultSets=True;App=EntityFramework&quot;" />
+</parameters>

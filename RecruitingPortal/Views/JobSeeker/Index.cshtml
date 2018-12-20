@@ -1,0 +1,49 @@
+﻿@using RecruitingPortal.Domain
+@using RecruitingPortal.BLL
+@using RecruitingPortal.Infrastructure
+@using RecruitingPortal.Models
+@{
+    Layout = "~/Views/Shared/_LayoutSub.cshtml";
+    var session = WebUtil.GetSession<LoggedInUserViewModel>("LoggedInUserViewModel") != null ? WebUtil.GetSession<LoggedInUserViewModel>("LoggedInUserViewModel") : null;
+
+    if (session == null)
+    {
+        Response.Redirect("~/Account/Login");
+    }
+
+    bool isAuthenticated = HttpContext.Current.User.Identity.IsAuthenticated;
+
+    EnumMemberRole enumMemberRole = EnumMemberRole.JobSeeker;
+
+    if (session != null)
+    {
+        enumMemberRole = session.Role;
+    }
+}
+<div id="rsPageContentWrap">
+    <h3>Job Applicants</h3>
+    <div class="rsBackCard">
+        <div class="col-xs-12">
+            <div class="rsBlockWrap">
+                <section id="featured">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-xs-12 col-md-3">
+                                <div class="index_result_01" style="width:100%; padding-top:5px; padding-bottom:5px;">
+                                    @Html.Action("JobSeekerSearch", "Search", new { searchControlDirection = SearchControlDirection.Vertical })
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-md-9">
+                                <div class="index_result_01" style="width:100%; padding-top:5px; padding-bottom:5px;">
+                                    <div id="search-results-jobSeeker-grid">
+                                        @Html.Partial("_JobSeekerGrid")
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>

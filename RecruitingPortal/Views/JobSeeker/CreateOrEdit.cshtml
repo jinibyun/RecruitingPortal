@@ -1,0 +1,112 @@
+﻿@model RecruitingPortal.Models.JobSeekerViewModel
+@using RecruitingPortal.Domain
+
+@{
+    //ref: http://www.mikesdotnetting.com/article/164/nested-layout-pages-with-razor
+    Layout = "~/Views/Shared/_LayoutSub.cshtml";
+
+    ViewBag.Title = "Job Seeker Information";
+    if (ViewData["PageMode"] == null)
+    {
+        ViewData["PageMode"] = PageMode.EDIT;
+    }
+    var pageMode = (PageMode)Enum.Parse(typeof(PageMode), ViewData["PageMode"].ToString());
+    var buttonLabel = pageMode == PageMode.CREATE ? "CREATE" : "EDIT";
+}
+
+<style type="text/css">
+    h3 {
+        margin-top: 0px;
+    }
+</style>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+
+<div id="rsPageContentWrap">
+    <h3>My Profile</h3>
+    <div class="rsBackCard">
+        <div class="col-xs-12">
+            <div class="rsBlockWrap">
+                <div>
+                    <!--<div class="alert alert-success">
+                        <ul class="fa-ul">
+                            <li>
+                                <i class="fa fa-check-square-o fa-lg fa-li"></i>
+                                Please review your profile and update if required
+                            </li>
+                        </ul>
+                    </div> -->
+
+                    <div class="rsMsgWrap">
+                        <div class="rsCircle rsWarn">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        Please review your profile and update if required
+                        <br />
+                    </div>
+
+                    @if (TempData["message"] != null)
+    {
+                <div class="alert alert-info alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <span class="glyphicon glyphicon-ok"></span> <strong>@TempData["message"]</strong>
+                </div>
+}
+
+                    @using (Html.BeginForm("CreateOrEdit", "JobSeeker", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+                @Html.AntiForgeryToken()
+                @*//ref: http://stackoverflow.com/questions/26148793/how-to-solve-dbupdateconcurrencyexception-when-updating-a-row*@
+                @Html.HiddenFor(m => m.Id)
+                @Html.Hidden("PageMode", ViewData["PageMode"])
+
+                <!-- ref: collapsible panel: http://jsfiddle.net/jinibyun/k48fq5p9/-->
+
+                <div class="panel panel-default">
+                    <div class="panel-heading rsFormTitle-panel">
+                        Contact Information
+                    </div>
+                    <div class="panel-body">
+                        @Html.Partial("_ContactInfo", Model)
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading rsFormTitle-panel ">
+                        Location Information
+                    </div>
+
+                    <div class="panel-body">
+                        @Html.Partial("_LocationInfo", Model)
+                    </div>
+
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading rsFormTitle-panel ">
+                        Education &amp; Qualification
+                    </div>
+
+                    <div class="panel-body">
+                        @Html.Partial("_EducationQualificationLicense", Model)
+                    </div>
+
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading rsFormTitle-panel ">
+                        Attachments
+                    </div>
+
+                    <div class="panel-body">
+                        @Html.Partial("_Attachment")
+                    </div>
+                </div>
+
+                <br />
+                <button type="submit" class="btn rsBtnDefault pull-right">@buttonLabel PROFILE</button>
+}
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

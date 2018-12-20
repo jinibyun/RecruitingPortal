@@ -1,0 +1,384 @@
+﻿@using RecruitingPortal.Domain
+@using RecruitingPortal.BLL
+@using RecruitingPortal.Infrastructure
+@using System.Configuration
+@{
+    var FileDownLoadedUrl = ConfigurationManager.AppSettings["hostWebName"] + "FileUploaded/JobPosting/";
+}
+<style>
+    #searchByPosted {
+        cursor: pointer;
+    }
+
+    .statusDiv {
+        width: 280px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        overflow: hidden;
+        display: inline-block;
+        margin: 0px 10px 5px 5px;
+        vertical-align: top;
+    }
+
+    .progressbar {
+        color: #fff;
+        text-align: center;
+        height: 20px;
+        width: 0;
+        background-color: #0ba1b5;
+        border-radius: 3px;
+    }
+</style>
+
+<div class="row">
+    <div class="col-xs-12">
+        <h4 class="sub-heading">
+            Security Guard Request(s)
+            @Html.ActionLink("Request Guard", "CreateOrEditGuardRequest", "ServiceTeam", null, new { @class = "btn rsPostAddBtn pull-right" })
+        </h4>
+    </div>
+</div>
+
+<div>
+    <!--<div class="alert alert-success">
+        <ul class="fa-ul">
+            <li>
+                <i class="fa fa-check-square-o fa-lg fa-li"></i>
+                Once the request is made, it will be notified to HR so that they can post a job
+            </li>
+            <li>
+                <i class="fa fa-check-square-o fa-lg fa-li"></i>
+                Once the job is created, it will be listed as well. Please check "Job ID" to see in more detail
+            </li>
+        </ul>
+    </div>-->
+    <div class="rsMsgWrap">
+        <div class="rsCircle rsWarn">
+            <i class="fas fa-check"></i>
+        </div>
+        Once the request is made, it will be notified to HR so that they can post a job<br />
+        <div class="rsCircle rsSuccess">
+            <i class="fas fa-check"></i>
+        </div>
+        Once the job is created, it will be listed as well. Please check "Job ID" to see in more detail
+    </div>
+    @if (TempData["message"] != null)
+    {
+        <div class="alert alert-info alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <span class="glyphicon glyphicon-ok"></span> <strong>@TempData["message"]</strong>
+        </div>
+    }
+
+
+    <br />
+
+    <div class="row">
+        <div class="col-md-6">
+            @Html.Action("GetJobPostedOrNotPosted", "Common")
+            <div class="btn rsBtnDefault" aria-hidden="true" id="searchByPosted"> <i class="fas fa-search"></i>Find By Posted(Responded)</div>
+        </div>
+        <div class="col-md-6">
+            <span class="pull-right">
+                <a href="@Url.Action("ExportToExcel", "Common", new { reportType = ReportType.GUARDREQUEDST })" class="btn rsExportBtn"><i class="far fa-file-excel" aria-hidden="true"></i> Export All Guard Request Data</a>
+            </span>
+
+        </div>
+    </div>
+    <br />
+
+    <div class="row">
+        <div class="col-xs-12">
+            <table id="table_GuardRequest">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Responded</th>
+                        <th>Responded By</th>
+                        <th>Job Id</th>
+                        <th>Job Status</th>
+                        @*<th>Hiring Process</th>*@
+                        @*<th>Candidates</th>*@
+                        @*<th>Title</th>*@
+                        <th>Request Date</th>
+                        <th>Post Date</th>
+                        <th class="no-sort">Operations</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+    @Html.Partial("_JobPostingDetail")
+
+    <script type="text/jscript">
+    $(document).ready(function () {
+
+        // ref: https://www.echosteg.com/jquery-datatables-asp.net-mvc5-server-side
+        var oTable = $('#table_GuardRequest').DataTable({
+            iDisplayLength: 25,
+            serverSide: true,
+            ajax: {
+                type: "POST",
+                url: "@Url.Action("GetGuardRequest", "ServiceTeam")",
+                contentType: 'application/json; charset=utf-8',
+                dataType: "json",
+                dataSrc: "data",
+                data: function (data) {
+                    data.PostedOrNotPosted = $('#JobPostedOrNotPosted').val()
+                    return JSON.stringify(data);
+                },
+                error: function (request, status, error) {
+                    console.log("request: " + request);
+                    console.log("status: " + status);
+                    console.log("error: " + error);
+                }
+            },
+            //"dom": 'frtiS',
+            //"scrollY": 500,
+            //"scrollX": true,
+            //"scrollCollapse": true,
+            "scroller": {
+                loadingIndicator: false
+            },
+            processing: true,
+            select: true,
+            destroy: true,
+            paging: true,
+            bInfo: true, // hide 1 of n record
+            bFilter: true, // hide search box
+            bLengthChange: true, // hide entries dropdown list
+            // sDom: 't', // hide paging // ref: https://datatables.net/forums/discussion/2850/remove-pagination  // ref: http://legacy.datatables.net/usage/options#sDom
+            // ordering: true,
+            // deferRender: true,
+
+            // ref: http://stackoverflow.com/questions/19777075/datatables-merge-columns-together
+            columns: [
+                     {
+                         data: "Id"
+                     },
+                     {
+                         data: "IsResponded", // data : null (this does not sort)
+                         render: function (data, type, row) {
+                             if (row["IsResponded"] != '' && row["IsResponded"] != null) {
+                                 return row["IsResponded"] == "0" ? "NO" : "YES";
+                             } else {
+                                 return "NO";
+                             }
+                         }
+                     },
+                     {
+                         data: "RespondedBy",
+                         render: function (data, type, row) {
+                             if (row["RespondedBy"] != '' && row["RespondedBy"] != null) {
+                                 return "<a href=mailto:" + row["RespondedBy"] + ">" + row["RespondedBy"] + "</a>";
+                             } else {
+                                 return "N/A";
+                             }
+                         }
+                     },
+                     {
+                         data: "JobId",
+                         render: function (data, type, row) {
+                             if (row["IsResponded"] != '' && row["IsResponded"] != null) {
+                                 return "<a href='#jobPostingDetail' class='jobPostingDetail' id='" + row["JobPostId"] + "'>" + row["JobId"] + "</a>";
+                             }
+                             return "N/A";
+                         }
+                     },
+
+                     {
+                        data:"JobStatus",
+                        render: function (data, type, row) {
+                            // ref: http://hayageek.com/jquery-progress-bar-example/
+                             return "<div class='statusDiv'><div class='progressbar' id='progress" + row["Id"] + "'></div></div>";
+                         }
+                     },
+                     {
+                         data: "CreateDate",
+                         render: function (value) {
+                             var date = new Date(parseInt(value.replace("/Date(", "").replace(")/", "")));
+                             return date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear(); // + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+                         }
+                     },
+                     {
+                         data: "JobPostDate",
+                         render: function (data, type, row) {
+
+                             if (row["JobPostDate"] != '' && row["JobPostDate"] != null) {
+                                 var date = new Date(parseInt(row["JobPostDate"].replace("/Date(", "").replace(")/", "")));
+                                 return date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear();// + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+                             }
+                             return "N/A";
+                         }
+                     },
+                     {
+                         // this is Actions Column
+                         // ref: http://stackoverflow.com/questions/30627026/jquery-datatables-how-to-add-an-edit-and-delete-option
+
+                         mRender: function (data, type, row) {
+
+                             var viewLink = "<a href='#guardRequestDetail' class='guardRequestDetail btn btn-info btn-xs' id='" + row["Id"] + "'>VIEW</a>";
+
+                             var editLink = "";
+
+                             if (row["IsResponded"] == false) {
+                                 editLink = '@Html.ActionLink("EDIT", "CreateOrEditGuardRequest", "ServiceTeam", new { Id = -1 }, htmlAttributes: new { @class = "btn btn-warning btn-xs" })';
+                                 editLink = editLink.replace("-1", row["Id"]);
+                             }
+
+                             var delLink = '<a href="#_" class="delGuardRequest" id=' + row["Id"] + '><i class="fa fa-times" aria-hidden="true"></i></a>';
+
+                             return viewLink + "&nbsp" + editLink + "&nbsp;" + delLink;
+                         }
+                     }
+
+            ],
+            order: [0, "desc"],
+            columnDefs: [
+                {
+                    className: "dt-left", "targets": [0], "visible": false
+                },
+                {
+                    className: "dt-left", "targets": [1], "width": "8%"
+                },
+                {
+                    className: "dt-left", "targets": [2]//, "width": "15%"
+                },
+                {
+                    className: "dt-left", "targets": [3]//, "width": "15%"
+                },
+                {
+                    className: "dt-left", "targets": [4], "width": "15%"
+                },
+                {
+                    className: "dt-left", "targets": [5]
+                },
+                {
+                    className: "dt-center", "targets": [6]
+                },
+                {
+                    className: "dt-right", "targets": [7]
+                }
+            ],
+            drawCallback: function( settings ) {
+                var api = this.api();
+                var json = api.ajax.json();
+                // console.log(json.data[0].JobStatus);
+                /*
+                    (refer to EnumJobStatus.cs)
+                    (JobStatus Value)
+                    Requested = 1, -->> 25%
+                    Posted = 2,    -->> 50%
+                    Applied = 3,   -->> 75%
+                    Hired = 4,     -->> 100%
+                    Removed = 5, -->> no effect to job progress
+                    Expired = 6  -->> no effect to job progress
+                */
+                var progressString = "";
+                var progressNumber = 0;
+                for(i =0; i < json.data.length; i++){
+
+                    var controlName = "progress" + json.data[i].Id;
+                    switch(json.data[i].JobStatus){
+                        case 1:
+                            progressString = "Requested";
+                            progressNumber = 25;
+                        break;
+                        case 2:
+                            progressString = "Posted";
+                            progressNumber = 50;
+                        break;
+                        case 3:
+                            progressString = "Applied";
+                            progressNumber = 75;
+                        break;
+                        case 4:
+                            progressString = "Hired";
+                            progressNumber = 100;
+                        break;
+                        case 5:
+                            progressString = "Removed";
+                        break;
+                        case 6:
+                            progressString = "Expired";
+                        break;
+
+                    }
+                    // console.log(controlName);
+                    setProgress("#" + controlName, progressString, progressNumber);
+                }
+
+                function setProgress(controlName, progressString, progressNumber)
+                {
+                    var progressBarWidth = progressNumber * $(".statusDiv").width()/ 100;
+                    $(controlName).width(progressBarWidth).html(progressString);
+                }
+            }
+        });
+
+        $("#searchByPosted").click(function (e) {
+            oTable.draw();
+        });
+
+        // job posting Detail
+        $("body").on("click", ".jobPostingDetail", function (e) {
+            e.preventDefault();
+            var id = $(this).attr('id');
+            var url = "@Url.Action("JobPostingDetail", "JobPosting")";
+            var fileDownloadUrl = "@FileDownLoadedUrl";
+            GetJobPostingDetail(id, url, fileDownloadUrl);
+        });
+
+        // delete guard request
+        $('body').on('click', '.delGuardRequest', function (event) {
+            var jobPostId = $(this).attr('id');
+            // getParameter
+            //var gridpage = $.urlParam('grid-page') == null ? "1" : $.urlParam('grid-page');
+
+
+            fancyConfirm('Are you sure deleting selected guard request?',
+                    function () { // ok click
+                        $.ajax({
+                            type: "POST",
+                            cache: false,
+                            dataType: "json",
+                            contentType: 'application/json; charset=utf-8',
+                            url: "@Url.Action("DeleteGuard", "ServiceTeam")",
+                            data: JSON.stringify({
+                                Id: jobPostId
+                            }),
+                            success: function (data) {
+                                // data is your result from controller
+                                if (data.success) {
+                                    window.location.reload(true);
+                                }
+                                else {
+                                    alert('Guard request was not deleted. Please try it again');
+                                }
+                            },
+                            error: function (request, status, error) {
+                                alert('Guard request was not deleted. Please try it again');
+                            },
+                            complete: function () {
+                            }
+                        });
+                    },
+                    function () { // cancel click
+                        // do nothing
+                    }
+                );
+        });
+
+        $("body").on("click", ".guardRequestDetail", function (e) {
+            e.preventDefault();
+            var requestId = $(this).attr('id'); // request id
+            var url = "@Url.Action("GetGuardRequestDetail", "ServiceTeam")"
+            GetGuardRequestDetal(requestId, url);
+
+        });
+
+    }); // end of document loading
+
+    </script>
+    @Html.Partial("_guardRequestDetail")

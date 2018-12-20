@@ -1,0 +1,162 @@
+﻿@using RecruitingPortal.Domain
+@using System.Configuration
+@model RecruitingPortal.Domain.city
+
+@{
+    var regions = ViewData["regions"] != null ? (IEnumerable<SelectListItem>)ViewData["regions"] : null;
+    var cities = ViewData["cities"] != null ? (IEnumerable<SelectListItem>)ViewData["cities"] : null;
+    var isRequired = ViewData["isRequired"] != null ? bool.Parse(ViewData["isRequired"].ToString()) : false;
+    var pageName = ViewData["pageName"] != null ? ViewData["pageName"].ToString() : "JobSearch"; // JobSearch or JobSeekerSearch
+    var searchControlDirection = ViewData["searchControlDirection"] != null ? (SearchControlDirection)Enum.Parse(typeof(SearchControlDirection), ViewData["searchControlDirection"].ToString()) : SearchControlDirection.Vertical;
+    var fullsize = ViewData["fullsize"] != null ? bool.Parse(ViewData["fullsize"].ToString()) : false;
+}
+
+@*ref: http://stackoverflow.com/questions/8830648/html-validationmessagefor-did-not-work-as-expected*@
+@if (regions != null && cities != null)
+{
+    if (Model != null)
+    {
+        <div class="row">
+            @Html.Label("Province", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.DropDownListFor(model => model.RegionID, @regions, new { @class = "form-control " })
+                @Html.ValidationMessageFor(model => model.RegionID, "", new { @class = "text-danger" })
+            </div>
+            @Html.Label("City", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.DropDownListFor(model => model.CityId, @cities, new { @class = "form-control " })
+                @Html.ValidationMessageFor(model => model.CityId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    }
+    else
+    {
+        if (searchControlDirection == SearchControlDirection.Vertical) // Vertical
+        {
+            // for search: JobSearch / JobSeeekerSearch: Validation is not required
+            <div class="form-group">
+                @Html.Label("Province")
+                @Html.DropDownList("Region", @regions, new { @class = "form-control ", @id = @pageName + "_RegionID" })
+                
+            </div>
+            <div class="form-group">
+                @Html.Label("City")
+                @Html.DropDownList("CityId", @cities, new { @class = "form-control ", @id = @pageName + "_CityId" })
+                @if (isRequired)
+                {
+                    @Html.ValidationMessageFor(model => model.CityId, "", new { @class = "text-danger" })
+                }
+            </div>
+        }
+        else // Horizontal
+        {
+            if (!fullsize)
+            {
+                // for search: JobSearch / JobSeeekerSearch: Validation is not required
+                <div class="row">
+                    <div class="form-group form-group_01">
+                        @Html.Label("Province")
+                        @Html.DropDownList("Region", @regions, new { @class = "form-control ", @id = @pageName + "_RegionID" })
+                    </div>
+                    <div class="form-group form-group_01">
+                        @Html.Label("City")
+                        @Html.DropDownList("CityId", @cities, new { @class = "form-control ", @id = @pageName + "_CityId" })
+                        @if (isRequired)
+                        {
+                            @Html.ValidationMessageFor(model => model.CityId, "", new { @class = "text-danger" })
+                        }
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="row">
+                    
+                    @Html.Label("Province", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">                        
+                        @if (isRequired)
+                        {
+                            @Html.DropDownListFor(model => model.RegionID, @regions, new { @class = "form-control required", @id = @pageName + "_RegionID" })
+                            @Html.ValidationMessageFor(model => model.RegionID, "Please select province", new { @class = "text-danger" })
+                        }
+                        else
+                        {
+                            @Html.DropDownListFor(model => model.RegionID, @regions, new { @class = "form-control", @id = @pageName + "_RegionID" })                            
+                        }                        
+                    </div>
+                    @Html.Label("City", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">                                                
+                        @if (isRequired)
+                        {
+                            @Html.DropDownListFor(model => model.CityId, @cities, new { @class = "form-control required", @id = @pageName + "_CityId" })
+                            @Html.ValidationMessageFor(model => model.CityId, "Please select city", new { @class = "text-danger" })
+                        }
+                        else
+                        {
+                            @Html.DropDownListFor(model => model.CityId, @cities, new { @class = "form-control", @id = @pageName + "_CityId" })
+                        }
+                    </div>
+                </div>
+            }
+        }
+    }
+}
+<script type="text/javascript">
+
+    $('#RegionID').change(function () {
+        RegionCity($(this).val(), '#CityId');
+    });
+
+    $('#JobSearch_RegionID').change(function () {
+        RegionCity($(this).val(), '#JobSearch_CityId');
+    });
+
+    $('#JobSeekerSearch_RegionID').change(function () {
+        RegionCity($(this).val(), '#JobSeekerSearch_CityId');
+    });
+
+    var RegionCity = function (provinceId, cityId) {
+        var selCity = $(cityId).empty();
+        
+        if (provinceId < 1) {
+            fancyAlert("Please select province");
+            return;
+        }
+        if (cityId < 1) {
+            fancyAlert("Please select city");
+            return;
+        }
+        // ref: http://stackoverflow.com/questions/30133132/jquery-to-call-action-method-in-asp-net-mvc-c-sharp-by-ajax
+        // ref: http://stackoverflow.com/questions/17873926/invalid-json-primitive-error
+        $.ajax(
+            {
+                url:"@Url.Action("GetCities", "Search")",
+                dataType: "json",
+                type: "GET",
+                cache: false,
+                data: {
+                    "provinceId": provinceId
+                },
+                success: function (returnData) {
+                    if (returnData.ErrorMsg != undefined) {
+                        // TODO: error message when there is no country information
+                    }
+                    else {
+                        selCity.append('<option value="">Select City</option>');
+                        $.each(returnData, function (i, item) {
+                            selCity.append('<option value="'
+                                     + item.Id
+                                     + '">'
+                                     + item.Name
+                                     + '</option>');
+                        });
+                    }
+                },
+                error: function (request, status, error) {
+                    fancyAlert("Status:" + status + " Error Thrown: " + error);
+                    // console.log(error);
+                }
+            }
+        );
+    };
+</script>

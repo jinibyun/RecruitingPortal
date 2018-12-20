@@ -1,0 +1,16 @@
+﻿@model RecruitingPortal.Models.JobPostingViewModel
+
+@{
+    ViewBag.Title = "Apply";
+}
+<div>
+    <h4>Job Apply</h4>
+    <hr />
+
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to Job List", "Index")
+</p>
+
+

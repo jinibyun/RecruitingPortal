@@ -1,0 +1,152 @@
+﻿@using System.Configuration
+@model RecruitingPortal.Models.JobApplyViewModel
+@{
+
+    var IsHired = ViewData["IsHired"] != null ? bool.Parse(ViewData["IsHired"].ToString()) : false;
+    var HireJobSeekerId = ViewData["HireJobSeekerId"] != null ? int.Parse(ViewData["HireJobSeekerId"].ToString()) : 0;
+    var hired = "";
+    var backgroundColor = "white";
+
+    if (Model.JobSeeker.Id == HireJobSeekerId)
+    {
+        backgroundColor = "azure";
+        hired = "HIRED";
+    }
+
+    var fullAddress = Model.JobSeeker.Address + "&nbsp;&nbsp;" + Model.JobSeeker.city.City1 + " " + Model.JobSeeker.city.Region.Region1 + " " + Model.JobSeeker.PostalCode;
+
+    string fullAddressLink = "";// "<i class=\"glyphicon glyphicon-map-marker\"></i>";
+    fullAddressLink += string.Format("<a href=\"#mapcontainer\" class=\"mapToShowGoogle\" id=\"{0}|{1}|{2}\">", Model.JobSeeker.city.City1, Model.JobSeeker.city.Region.Region1, Model.JobSeeker.PostalCode);
+    fullAddressLink += fullAddress;
+    fullAddressLink += "</a>";
+
+    var hasSecurityLicense = Model.JobSeeker.HasSecurityLicense == true ? "Yes" : "No";
+    var hasCar = Model.JobSeeker.HasCar == true ? "Yes" : "No";
+
+    // type of work
+    var typeofWorks = Model.JobSeeker.JobSeekerTypeOfWorks.ToList();
+    var workTypes = new List<string>();
+    if (typeofWorks != null && typeofWorks.Count > 0)
+    {
+
+        for (var i = 0; i < typeofWorks.Count; i++)
+        {
+            if (typeofWorks[i].TypeOfWorkId == 1)
+            {
+                workTypes.Add("FullTime Permanent");
+            }
+            else if (typeofWorks[i].TypeOfWorkId == 2)
+            {
+                workTypes.Add("FullTime Contract");
+            }
+            else if (typeofWorks[i].TypeOfWorkId == 3)
+            {
+                workTypes.Add("PartTime Contract");
+            }
+        }
+    }
+    string finalWorkType = "N/A";
+    if (workTypes.Count > 0)
+    {
+        finalWorkType = string.Join(",", workTypes.ToArray());
+    }
+
+    // Language
+    var langs = Model.JobSeeker.JobSeekerLangs.ToList();
+    var languages = new List<string>();
+    if (langs != null && langs.Count > 0)
+    {
+        for (var i = 0; i < langs.Count; i++)
+        {
+            if (langs[i].LangId == 1)
+            {
+                languages.Add("English");
+            }
+            else if (langs[i].LangId == 2)
+            {
+                languages.Add("French");
+            }
+        }
+    }
+
+    string finalLanguages = "N/A";
+    if (languages.Count > 0)
+    {
+        finalLanguages = string.Join(",", languages.ToArray());
+    }
+
+    //var otherLanguage = Model.
+
+    // Resume text
+    var jobSeekerFiles = Model.JobSeeker.JobSeekerFiles.ToList();
+    //var resumeText = "N/A";
+    //if (jobSeekerFiles[0] != null && jobSeekerFiles[0].ResumeText != null && jobSeekerFiles[0].ResumeText != "") {
+    //    resumeText = jobSeekerFiles[0].ResumeText;
+    //}
+
+    // Resume File Path
+    var ResumeFilePath = "N/A";
+    if (jobSeekerFiles != null && jobSeekerFiles.Count > 0)
+    {
+        var jobSeekerFile = jobSeekerFiles.FirstOrDefault();
+        if (jobSeekerFile != null && jobSeekerFiles.First().ResumeFilePath != null)
+        {
+            var fileName = jobSeekerFile.ResumeFilePath.Substring(jobSeekerFile.ResumeFilePath.LastIndexOf("\\") + 1);
+
+            var fileDownloadUrl = ConfigurationManager.AppSettings["hostWebName"] + "FileUploaded/JobSeeker/";
+
+            fileDownloadUrl = fileDownloadUrl + jobSeekerFile.JobSeekerId + "/Resume/" + fileName;
+            var link = "<a href='" + fileDownloadUrl + "'>" + fileName + "</a>";
+            ResumeFilePath = link;
+        }
+    }
+}
+
+<style>
+    .list-unstyled li {
+        margin: 0.2em 0;
+    }
+</style>
+
+<div class="item  col-xs-6 col-lg-4">
+    <div class="thumbnail">
+        <!--<div class="thumbnail" style="background-color:@backgroundColor">-->
+        @*<img class="group list-group-image" src="http://placehold.it/400x250/000/fff" alt="" />*@
+        <div class="caption">
+            <h3 class="group inner list-group-item-heading" style="border-bottom: 1px solid #ddd;">
+                <span class="glyphicon glyphicon-user"></span> @string.Format("{0} {1}", Model.JobSeeker.FirstName, Model.JobSeeker.LastName) <font face="Impact" size="5" color="red">@hired</font>
+            </h3>
+            <p class="group inner list-group-item-text">
+                <ul class="list-unstyled">
+                    <li><span class="label label-default">Email</span> <a href="mailto:@Model.JobSeeker.AspNetUser.Email">@Model.JobSeeker.AspNetUser.Email</a></li>
+                    <li><span class="label label-default">Home phone</span> @Model.JobSeeker.HomePhone</li>
+                    <li><span class="label label-default">Cell phone</span> @Model.JobSeeker.CellPhone</li>
+                    <li><span class="label label-default">Address</span> @Html.Raw(fullAddressLink)</li>
+                    <li><span class="label label-default">Scurity License</span> @hasSecurityLicense</li>
+                    <li><span class="label label-default">Experience(yrs.)</span> @Model.JobSeeker.YearsOfExperience</li>
+                    <li><span class="label label-default">Education</span> @Model.JobSeeker.EducationLevel.Description</li>
+                    <li><span class="label label-default">Service Type</span> @Model.JobSeeker.TypeOfService.Name </li>
+                    <li><span class="label label-default">Have Vehicle</span> @hasCar</li>
+                    <li><span class="label label-default">Work Type</span> @finalWorkType</li>
+                    <li><span class="label label-default">Language</span> @finalLanguages</li>
+                    <li><span class="label label-default">Resume</span> @Html.Raw(ResumeFilePath)</li>
+                </ul>
+            </p>
+            <div class="row">
+                <div class="col-xs-12">
+                    <p class="pull-right">
+                        <b style="color: #006ee7;">Applied: @string.Format("{0:MM/dd/yyyy}", Model.AppliedDate)</b>
+                    </p>
+                </div>
+                <div class="col-xs-12 col-md-6">
+                    @if (!IsHired)
+                {
+                    <p>
+                        <a href='#_' class='applicant-hire btn btn-warning' id='@Model.Id' name="@Model.JobSeeker.FirstName @Model.JobSeeker.LastName | @Model.JobSeeker.AspNetUser.Email">HIRE</a>
+                    </p>
+            }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

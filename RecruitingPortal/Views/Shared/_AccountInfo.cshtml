@@ -1,0 +1,153 @@
+﻿@using System.Configuration
+@using RecruitingPortal.Domain
+@using RecruitingPortal.BLL
+@using RecruitingPortal.Models
+@using RecruitingPortal.Infrastructure
+@{
+    ViewBag.Title = "Index";
+    var locationLink = ConfigurationManager.AppSettings["locationLink"];
+    var session = WebUtil.GetSession<LoggedInUserViewModel>("LoggedInUserViewModel") != null ? WebUtil.GetSession<LoggedInUserViewModel>("LoggedInUserViewModel") : null;
+}
+<style type="text/css">
+    /*.nav > li.dropdown.active.open > a,
+    .nav > li.dropdown.active.open > ul.dropdown-menu a:hover,
+    .nav > li.dropdown.open > a,
+    .nav > li.dropdown.open > ul.dropdown-menu a:hover
+    {
+      color: #fff;
+      background-color: #b91773;
+      border-color: #fff;
+    }*/
+
+    .nav > li.dropdown > a {
+        color: rgb(157, 157, 157);
+    }
+
+        .nav > li.dropdown > a:hover {
+            background-color: white;
+            color: black;
+        }
+</style>
+<div class="navbar-right" style="margin-right: 1px;">
+
+    @if (HttpContext.Current.User.Identity == null || !HttpContext.Current.User.Identity.IsAuthenticated || session == null)
+    {
+        <a class="btn btn-success navbar-btn" href="@Url.Action("Login", "Account")">Sign In</a>
+        <a class="btn btn-info navbar-btn" href="@Url.Action("Register", "Account")">Sign Up</a>
+    }
+    else
+    {
+        var enumMemberRole = session.Role;
+        EnumLoginFrom enumLoginFrom = session.LoginFrom;
+
+        <ul class="nav navbar-nav navbar-right">
+
+            <li id="fat-menu" class="dropdown">
+                <a id="drop3" href="#_" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                    <span class="glyphicon glyphicon-user"></span> @HttpContext.Current.User.Identity.Name
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="drop3">
+
+                    @if (enumMemberRole == EnumMemberRole.Administrator || enumMemberRole == EnumMemberRole.Company)
+                    {
+                        <li><a href="~/Company/Dashboard">Dashboard</a></li>
+                        <li><a href="~/JobPosting/CompanyPostedJob">Manage Job Postings</a></li>
+                        <li><a href="~/JobSeeker/Index">View Security Guards</a></li>
+                        <li><a href="~/Company/Index">Security Guard Request List</a></li>
+                        <li><a href="~/Company/Index">Security Guard Request List</a></li>
+                        <li><a href="~/JobPosting/CreateOrEdit">Post Job</a></li>
+                        if (enumLoginFrom == EnumLoginFrom.Internal)
+                        {
+                            <li role="separator" class="divider"></li>
+                            <li><a href="~/Manage/ChangePassword">Change Password</a></li>
+                        }
+
+                    }
+                    else if (enumMemberRole == EnumMemberRole.Staff)
+                    {
+                        <li><a href="~/ServiceTeam/Dashboard">Dashboard</a></li>
+                        <li><a href="~/JobPosting/CompanyPostedJob">Manage Job Postings</a></li>
+                        <li><a href="~/ServiceTeam/CreateOrEditGuardRequest">Request Security Guard</a></li>
+                        <li><a href="~/ServiceTeam/CreateOrEditGuardRequest">Security Guard Request List</a></li>
+                        <li><a href="~/JobSeeker/Index">View Security Guards</a></li>
+                        if (enumLoginFrom == EnumLoginFrom.Internal)
+                        {
+                            <li role="separator" class="divider"></li>
+                            <li><a href="~/Manage/ChangePassword">Change Password</a></li>
+                        }
+                    }
+                    else if (enumMemberRole == EnumMemberRole.JobSeeker)
+                    {
+                        <li><a href="~/JobSeeker/CreateOrEdit">My Profile</a></li>
+                        <li><a href="~/JobPosting/Index">List All Jobs</a></li>
+                        <li><a href="~/JobApply/Index">Applied Jobs</a></li>
+                        <li><a href="~/JobAlert/Index">Job Alert</a></li>
+                        if (enumLoginFrom == EnumLoginFrom.Internal)
+                        {
+                            <li role="separator" class="divider"></li>
+                            <li><a href="~/Manage/ChangePassword">Change Password</a></li>
+                            <li>
+                                <a href="#_" class="text-danger" id="@session.Id">
+                                    <span class="delJobSeekerAccount">Delete Account</span>
+                                </a>
+                            </li>
+                        }
+
+                    }
+                    <li role="separator" class="divider"></li>
+
+                    <li><a href="~/Account/SignOut">Sign Out</a></li>
+
+                    @*@using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <li><a href="javascript:document.getElementById('logoutForm').submit()">Sign Out</a></li>
+                        }*@
+                </ul>
+            </li>
+        </ul>
+    }
+</div>
+<script type="text/javascript">
+    // delete job posting
+    $('.delJobSeekerAccount').click(function () {
+        // getParameter
+
+        var memberId = $(this).attr('id'); // member id
+        var url = "@locationLink" + "Account/Delete";
+
+        fancyConfirm('Are you sure of deleting your account? Note that your account will be removed from the system.',
+                function () { // ok click
+                    $.ajax({
+                        type: "POST",
+                        cache: false,
+                        dataType: "json",
+                        contentType: 'application/json; charset=utf-8',
+                        url: url,
+                        data: JSON.stringify({
+                            Id: memberId
+                        }),
+                        success: function (data) {
+                            // data is your result from controller
+                            if (data.success) {
+                                window.location.href = "@locationLink"; // note: after deleting account, they must be session out from the site
+                                window.location.reload(true);
+                            }
+                            else {
+                                alert('Your account was not deleted. Please try it again');
+                            }
+                        },
+                        error: function (request, status, error) {
+                            alert('Your account was not deleted. Please try it again');
+                        },
+                        complete: function () {
+                        }
+                    });
+                },
+                function () { // cancel click
+                    // do nothing
+                }
+            );
+    });
+</script>

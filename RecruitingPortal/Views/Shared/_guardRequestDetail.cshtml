@@ -1,0 +1,161 @@
+﻿<div id="guardRequestDetail" style="display: none; overflow:hidden!important;height:auto">
+    <h3>Guard Request Detail</h3>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="form-group">
+                    @Html.Label("Request Id", htmlAttributes: new { @class = "control-label col-sm-2 col-md-2" })
+                    <div class="col-sm-10 col-md-10">
+                        @Html.Raw("<span id = \"RequestId\" />")
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    @Html.Label("Requestor", htmlAttributes: new { @class = "control-label col-sm-2 col-md-2" })
+                    <div class="col-sm-4 col-md-4">
+                        @Html.Raw("<span id = \"Requestor\" />")
+                    </div>
+                    @Html.Label("Position", htmlAttributes: new { @class = "control-label col-sm-2 col-md-2" })
+                    <div class="col-sm-4 col-md-4">
+                        @Html.Raw("<span id = \"Position\" />")
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    @Html.Label("Service Location", htmlAttributes: new { @class = "control-label col-sm-2 col-md-2" })
+                    <div class="col-sm-4 col-md-4">
+                        @Html.Raw("<span id = \"ServiceLocation\" />")
+                    </div>
+                    @Html.Label("Servie Type", htmlAttributes: new { @class = "control-label col-sm-2 col-md-2" })
+                    <div class="col-sm-4 col-md-4">
+                        @Html.Raw("<span id = \"ServiceType\" />")
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    @Html.Label("Type of Work", htmlAttributes: new { @class = "control-label col-sm-2 col-md-2" })
+                    <div class="col-sm-10 col-md-10">
+                        @Html.Raw("<span id = \"TypeOfWorkName\" />")
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    @Html.Label("Description", htmlAttributes: new { @class = "control-label col-sm-2 col-md-2" })
+                    <div class="col-sm-10 col-md-10">
+                        @Html.Raw("<span id = \"Description\" />")
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    @Html.Label("Special Remarks", htmlAttributes: new { @class = "control-label col-sm-2 col-md-2" })
+                    <div class="col-sm-10 col-md-10">
+                        @Html.Raw("<span id = \"SpecialRemark\" />")
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    @Html.Label("Central Office", htmlAttributes: new { @class = "control-label col-sm-2 col-md-2" })
+                    <div class="col-sm-4 col-md-4">
+                        @Html.Raw("<span id = \"CenteralOffice\" />")
+                    </div>
+                    @Html.Label("Team", htmlAttributes: new { @class = "control-label col-sm-2 col-md-2" })
+                    <div class="col-sm-4 col-md-4">
+                        @Html.Raw("<span id = \"RequestTeam\" />")
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    @Html.Label("Created", htmlAttributes: new { @class = "control-label col-sm-2 col-md-2" })
+                    <div class="col-sm-4 col-md-4">
+                        @Html.Raw("<span id = \"Created\" />")
+                    </div>
+                    @Html.Label("Updated", htmlAttributes: new { @class = "control-label col-sm-2 col-md-2" })
+                    <div class="col-sm-4 col-md-4">
+                        @Html.Raw("<span id = \"Updated\" />")
+                    </div>
+                </div>
+            </div>
+        </div>
+     </div>
+</div>
+<script type="text/javascript">
+    function GetGuardRequestDetal(Id, url) {
+        $.ajax({
+            url: url,
+            dataType: "json",
+            type: "GET",
+            cache: false,
+            data: {
+                Id: Id
+            },
+            success: function (returnData) {
+                // fancy box start
+                $('#guardRequestDetail').fancybox({
+                    type: 'inline',
+                    margin: [10, 10, 10, 10],
+                    padding: 20,
+                    width: 800,
+                    height: 'auto',
+                    scrolling: 'yes',
+                    autoSize: false,
+                    tpl: {
+                        wrap: '<div class="fancybox-wrap fancybox-login-form" tabIndex="-1"><div class="fancybox-skin"><div class="fancybox-outer"><div class="fancybox-inner"></div></div></div></div>'
+                    },
+                    openEffect: 'elastic',
+                    closeEffect: 'elastic'
+                }).trigger('click');
+                // -- fancy box start
+
+                if (returnData.success != undefined && returnData.success == false) {
+                    alert('failed');
+                }
+                else {
+                    $("#RequestId").text(returnData.Id);
+                    $("#Requestor").text(returnData.AspNetUser.Email);
+                    $("#Position").text(returnData.TypeOfPosition.Name);
+                    $("#ServiceType").text(returnData.TypeOfService.Description + " [ code: " + returnData.TypeOfService.ShortCutName + " ]");
+                    $("#ServiceLocation").text(returnData.ServiceLocation);
+                    $("#PostalCode").text(returnData.PostalCode);
+                    $("#RequestTitle").text(returnData.Title);
+                    $("#Description").html(returnData.Description);
+                    $("#SpecialRemark").html(returnData.SpecialRemark);
+                    $("#CenteralOffice").text(returnData.BranchAddress.Name);
+                    $("#RequestTeam").text(returnData.StaffTeam.Name);
+
+                    var typeOfWorkName = "";
+
+                    if (returnData.GuardRequestTypeOfWorks != null && returnData.GuardRequestTypeOfWorks.length > 0) {
+                        for (var i = 0 ; i < returnData.GuardRequestTypeOfWorks.length ; i++) {
+                            if (i == 0)
+                                typeOfWorkName = returnData.GuardRequestTypeOfWorks[i].TypeOfWork.Name;
+                            else
+                                typeOfWorkName += ", " + returnData.GuardRequestTypeOfWorks[i].TypeOfWork.Name;
+                        }
+                    }
+                    else {
+                        typeOfWorkName = "N/A";
+                    }
+                    $("#TypeOfWorkName").text(typeOfWorkName);
+
+                    var date1 = new Date(Date.parse(returnData.CreateDate));
+                    var createdateString = date1.getFullYear() + "/" + (date1.getMonth() + 1) + "/" + (date1.getUTCDate());
+                    $("#Created").text(createdateString);
+
+                    var date2 = new Date(Date.parse(returnData.UpdateDate));
+                    var updatedateString = date2.getFullYear() + "/" + (date2.getMonth() + 1) + "/" + (date2.getUTCDate());
+                    $("#Updated").text(updatedateString);
+                }
+            },
+            error: function (request, status, error) {
+                fancyAlert("Status:" + status + " Error Thrown: " + error);
+            }
+        });
+    }
+</script>

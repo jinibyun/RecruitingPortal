@@ -1,0 +1,228 @@
+﻿@using RecruitingPortal.BLL
+@using RecruitingPortal.Infrastructure
+@using RecruitingPortal.Domain
+@using RecruitingPortal.Models
+@{
+    var session = WebUtil.GetSession<LoggedInUserViewModel>("LoggedInUserViewModel") != null ? WebUtil.GetSession<LoggedInUserViewModel>("LoggedInUserViewModel") : null;
+
+    if (session == null)
+    {
+        Response.Redirect("~/Account/Login");
+    }
+
+    EnumMemberRole enumMemberRole = session.Role;
+}
+
+
+<div id="jobPostingDetail" style="display: none; overflow:hidden!important; ">
+    <h3>Job Details</h3>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="form-group">
+                    @Html.Label("Id", htmlAttributes: new { @class = "control-label col-sm-2" })
+                    <div class="col-sm-2">
+                        @Html.Raw("<span id = \"_detail_Id\" />")
+                    </div>
+                    @if (enumMemberRole != EnumMemberRole.JobSeeker)
+                {
+                    @Html.Label("Job Id", htmlAttributes: new { @class = "control-label col-sm-2" })
+                    <div class="col-sm-2">
+                        @Html.Raw("<span id = \"_detail_PostJobtId\" />")
+                    </div>
+                    @Html.Label("Request Id", htmlAttributes: new { @class = "control-label col-sm-2" })
+                    <div class="col-sm-2">
+                        @Html.Raw("<span id = \"_detail_RequestId\" />")
+                    </div>
+            }
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    @Html.Label("Position", htmlAttributes: new { @class = "control-label col-sm-2" })
+                    <div class="col-sm-4">
+                        @Html.Raw("<span id = \"_detail_Position\" />")
+                    </div>
+                    @Html.Label("Work Type", htmlAttributes: new { @class = "control-label col-sm-2" })
+                    <div class="col-sm-4">
+                        @Html.Raw("<span id = \"_detail_JobTypeOfWork\" />")
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    @Html.Label("Service Type", htmlAttributes: new { @class = "control-label col-sm-2" })
+                    <div class="col-sm-4">
+                        @Html.Raw("<span id = \"_detail_ServiceType\" />")
+                    </div>
+                    @Html.Label("Rate (/hr)", htmlAttributes: new { @class = "control-label col-sm-2" })
+                    <div class="col-sm-4">
+                        @Html.Raw("<span id = \"_detail_JobRate\" />")
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    @Html.Label("Title", htmlAttributes: new { @class = "control-label col-sm-2" })
+                    <div class="col-sm-10">
+                        @Html.Raw("<span id = \"_detail_JobTitle\" />")
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    @Html.Label("Description", htmlAttributes: new { @class = "control-label col-sm-2" })
+                    <div class="col-sm-10">
+                        @Html.Raw("<span id = \"_detail_JobDescription\" />")
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    @Html.Label("Central Office", htmlAttributes: new { @class = "control-label col-sm-2" })
+                    <div class="col-sm-10">
+                        @Html.Raw("<span id = \"_detail_CentralOffice\" />")
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    @Html.Label("Attached 1", htmlAttributes: new { @class = "control-label col-sm-2" })
+                    <div class="col-sm-10">
+                        @Html.Raw("<span id = \"_detail_Attached1\" />")
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    @Html.Label("Attached 2", htmlAttributes: new { @class = "control-label col-sm-2" })
+                    <div class="col-sm-10">
+                        @Html.Raw("<span id = \"_detail_Attached2\" />")
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    @Html.Label("Attached 3", htmlAttributes: new { @class = "control-label col-sm-2" })
+                    <div class="col-sm-10">
+                        @Html.Raw("<span id = \"_detail_Attached3\" />")
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function GetJobPostingDetail(Id, url, fileDownLoadUrl) {
+        $.ajax({
+            url: url,
+            dataType: "json",
+            type: "GET",
+            cache: false,
+            data: {
+                Id: Id
+            },
+            success: function (returnData) {
+
+                // fancybox foramt
+                $("#jobPostingDetail").fancybox({
+                    type: 'inline',
+                    margin: [10, 10, 10, 10],
+                    padding: 20,
+                    width: 750,
+                    height: 'auto',
+                    scrolling: 'yes',
+                    autoSize: false,
+                    tpl: {
+                        wrap: '<div class="fancybox-wrap fancybox-login-form" tabindex="-1"><div class="fancybox-skin"><div class="fancybox-outer"><div class="fancybox-inner"></div></div></div></div>'
+                    },
+                    openEffect: 'elastic',
+                    closeEffect: 'elastic',
+                }).trigger('click');
+                // -- fancy box format
+
+                if (returnData.success != undefined && returnData.success == false) {
+                    alert('failed');
+                }
+                else {
+                    $("#_detail_Id").text(returnData.Id);
+                    $("#_detail_PostJobtId").text(returnData.JobId);
+                    $("#_detail_RequestId").text(returnData.GuardRequestId);
+                    $("#_detail_Position").text(returnData.TypeOfPosition.Name);
+                    $("#_detail_ServiceType").text(returnData.TypeOfService.Description + " [ code: " + returnData.TypeOfService.ShortCutName + " ]");
+                    $("#_detail_JobPostDate").text($.datepicker.formatDate('dd M yy', new Date(returnData.CreateDate)));
+                    $("#_detail_JobTitle").text(returnData.Title);
+                    $("#_detail_JobDescription").html(returnData.Description); // note: html() supports html encode
+
+                    if (returnData.Rate != null && returnData.Rate != undefined) {
+                        $("#_detail_JobRate").text(parseFloat(returnData.Rate).toFixed(2));
+                    } else {
+                        $("#_detail_JobRate").text("N/A");
+                    }
+
+                    $("#_detail_CentralOffice").text(returnData.BranchAddress.Name);
+
+                    var typeOfWorkName = "";
+
+                    if (returnData.JobPostingTypeOfWorks != null && returnData.JobPostingTypeOfWorks.length > 0) {
+                        for (var i = 0; i < returnData.JobPostingTypeOfWorks.length; i++) {
+                            if (i == 0)
+                                typeOfWorkName = returnData.JobPostingTypeOfWorks[i].TypeOfWork.Name;
+                            else
+                                typeOfWorkName += ", " + returnData.JobPostingTypeOfWorks[i].TypeOfWork.Name;
+                        }
+                    }
+                    else {
+                        typeOfWorkName = "N/A";
+                    }
+                    $("#_detail_JobTypeOfWork").text(typeOfWorkName);
+
+
+                    var address = (returnData.Address != null) ? returnData.Address : "[address: n/a]";
+                    var city = (returnData.city != null && returnData.city.City1 != null) ? returnData.city.City1 : "[city: n/a]";
+                    var region = (returnData.city != null && returnData.city.Region != null && returnData.city.Region.Region1 != null) ? returnData.city.Region.Region1 : "[province: n/a]";
+                    var postalCode = returnData.PostalCode != null ? returnData.PostalCode : "[post code: n/a]";
+                    var fullAddress = address + "<br />" + city + " " + region + " " + postalCode;
+                    var fileDownloadUrl = fileDownLoadUrl;
+                    $("#_detail_JobFullAddress").html(fullAddress);
+
+                    // file attached 1
+                    if (returnData.JobPostingFiles[0] != null && returnData.JobPostingFiles[0].JobFilePath1 != null) {
+                        var fileName = returnData.JobPostingFiles[0].JobFilePath1.substr(returnData.JobPostingFiles[0].JobFilePath1.lastIndexOf("\\") + 1);
+                        fileDownloadUrl = fileDownloadUrl + returnData.JobPostingFiles[0].JobPostingId + "/" + fileName;
+                        var link = "<a href='" + fileDownloadUrl + "'>" + fileName + "</a>";
+                        $("#_detail_Attached1").html(link);
+                    } else {
+                        $("#_detail_Attached1").text("N/A");
+                    }
+
+                    // file attached 2
+                    if (returnData.JobPostingFiles[0] != null && returnData.JobPostingFiles[0].JobFilePath2 != null) {
+                        var fileName = returnData.JobPostingFiles[0].JobFilePath2.substr(returnData.JobPostingFiles[0].JobFilePath2.lastIndexOf("\\") + 1);
+                        fileDownloadUrl = fileDownloadUrl + returnData.JobPostingFiles[0].JobPostingId + "/" + fileName;
+                        var link = "<a href='" + fileDownloadUrl + "'>" + fileName + "</a>";
+                        $("#_detail_Attached2").html(link);
+                    } else {
+                        $("#_detail_Attached2").text("N/A");
+                    }
+
+                    // file attached 3
+                    if (returnData.JobPostingFiles[0] != null && returnData.JobPostingFiles[0].JobFilePath3 != null) {
+                        var fileName = returnData.JobPostingFiles[0].JobFilePath3.substr(returnData.JobPostingFiles[0].JobFilePath3.lastIndexOf("\\") + 1);
+                        fileDownloadUrl = fileDownloadUrl + returnData.JobPostingFiles[0].JobPostingId + "/" + fileName;
+                        var link = "<a href='" + fileDownloadUrl + "'>" + fileName + "</a>";
+                        $("#_detail_Attached3").html(link);
+                    } else {
+                        $("#_detail_Attached3").text("N/A");
+                    }
+                }
+            },
+            error: function (request, status, error) {
+                fancyAlert("Status:" + status + " Error Thrown: " + error);
+            }
+        });
+    }
+</script>

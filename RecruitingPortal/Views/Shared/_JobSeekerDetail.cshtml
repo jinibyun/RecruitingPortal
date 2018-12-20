@@ -1,0 +1,380 @@
+﻿<div id="jobSeekerDetail" style="display: none; overflow:hidden!important;height:auto" class="panel panel-info">
+    <div class="panel-heading">
+        Job Seeker Details @Html.Label("Last Updated Date"): @Html.Raw("<span id = \"Updated\" />")
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="form-group">
+                @Html.Label("Name", htmlAttributes: new { @class = "control-label col-sm-4" })
+                <div class="col-sm-8">
+                    @Html.Raw("<span id = \"Name\" />")
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                @Html.Label("Email", htmlAttributes: new { @class = "control-label col-sm-4" })
+                <div class="col-sm-8">
+                    @Html.Raw("<span id = \"Email\" />")
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                @Html.Label("Home Phone", htmlAttributes: new { @class = "control-label col-sm-4" })
+                <div class="col-sm-2">
+                    @Html.Raw("<span id = \"HomePhone\" />")
+                </div>
+                @Html.Label("Cell Phone", htmlAttributes: new { @class = "control-label col-sm-4" })
+                <div class="col-sm-2">
+                    @Html.Raw("<span id = \"CellPhone\" />")
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                @Html.Label("Address", htmlAttributes: new { @class = "control-label col-sm-4" })
+                <div class="col-sm-8">
+                    @Html.Raw("<span id = \"Address\" />")
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                @Html.Label("Currently Working", htmlAttributes: new { @class = "control-label col-sm-4" })
+                <div class="col-sm-2">
+                    @Html.Raw("<span id = \"CurrentlyWorking\" />")
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                @Html.Label("Valid CPR/First Aid Certificate", htmlAttributes: new { @class = "control-label col-sm-4" })
+                <div class="col-sm-2">
+                    @Html.Raw("<span id = \"ValidCPR\" />")
+                </div>
+                @Html.Label("Law & Security Community College Certificate", htmlAttributes: new { @class = "control-label col-sm-4" })
+                <div class="col-sm-2">
+                    @Html.Raw("<span id = \"CommunityCollege\" />")
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                @Html.Label("Security license", htmlAttributes: new { @class = "control-label col-sm-4" })
+                <div class="col-sm-2">
+                    @Html.Raw("<span id = \"HasSecurityLicense\" />")
+                </div>
+                @Html.Label("Security license Expiry", htmlAttributes: new { @class = "control-label col-sm-4" })
+                <div class="col-sm-2">
+                    @Html.Raw("<span id = \"SecurityLicenseExpiry\" />")
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                @Html.Label("Security Experience(yrs)", htmlAttributes: new { @class = "control-label col-sm-4" })
+                <div class="col-sm-2">
+                    @Html.Raw("<span id = \"ExpYrs\" />")
+                </div>
+                @Html.Label("Have Vehicle", htmlAttributes: new { @class = "control-label col-sm-4" })
+                <div class="col-sm-2">
+                    @Html.Raw("<span id = \"HasCar\" />")
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                @Html.Label("Work Type", htmlAttributes: new { @class = "control-label col-sm-4" })
+                <div class="col-sm-2">
+                    @Html.Raw("<span id = \"TypeOfWork\" />")
+                </div>
+                @Html.Label("Service", htmlAttributes: new { @class = "control-label col-sm-4" })
+                <div class="col-sm-2">
+                    @Html.Raw("<span id = \"TypeOfService\" />")
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                @Html.Label("Languages", htmlAttributes: new { @class = "control-label col-sm-4" })
+                <div class="col-sm-2">
+                    @Html.Raw("<span id = \"Languages\" />")
+                </div>
+                @Html.Label("Other Languages", htmlAttributes: new { @class = "control-label col-sm-4" })
+                <div class="col-sm-2">
+                    @Html.Raw("<span id = \"AnotherLanguage\" />")
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">                
+                @Html.Label("Shift Work Available", htmlAttributes: new { @class = "control-label col-sm-4" })
+                <div class="col-sm-2">
+                    @Html.Raw("<span id = \"ShiftWorkAvailable\" />")
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                @Html.Label("Notice of Availability", htmlAttributes: new { @class = "control-label col-sm-4" })
+                <div class="col-sm-2">
+                    @Html.Raw("<span id = \"NoticeOfAvailability\" />")
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                @Html.Label("Background", htmlAttributes: new { @class = "control-label col-sm-4" })
+                <div class="col-sm-2">
+                    @Html.Raw("<span id = \"Background\" />")
+                </div>
+                @Html.Label("Security Experiences", htmlAttributes: new { @class = "control-label col-sm-4" })
+                <div class="col-sm-2">
+                    @Html.Raw("<span id = \"SecurityExperience\" />")
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                @Html.Label("Resume (Text)", htmlAttributes: new { @class = "control-label col-sm-4" })
+                <div class="col-sm-8">
+                    @Html.Raw("<span id = \"Resume\" />")
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                @Html.Label("Resume", htmlAttributes: new { @class = "control-label col-sm-4" })
+                <div class="col-sm-8">
+                    @Html.Raw("<span id = \"ResumeAttach\" />")
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                @Html.Label("License", htmlAttributes: new { @class = "control-label col-sm-4" })
+                <div class="col-sm-8">
+                    @Html.Raw("<span id = \"LicenseAttach\" />")
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                @Html.Label("Certificate", htmlAttributes: new { @class = "control-label col-sm-4" })
+                <div class="col-sm-8">
+                    @Html.Raw("<span id = \"CertificateAttach\" />")
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                @Html.Label("Education", htmlAttributes: new { @class = "control-label col-sm-4" })
+                <div class="col-sm-8">
+                    @Html.Raw("<span id = \"EducationAttach\" />")
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function GetJobSeekerDetail(Id, url, fileDownloadUrl) {
+        $.ajax({
+            url: url,
+            dataType: "json",
+        type: "GET",
+        cache: false,
+        data: {
+            Id: Id
+        },
+        success: function (returnData) {
+            // fancy box start
+            $('#jobSeekerDetail').fancybox({
+                type: 'inline',
+                margin: [10, 10, 10, 10],
+                padding: 20,
+                width: 750,
+                height: 450,//'auto',
+                scrolling: 'yes',
+                autoSize: false,
+                tpl: {
+                    wrap: '<div class="fancybox-wrap fancybox-login-form" tabIndex="-1"><div class="fancybox-skin"><div class="fancybox-outer"><div class="fancybox-inner"></div></div></div></div>'
+                },
+                openEffect: 'elastic',
+                closeEffect: 'elastic'
+            }).trigger('click');
+            // -- fancy box end
+
+
+            if (returnData.success != undefined && returnData.success == false) {
+                // TODO: error message when there is no country information
+                // console.log(returnData);
+                alert('failed');
+            }
+            else {
+                if (returnData.MiddleName != '' && returnData.MiddleName != null) {
+                    $("#Name").text(returnData.FirstName + " " + returnData.MiddleName + " " + returnData.LastName);
+                } else {
+                    $("#Name").text(returnData.FirstName + " " + returnData.LastName);
+                }
+
+                $("#Email").html("<a href='mailto:" + returnData.AspNetUser.Email + "'>" + returnData.AspNetUser.Email + "</a>");
+                $("#HomePhone").text(returnData.HomePhone != null ? returnData.HomePhone : "");
+                $("#CellPhone").text(returnData.CellPhone);
+
+                var fullAddress = returnData.Address + " " + returnData.city.City1 + " " + returnData.city.Region.Region1 + " " + returnData.PostalCode;
+                $("#Address").html(fullAddress);
+                $("#CurrentlyWorking").text(returnData.IsCurrentlyWorking ? "YES" : "NO");
+                $("#HasSecurityLicense").text(returnData.HasSecurityLicense ? "YES" : "NO");
+                $("#SecurityLicenseExpiry").text($.datepicker.formatDate('dd M yy', new Date(returnData.SecurityLicenseExpiry)));
+                $("#ValidCPR").text(returnData.HasValidFirstAidCertificate ? "YES" : "NO");
+                $("#CommunityCollege").text(returnData.HasLawSecurityCommunityCollegeCertificate ? "YES" : "NO");
+                $("#MSOffice").text(returnData.HasLawSecurityCommunityCollegeCertificate ? "YES" : "NO");
+                $("#Rate").text((returnData.RateDesiredPerHour == null || returnData.RateDesiredPerHour == "") ? "N/A" : parseFloat(returnData.RateDesiredPerHour).toFixed(2));
+                $("#ExpYrs").text(returnData.YearsOfExperience);
+
+                $("#Updated").text($.datepicker.formatDate('dd M yy', new Date(returnData.UpdateDate)));
+                $("#HasCar").text(returnData.HasCar ? "YES" : "NO");
+                $("#ShiftWorkAvailable").text(returnData.IsShiftAvailable ? "YES" : "NO");
+
+                $("#EducationLevel").text(returnData.EducationLevel != null ? returnData.EducationLevel.Description : "N/A");
+                $("#TypeOfService").text(returnData.TypeOfService != null ? returnData.TypeOfService.Name : "N/A");
+
+                // TODO: any better way than hard code??
+                var workTypes = [];
+                if (returnData.JobSeekerTypeOfWorks != null && returnData.JobSeekerTypeOfWorks.length > 0) {
+                    for (var i = 0 ; i < returnData.JobSeekerTypeOfWorks.length; i++) {
+                        if (returnData.JobSeekerTypeOfWorks[i].TypeOfWorkId == 1) {
+                            workTypes[i] = "Full Time";
+                        } else if (returnData.JobSeekerTypeOfWorks[i].TypeOfWorkId == 2) {
+                            workTypes[i] = "Part Time";
+                        }
+                    }
+                }
+
+                if (workTypes.length > 0) {
+                    $("#TypeOfWork").text(workTypes.join(", "));
+                } else {
+                    $("#TypeOfWork").text("N/A");
+                }
+
+                // TODO: any better way than hard code??
+                var languages = [];
+                if (returnData.JobSeekerLangs != null && returnData.JobSeekerLangs.length > 0) {
+                    for (var i = 0 ; i < returnData.JobSeekerLangs.length; i++) {
+                        if (returnData.JobSeekerLangs[i].LangId == 1) {
+                            languages[i] = "English";
+                        } else if (returnData.JobSeekerLangs[i].LangId == 2) {
+                            languages[i] = "French";
+                        }
+                    }
+                }
+
+                if (languages.length > 0) {
+                    $("#Languages").text(languages.join(", "));
+                } else {
+                    $("#Languages").text("N/A");
+                }
+
+                $("#AnotherLanguage").text(returnData.AnotherLanguage != null ? returnData.AnotherLanguage : "N/A");
+                if (returnData.TypeOfNotice != null) {
+                    $("#NoticeOfAvailability").text(returnData.TypeOfNotice.Name);
+                } else {
+                    $("#NoticeOfAvailability").text("N/A");
+                }
+
+
+                // TODO: any better way than hard code??
+                var backgrounds = [];
+                if (returnData.JobSeekerBackGrounds != null && returnData.JobSeekerBackGrounds.length > 0) {
+                    for (var i = 0 ; i < returnData.JobSeekerBackGrounds.length; i++) {
+                        if (returnData.JobSeekerBackGrounds[i].BackGroundId == 1) {
+                            backgrounds[i] = "Military";
+                        } else if (returnData.JobSeekerBackGrounds[i].BackGroundId == 2) {
+                            backgrounds[i] = "Security";
+                        } else if (returnData.JobSeekerBackGrounds[i].BackGroundId == 3) {
+                            backgrounds[i] = "Police";
+                        }
+                    }
+                }
+
+                if (backgrounds.length > 0) {
+                    $("#Background").text(backgrounds.join(", "));
+                } else {
+                    $("#Background").text("N/A");
+                }
+
+                // TODO: any better way than hard code??
+                var securityExperience = [];
+                if (returnData.JobSeekerSecurityExperiences != null && returnData.JobSeekerSecurityExperiences.length > 0) {
+                    for (var i = 0 ; i < returnData.JobSeekerSecurityExperiences.length; i++) {
+                        if (returnData.JobSeekerSecurityExperiences[i].SecurityExperienceId == 1) {
+                            securityExperience[i] = "Guard";
+                        } else if (returnData.JobSeekerSecurityExperiences[i].SecurityExperienceId == 2) {
+                            securityExperience[i] = "Supervisor";
+                        } else if (returnData.JobSeekerSecurityExperiences[i].SecurityExperienceId == 3) {
+                            securityExperience[i] = "Site Admin";
+                        }
+                    }
+                }
+
+                if (securityExperience.length > 0) {
+                    $("#SecurityExperience").text(securityExperience.join(", "));
+                } else {
+                    $("#SecurityExperience").text("N/A");
+                }
+
+                // Resume text
+                if (returnData.JobSeekerFiles[0] != null && returnData.JobSeekerFiles[0].ResumeText != null && returnData.JobSeekerFiles[0].ResumeText != "") {
+                    $("#Resume").html(returnData.JobSeekerFiles[0].ResumeText);
+                } else {
+                    $("#Resume").text("N/A");
+                }
+                // Resume File Path
+                if (returnData.JobSeekerFiles[0] != null && returnData.JobSeekerFiles[0].ResumeFilePath != null) {
+                    var fileName = returnData.JobSeekerFiles[0].ResumeFilePath.substr(returnData.JobSeekerFiles[0].ResumeFilePath.lastIndexOf("\\") + 1);
+                    fileDownloadUrl = fileDownloadUrl + returnData.JobSeekerFiles[0].JobSeekerId + "/Resume/" + fileName;
+                    var link = "<a href='" + fileDownloadUrl + "'>" + fileName + "</a>";
+                    $("#ResumeAttach").html(link);
+                } else {
+                    $("#ResumeAttach").text("N/A");
+                }
+
+                // License File Path
+                if (returnData.JobSeekerFiles[0] != null && returnData.JobSeekerFiles[0].LicenseFilePath != null) {
+                    var fileName = returnData.JobSeekerFiles[0].LicenseFilePath.substr(returnData.JobSeekerFiles[0].LicenseFilePath.lastIndexOf("\\") + 1);
+                    fileDownloadUrl = fileDownloadUrl + returnData.JobSeekerFiles[0].JobSeekerId + "/License/" + fileName;
+                    var link = "<a href='" + fileDownloadUrl + "'>" + fileName + "</a>";
+                    $("#LicenseAttach").html(link);
+                } else {
+                    $("#LicenseAttach").text("N/A");
+                }
+
+                // License File Path
+                if (returnData.JobSeekerFiles[0] != null && returnData.JobSeekerFiles[0].CertificateFilePath != null) {
+                    var fileName = returnData.JobSeekerFiles[0].CertificateFilePath.substr(returnData.JobSeekerFiles[0].CertificateFilePath.lastIndexOf("\\") + 1);
+                    fileDownloadUrl = fileDownloadUrl + returnData.JobSeekerFiles[0].JobSeekerId + "/Certificate/" + fileName;
+                    var link = "<a href='" + fileDownloadUrl + "'>" + fileName + "</a>";
+                    $("#CertificateAttach").html(link);
+                } else {
+                    $("#CertificateAttach").text("N/A");
+                }
+
+                // Education File Path
+                if (returnData.JobSeekerFiles[0] != null && returnData.JobSeekerFiles[0].EducationFilePath != null) {
+                    var fileName = returnData.JobSeekerFiles[0].EducationFilePath.substr(returnData.JobSeekerFiles[0].EducationFilePath.lastIndexOf("\\") + 1);
+                    fileDownloadUrl = fileDownloadUrl + returnData.JobSeekerFiles[0].JobSeekerId + "/Education/" + fileName;
+                    var link = "<a href='" + fileDownloadUrl + "'>" + fileName + "</a>";
+                    $("#EducationAttach").html(link);
+                } else {
+                    $("#EducationAttach").text("N/A");
+                }
+            }
+        },
+        error: function (request, status, error) {
+            fancyAlert("Status:" + status + " Error Thrown: " + error);
+        }
+    });
+    }
+</script>
